@@ -523,7 +523,9 @@ body:not(.riding) footer,body:not(.riding) #viewSeg,body:not(.riding) #btnPip{di
 .pvInfo{background:var(--s1);border:1px solid var(--ln);border-radius:14px;padding:12px 16px;margin:4px 0 10px;color:var(--tx2);font-size:14px}.pvInfo b{color:var(--tx)}.pvInfo p{margin:6px 0 8px;color:var(--tx)}
 .pvSvg{height:56px}.pvSvg svg{width:100%;height:100%;display:block}
 #grpDiff{display:none!important}
-#biasLbl{display:inline-block;min-width:112px;text-align:center;white-space:nowrap;font-variant-numeric:tabular-nums}
+#biasLbl{display:inline-block;min-width:170px;text-align:center;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--tx)}
+#controls{flex-wrap:nowrap!important;white-space:nowrap}#controls>*{flex:0 0 auto}
+@media (max-width:760px){#controls button{padding:6px 10px!important;font-size:12px!important}#biasLbl{min-width:0;font-size:12px}#controls #btnSkip{font-size:0!important}#controls #btnSkip::after{content:"Überspringen";font-size:12px}#controls .grp{padding:0 2px;gap:4px}#biasLbl .bl{display:none}}
 #ghostBox .gsub{font-size:12px;color:var(--tx2);font-variant-numeric:tabular-nums}
 button.primary,.planCard .primary,#calDlg button.primary,#dashDlg button.primary,#planDlg .actions button.primary{color:var(--onacc)!important}
 #mapBox .leaflet-control-attribution{background:rgba(12,12,13,.75)!important;color:var(--tx2)!important}#mapBox .leaflet-control-attribution a{color:var(--tx)!important}
@@ -1343,7 +1345,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <!-- Setup -->
   <div class="overlay" id="setup">
     <div class="card menu">
-      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 3.1</span></div>
+      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 3.2</span></div>
       <div class="warnbox" id="noBt" style="display:none">Bluetooth geht nur in <b>Google Chrome</b> oder Edge. Die Demo funktioniert trotzdem.</div>
       <div class="warnbox" id="recoverBox" style="display:none">Nicht gespeicherte Fahrt vom <span id="recoverDate"></span> gefunden. <button id="btnRecover">Ansehen</button></div>
       <div id="planBanner"></div>
@@ -2409,7 +2411,7 @@ function syncRideUI() {
 
 // ---------- HUD ----------
 function updateHUD() {
-  syncRideUI();
+  syncRideUI(); biasText();
   updateGhostHUD();
   const p3 = powerHist.length ? powerHist.reduce((a, x) => a + x[1], 0) / powerHist.length : 0;
   $('#hP').textContent = Math.round(p3);
@@ -2461,11 +2463,18 @@ function updateHUD() {
   else $('#wNext').textContent = 'Letztes Intervall';
   $('#wBias').textContent = [ride.bias ? 'Intensität ' + (ride.bias > 0 ? '+' : ride.bias < 0 ? '−' : '±') + Math.abs(ride.bias) + ' %' : '', pmActive() && settings.erg ? 'PowerMatch: Trainer ' + (live.pmOffset >= 0 ? '+' : '') + Math.round(live.pmOffset) + ' W' : ''].filter(Boolean).join(' · ');
 }
+// Anzeige in der Steuerleiste: Intensität in % und was das gerade in Watt ausmacht (bzw. fester Wattwert)
+function biasText() {
+  const wo = ride.workout, el = $('#biasLbl'); if (!wo || !el) return;
+  if (wo.manual) { el.innerHTML = '<span class="bl">Fester Wert </span>' + settings.manualW + ' W'; return; }
+  const b = ride.bias, tgt = currentTarget(), base = tgt ? tgt / (1 + b / 100) : 0, dw = Math.round(base * b / 100);
+  el.innerHTML = '<span class="bl">Intensität </span>' + (b > 0 ? '+' : b < 0 ? '−' : '±') + Math.abs(b) + ' %' + (tgt ? ' · ' + (dw > 0 ? '+' : dw < 0 ? '−' : '±') + Math.abs(dw) + ' W' : '');
+}
 function updateControls() {
   const wo = ride.workout;
   $('#btnSkip').style.display = wo && !wo.manual ? '' : 'none';
   $('#grpBias').style.display = wo ? '' : 'none';
-  $('#biasLbl').textContent = wo?.manual ? 'Watt' : 'Intensität ' + (ride.bias > 0 ? '+' : ride.bias < 0 ? '−' : '±') + Math.abs(ride.bias) + ' %';
+  biasText();
   $('#rDiff').value = settings.difficulty; $('#diffLbl').textContent = settings.difficulty + ' %';
 }
 function adjust(dir) {
