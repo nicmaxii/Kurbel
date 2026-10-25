@@ -1334,7 +1334,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <!-- Setup -->
   <div class="overlay" id="setup">
     <div class="card menu">
-      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 2.5</span></div>
+      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 2.6</span></div>
       <div class="warnbox" id="noBt" style="display:none">Bluetooth geht nur in <b>Google Chrome</b> oder Edge. Die Demo funktioniert trotzdem.</div>
       <div class="warnbox" id="recoverBox" style="display:none">Nicht gespeicherte Fahrt vom <span id="recoverDate"></span> gefunden. <button id="btnRecover">Ansehen</button></div>
       <div id="planBanner"></div>
@@ -3955,7 +3955,7 @@ async function stravaAccess() {
   if (Date.now() / 1000 > strava.expires - 120) await stravaToken({ grant_type: 'refresh_token', refresh_token: strava.refresh });
   return strava.access;
 }
-const rideTitle = rd => { const r = rd.routeName.replace(/ · [\d.]+ km.*$/, '').replace(/^Karlsruhe · /, ''); return 'Kurbeln: ' + r + (rd.workoutName ? ' · ' + rd.workoutName : ''); };
+const rideTitle = rd => { const r = rd.routeName.replace(/ · [\d.]+ km.*$/, '').replace(/^Karlsruhe · /, ''); return 'Indoor kurbeln: ' + r + (rd.workoutName ? ' · ' + rd.workoutName : ''); };
 async function stravaUpload(rd, opt = {}) {
   const tok = await stravaAccess(), st = stats(rd), fname = fileBase(rd) + (opt.uniq ? '_' + Date.now().toString(36) : '') + '.fit';
   const fd = new FormData();

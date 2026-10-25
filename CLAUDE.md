@@ -1,7 +1,7 @@
 # Kurbel – Projektnotizen für Claude
 
 Kurbeln (früher „Kurbel“) ist eine Indoor-Radtraining-App (Zwift-Ersatz) als **eine einzige HTML-Datei** (`index.html`, ca. 1,1 MB).
-Sie läuft in Chrome auf dem MacBook und wird über GitHub Pages veröffentlicht. Nutzer: Max (spricht Deutsch).
+Sie läuft in Chrome auf dem MacBook und wird über GitHub Pages veröffentlicht: https://nicmaxii.github.io/kurbeln/ (Repo `nicmaxii/kurbeln`, früher `Kurbel`). Strava-Titel: „Indoor kurbeln: <Strecke> · <Workout>“. Nutzer: Max (spricht Deutsch).
 
 ## Arbeitsweise
 
