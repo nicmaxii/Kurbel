@@ -1325,7 +1325,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <!-- Setup -->
   <div class="overlay" id="setup">
     <div class="card menu">
-      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 1.9</span></div>
+      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 2.2</span></div>
       <div class="warnbox" id="noBt" style="display:none">Bluetooth geht nur in <b>Google Chrome</b> oder Edge. Die Demo funktioniert trotzdem.</div>
       <div class="warnbox" id="recoverBox" style="display:none">Nicht gespeicherte Fahrt vom <span id="recoverDate"></span> gefunden. <button id="btnRecover">Ansehen</button></div>
       <div id="planBanner"></div>
@@ -3155,8 +3155,45 @@ const PG = {
   rec: min => ({ name: `Locker ${fmtMin(min)}`, cat: 'Erholung', desc: 'Ganz locker (50–55 % FTP). Fördert die Erholung, ohne neue Ermüdung.', segs: [W(300, .4, .52), W(min * 60 - 600, .53), W(300, .5, .4)] }),
   test: () => ({ ref: 'ramp' }), test20: () => ({ ref: 'ftp20' }),
 };
+// VO2max-Booster (8 Wochen, Tage 1–7): Einheit auf Gesamtdauer auffüllen – Rest locker in Zone 2 vor dem Ausfahren
+const vbFit = (name, cat, desc, core, min) => { const segs = [...P_WU, W(180, .55), ...core]; const used = segs.reduce((a, x) => a + x.dur, 0) + P_CD.dur, rest = min * 60 - used; if (rest > 0) segs.push(W(rest, .66)); segs.push(P_CD); return { name, cat, desc, segs }; };
+const KRAFT = {
+  ein: 'Krafttraining Eingewöhnung', einD: 'Ganzkörper, 2–3 Sätze à 15 Wiederholungen mit leichtem Gewicht: Kniebeuge, Ausfallschritte, rumänisches Kreuzheben, Rudern, Liegestütz, Unterarmstütz. Technik lernen.',
+  ka: 'Krafttraining Kraftausdauer', kaD: '3 Sätze à 15–20 Wiederholungen, 45–60 s Pause: Kniebeuge, Bulgarian Split Squat, Hip Thrust, Kreuzheben, Rudern, Rumpf.',
+  del: '3 Satz Deload Krafttraining', delD: '3 Sätze mit etwa halbem Gewicht der Vorwoche – Bewegung halten, nicht ermüden.',
+  max: '3 Satz Max-Krafttraining', maxD: '3 Sätze à 3–5 Wiederholungen schwer (85–90 %), 3 min Pause: Kniebeuge, Kreuzheben, Bulgarian Split Squat; danach Rumpf.',
+};
+const VB = {
+  lit: (min, lbl) => Object.assign(PG.z2(min, .67), { name: 'LIT – ' + lbl, desc: 'Lockere Grundlage (LIT, ca. 65–70 % FTP). Ruhig fahren, gut sprechen können.' }),
+  fatmax: min => vbFit('LIT – 1h30 inklusive Fatmax-Intervall', 'Zone 2', 'Grundlage mit zwei Abschnitten an der oberen Grenze von Zone 2 (Fatmax, 75–80 % FTP), dort ist die Fettverbrennung am höchsten.', [W(1200, .68), W(900, .77), W(300, .66), W(600, .8)], min),
+  antritte: (n, min, lbl, sec = 6) => vbFit(`LIT – ${lbl} (mit ${n}×${sec}" Antritten)`, 'Zone 2', `Grundlage mit ${n} kurzen, maximalen Antritten über ${sec} Sekunden aus niedriger Geschwindigkeit, dazwischen 2 min locker.`, reps(n, W(sec, 2.5), W(120 - sec, .6)), min),
+  fatN: (n, m, min) => vbFit(`LIT mit ${n}×${m} min Fatmax-Intervallen`, 'Zone 2', `Grundlage mit ${n}× ${m} min an der oberen Grenze von Zone 2 (Fatmax, 75–80 % FTP), 5 min locker dazwischen.`, reps(n, W(m * 60, .78), W(300, .63)), min),
+  durab: (lvl, min, lang) => vbFit(`Durability Session ${lvl}${lang ? ' lang' : ''}`, 'Schwelle', `Erst ${lang ? '2:40' : '2'} h ruhige Grundlage, dann mit Vorermüdung: ${lvl === 'I' ? '3× 10 min Sweet Spot (92 %)' : '4× 8 min an der Schwelle (102 %)'}, 5 min locker dazwischen. Trainiert, auch spät im Rennen noch Leistung zu bringen.`, [W(lang ? 9600 : 7200, .67), ...(lvl === 'I' ? reps(3, W(600, .92), W(300, .55)) : reps(4, W(480, 1.02), W(300, .55)))], min),
+  torque: (n, min, ss) => vbFit(`EB – Torque: ${n}×8 min (am Berg)${ss ? ' + Sweetspot' : ''}`, 'VO2max', `${n}× 8 min bei 100–105 % FTP mit niedriger Trittfrequenz (60–70 U/min), wie am Berg, 4 min locker dazwischen${ss ? '. Danach 15 min Sweet Spot (90 %)' : ''}. Im Sim-Modus am besten mit hoher Schwierigkeit.`, [...reps(n, W(480, 1.02), W(240, .5)), ...(ss ? [W(300, .6), W(900, .9)] : [])], min),
+  hilly: min => vbFit('Long (hilly) Ride', 'Zone 2', 'Lange Ausfahrt mit Hügeln: alle 25 min ein Anstieg von 8 min bei 80–88 % FTP, sonst Zone 2.', reps(Math.floor((min - 30) / 33), [W(1500, .67), W(480, .84)]), min),
+  vorbel: () => vbFit('MIT – Race Vorbelastung', 'Tempo & Sweet Spot', 'Am Tag vor dem Rennen: 3× 3 min zügig (95 %) und 3× 30 s hart (130 %), sonst locker. Weckt die Beine, ohne müde zu machen.', [...reps(3, W(180, .95), W(180, .55)), W(300, .6), ...reps(3, W(30, 1.3), W(150, .55))], 90),
+  ie: (name, sets, n, on, off, pOn, min, pre = [], post = [], cat = 'HIT') => vbFit(name, cat, `${sets} Serien à ${n}× ${on} s hart (${Math.round(pOn * 100)} % FTP) / ${off} s locker, 3 min zwischen den Serien${pre.length || post.length ? ', dazu Sweet Spot (90 %)' : ''}.`, [...pre, ...reps(sets, reps(n, W(on, pOn), W(off, .5)), W(180, .5)), ...post], min),
+  sprint: (name, n, sec, min, rest = 240) => vbFit(name, 'Sprint', `${n}× ${sec} s maximal (Sprint), ${Math.round(rest / 60 * 10) / 10} min locker dazwischen, sonst Grundlage. Am besten im Sim-Modus fahren.`, reps(n, W(sec, 2), W(rest, .55)), min),
+  rwi: () => vbFit('HIT – 6× Race Winning Interval', 'VO2max', '6× wie ein Rennfinale: 20 s Antritt (150 %), 3 min hart (95 %), am Ende 15 s Sprint (170 %); 5 min locker dazwischen.', reps(6, [W(20, 1.5), W(180, .95), W(15, 1.7)], W(300, .5)), 120),
+  hitvar: () => vbFit('HIT – HITvar (5×5 min)', 'VO2max', '5× 5 min mit wechselndem Tempo: 30 s 120 % / 30 s 100 %, 4 min locker dazwischen. Ähnlich wie Attacken im Rennen.', reps(5, reps(5, W(30, 1.2), W(30, 1)), W(240, .5)), 90),
+  hitinc: () => vbFit('HIT – HITinc (2×(3×5))', 'VO2max', '2 Blöcke à 3× 5 min ansteigend: 4 min an der Schwelle (100 %), dann 1 min hart (120 %); 2:30 min locker dazwischen, 8 min zwischen den Blöcken.', reps(2, reps(3, [W(240, 1), W(60, 1.2)], W(150, .5)), W(480, .55)), 120),
+  swspStart: () => vbFit('MIT – SwSp (5×6 min mit 30s intensivem Start)', 'Tempo & Sweet Spot', '5× 6 min Sweet Spot (90 %), jeweils mit 30 s hartem Start (130 %); 4 min locker dazwischen.', reps(5, [W(30, 1.3), W(330, .9)], W(240, .55)), 120),
+  fm20: () => vbFit('9×20 s FatMax', 'Zone 2', 'Grundlage an der oberen Grenze von Zone 2 (Fatmax, 75 %) mit 9 kurzen Antritten über 20 s (150 %), 3 min dazwischen.', reps(9, W(20, 1.5), W(160, .75)), 70),
+  pyra60: () => vbFit('LIT – 1h Pyramide', 'Zone 2', 'Kurze Pyramide: 3–5–7–5–3 min stufenweise bis Tempo (72–85 % FTP), 2 min locker dazwischen.', [W(180, .72), W(120, .62), W(300, .78), W(120, .62), W(420, .85), W(120, .62), W(300, .78), W(120, .62), W(180, .72)], 60),
+  off: (name, min, desc, cat = 'Kraft') => ({ name, cat, off: true, desc, segs: [W(min * 60, 0)] }),
+  pyra: () => vbFit('LIT – 1:30h – Pyramiden', 'Zone 2', 'Grundlage mit Pyramide: 4–6–8–6–4 min stufenweise bis an die obere Grenze von Zone 2 und Tempo (72–85 % FTP), dazwischen 3 min locker.', reps(1, [W(240, .72), W(180, .62), W(360, .78), W(180, .62), W(480, .85), W(180, .62), W(360, .78), W(180, .62), W(240, .72)]), 90),
+  ie3030: (sets, n, min, ss) => vbFit(`HIT – IE: ${ss ? 'Sweetspot + ' : ''}${sets}×${n}×(30/30)${ss ? ' + Sweetspot' : ''}`, 'HIT', `${ss ? '10 min Sweet Spot (90 %), dann ' : ''}${sets} Serien à ${n}× 30 s hart (120 % FTP) / 30 s locker, 3 min zwischen den Serien${ss ? ', danach nochmal 10 min Sweet Spot' : ''}.`, [...(ss ? [W(600, .9), W(240, .55)] : []), ...reps(sets, reps(n, W(30, 1.2), W(30, .5)), W(180, .5)), ...(ss ? [W(240, .55), W(600, .9)] : [])], min),
+  eb: (n, m, p, rest, min, name) => vbFit(name || `HIT – EB: ${n}×${m} min`, 'VO2max', `${n}× ${m} min im Entwicklungsbereich (${Math.round(p * 100)} % FTP), ${rest} min locker dazwischen. Lange Zeit nahe der VO2max.`, reps(n, W(m * 60, p), W(rest * 60, .5)), min),
+  ie4020: () => vbFit('HIT – IE 3×10×40/20', 'HIT', '3 Serien à 10× 40 s hart (125 % FTP) / 20 s locker, 5 min zwischen den Serien.', reps(3, reps(10, W(40, 1.25), W(20, .5)), W(300, .5)), 90),
+  ie3015: (sets, n, min, ss) => vbFit(`HIT – IE: ${sets}×${n}×(30/15)${ss ? ' + Sweetspot' : ''}`, 'HIT', `${sets} Serien à ${n}× 30 s hart (125 % FTP) / 15 s locker, 3 min zwischen den Serien${ss ? ', danach 10 min Sweet Spot (90 %)' : ''}. Hält die Sauerstoffaufnahme lange oben (Rønnestad 2020).`, [...reps(sets, reps(n, W(30, 1.25), W(15, .5)), W(180, .5)), ...(ss ? [W(300, .55), W(600, .9)] : [])], min),
+  dec: (n, m, min) => vbFit(`HIT – DEC: ${n}×${m} min`, 'VO2max', `${n}× ${m} min abnehmend: 1 min hart (120 %), dann ${m - 1} min an der Schwelle (100 %), ${m - 1} min locker dazwischen. Der harte Start bringt die Sauerstoffaufnahme schnell nach oben.`, reps(n, [W(60, 1.2), W((m - 1) * 60, 1)], W((m - 1) * 60, .5)), min),
+  hitdec: () => vbFit('HIT – HITdec (2×(3×5 min))', 'VO2max', '2 Blöcke à 3× 5 min abnehmend (1 min 120 %, 4 min 100 %), 2:30 min locker dazwischen, 8 min zwischen den Blöcken.', reps(2, reps(3, [W(60, 1.2), W(240, 1)], W(150, .5)), W(480, .55)), 120),
+  kra: (n, m, min) => vbFit(`MIT – KrA ${n}×${m} min`, 'Tempo & Sweet Spot', `${n}× ${m} min Kraftausdauer bei 85–90 % FTP mit niedriger Trittfrequenz (50–60 U/min), 5 min locker dazwischen. Sitzen bleiben, Oberkörper ruhig.`, reps(n, W(m * 60, .88), W(300, .55)), min),
+  swsp: () => vbFit('MIT – SwSp 4×8 min', 'Tempo & Sweet Spot', '4× 8 min Sweet Spot (90 % FTP), 4 min locker dazwischen.', reps(4, W(480, .9), W(240, .55)), 78),
+  sit: () => vbFit('SIT – Booster LIT – 2h Sprint Endurance (4×30s)', 'Sprint', '4× 30 s maximal (Sprint), 4:30 min locker dazwischen, danach lockere Grundlage. Am besten im Sim-Modus fahren.', reps(4, W(30, 2), W(270, .55)), 120),
+};
 function fmtMin(min) { const h = Math.floor(min / 60), m = min % 60; return h ? h + (m ? ':' + String(m).padStart(2, '0') : '') + ' h' : m + ' min'; }
-const SLOT = { thr: 'Schwelle', z2: 'Grundlage', vo2: 'VO2max', long: 'Longride', test: 'Test', rec: 'Locker' };
+const SLOT = { thr: 'Schwelle', z2: 'Grundlage', vo2: 'VO2max', long: 'Longride', test: 'Test', rec: 'Locker', sit: 'Sprint', kraft: 'Kraft', race: 'Rennen' };
 const PLANS = [
   { id: 'ftp12', name: 'FTP-Builder', weeks: 12, color: '#edff9a', per: '4 Einheiten pro Woche · 4–8 h',
     desc: 'Mehr Watt an der Schwelle. Jede Woche: Schwelle, Grundlage, VO2max und ein Longride, der von 1:30 auf 3 h wächst. Die Intervalle werden von Block zu Block länger und härter. Jede 4. Woche Entlastung, am Ende Formaufbau und Test.',
@@ -3173,6 +3210,68 @@ const PLANS = [
       { s: [['thr', PG.ou(3)], ['z2', PG.z2(90)], ['vo2', PG.vo2(5, 5, 1.1, 4)], ['long', PG.long(165, 20)]] },
       { s: [['thr', PG.thr(2, 25, .98)], ['z2', PG.z2(90)], ['vo2', PG.vo2(6, 4, 1.1, 3)], ['long', PG.long(180, 20)]] },
       { note: 'Formaufbau + Test', easy: true, s: [['vo2', PG.opener()], ['z2', PG.z2(45)], ['rec', PG.rec(30)], ['test', PG.test()]] },
+    ] },
+  { id: 'vo2b8', name: 'VO2max-Booster', weeks: 8, color: '#cfdf82', per: '5–7 Einheiten pro Woche · 8–13 h',
+    desc: 'Acht Wochen polarisiert: viel lockere Grundlage (LIT) und zwei bis drei harte Einheiten pro Woche – lange VO2max-Intervalle (EB), kurze 30/15- und 40/20-Intervalle (IE), abnehmende Intervalle (DEC) und Sprints (SIT). Die Tage sind Vorschläge, Ruhetage sind frei.',
+    weeksDef: [
+      { s: [['z2', VB.lit(90, '1h30'), 2], ['vo2', VB.eb(5, 5, 1.08, 5, 90), 3], ['rec', VB.lit(45, '0h45'), 4], ['thr', VB.kra(3, 10, 90), 5], ['long', VB.lit(150, '2h30'), 6]] },
+      { s: [['vo2', VB.eb(5, 5, 1.08, 5, 90), 1], ['vo2', VB.ie4020(), 2], ['rec', VB.lit(45, '0h45'), 3], ['vo2', VB.eb(4, 8, 1.04, 4, 90), 4], ['vo2', VB.dec(4, 5, 78), 6], ['vo2', VB.ie3015(3, 8, 88, true), 7]] },
+      { s: [['z2', VB.lit(90, '1h30'), 2], ['long', VB.lit(120, '2h'), 3], ['z2', VB.fatmax(90), 5], ['vo2', VB.ie4020(), 6], ['long', VB.lit(150, '2h30'), 7]] },
+      { s: [['sit', VB.sit(), 2], ['long', VB.lit(150, '2h30'), 3], ['vo2', VB.eb(4, 8, 1.04, 4, 90), 5], ['rec', VB.lit(45, '0h45'), 6], ['long', VB.lit(150, '2h30'), 6], ['long', VB.lit(210, '3h30'), 7]] },
+      { s: [['z2', VB.antritte(6, 90, '1h30'), 2], ['vo2', VB.hitdec(), 3], ['long', VB.lit(120, '2h'), 4], ['thr', VB.swsp(), 5], ['long', VB.lit(150, '2h30'), 6]] },
+      { s: [['vo2', VB.dec(4, 5, 80), 1], ['vo2', VB.ie4020(), 2], ['vo2', VB.eb(3, 8, 1.05, 4, 78), 4], ['z2', VB.lit(60, '1h'), 5], ['vo2', VB.eb(5, 5, 1.08, 5, 100), 6], ['vo2', VB.ie3015(3, 13, 80), 7]] },
+      { s: [['z2', VB.lit(90, '1h30'), 2], ['z2', VB.fatmax(120), 3], ['z2', VB.lit(105, '1h45'), 5], ['vo2', VB.eb(5, 5, 1.08, 5, 90), 6], ['z2', VB.lit(90, '1h30'), 6], ['long', VB.lit(180, '3h00'), 7]] },
+      { s: [['sit', VB.sit(), 2], ['z2', VB.lit(90, '1h30'), 3], ['z2', VB.lit(60, '1h'), 4], ['vo2', VB.ie3015(3, 11, 75), 5], ['long', VB.lit(150, '2h30'), 6], ['long', VB.lit(270, '4h30'), 7]] },
+    ] },
+  { id: 'base12', name: 'Base', weeks: 12, color: '#a3ad6f', per: '5 Einheiten pro Woche · 7–10 h',
+    desc: 'Zwölf Wochen Grundlagen-Aufbau mit FTP-Test am Anfang und Ende: viel LIT mit kurzen Antritten und Pyramiden, dazu pro Woche ein bis zwei Qualitätseinheiten (30/30, DEC, Kraftausdauer, Sweet Spot, EB). Jede 4. Woche etwas leichter. Ruhetage sind Tag 1 und 5.',
+    weeksDef: [
+      { note: 'Test', s: [['z2', VB.antritte(6, 90, '1h30'), 2], ['test', PG.test20(), 3], ['z2', VB.lit(105, '1h45'), 4], ['vo2', VB.ie3030(3, 8, 79), 6], ['long', VB.lit(120, '2h00'), 7]] },
+      { s: [['z2', VB.antritte(8, 96, '1h36'), 2], ['vo2', VB.dec(6, 4, 92), 3], ['z2', VB.lit(105, '1h45'), 4], ['vo2', VB.ie3030(3, 10, 90), 6], ['long', VB.lit(150, '2h30'), 7]] },
+      { s: [['z2', VB.lit(90, '1h30'), 2], ['vo2', VB.ie3015(3, 8, 88, true), 3], ['z2', VB.pyra(), 4], ['thr', VB.kra(3, 10, 90), 6], ['long', VB.lit(165, '2h45'), 7]] },
+      { note: 'leichter', easy: true, s: [['z2', VB.antritte(6, 60, '1h00'), 2], ['vo2', VB.eb(5, 5, 1.08, 5, 90), 3], ['z2', VB.lit(90, '1h30'), 4], ['z2', VB.antritte(10, 102, '1h42'), 6], ['long', VB.lit(120, '2h00'), 7]] },
+      { s: [['z2', VB.antritte(6, 90, '1h30'), 2], ['vo2', VB.dec(6, 5, 93), 3], ['long', VB.lit(120, '2h'), 4], ['thr', VB.swsp(), 6], ['long', VB.lit(150, '2h30'), 7]] },
+      { s: [['z2', VB.lit(60, '1h'), 2], ['vo2', VB.ie4020(), 3], ['vo2', VB.eb(3, 8, 1.05, 4, 78), 4], ['vo2', VB.dec(4, 5, 80), 6], ['long', VB.lit(120, '2h'), 7]] },
+      { s: [['z2', VB.lit(90, '1h30'), 2], ['vo2', VB.dec(4, 5, 78), 3], ['z2', VB.pyra(), 4], ['thr', VB.kra(4, 10, 105), 6], ['long', VB.lit(180, '3h00'), 7]] },
+      { note: 'leichter', easy: true, s: [['z2', VB.lit(60, '1h'), 2], ['vo2', VB.ie3015(3, 10, 92, true), 3], ['z2', VB.lit(90, '1h30'), 4], ['z2', VB.antritte(6, 90, '1h30'), 6], ['long', VB.lit(150, '2h30'), 7]] },
+      { s: [['z2', VB.antritte(10, 102, '1h42'), 2], ['vo2', VB.eb(6, 5, 1.08, 4, 90), 3], ['long', VB.lit(120, '2h'), 4], ['thr', VB.swsp(), 6], ['long', VB.lit(165, '2h45'), 7]] },
+      { s: [['long', VB.lit(120, '2h'), 2], ['vo2', VB.ie3030(3, 8, 95, true), 3], ['z2', VB.pyra(), 4], ['thr', VB.kra(3, 15, 105), 6], ['long', VB.lit(180, '3h00'), 7]] },
+      { s: [['z2', VB.antritte(8, 96, '1h36'), 2], ['vo2', VB.eb(4, 8, 1.04, 4, 90), 3], ['long', VB.lit(120, '2h00'), 4], ['vo2', VB.dec(6, 5, 93), 6], ['long', VB.lit(180, '3h00'), 7]] },
+      { note: 'Test', easy: true, s: [['z2', VB.antritte(4, 64, '1h04'), 2], ['test', PG.test20(), 3], ['z2', VB.lit(80, '1h20'), 4], ['z2', VB.lit(100, '1h40'), 6], ['long', VB.lit(150, '2h30'), 7]] },
+    ] },
+  { id: 'gf12', name: 'Peak Gran Fondo', weeks: 12, color: '#f7ffd2', per: '6 Einheiten pro Woche · 9–17 h',
+    desc: 'Zwölf Wochen auf einen langen Radmarathon hin: Krafttraining am Montag, VO2max- und Torque-Intervalle, Fatmax-Blöcke, Durability-Einheiten mit Vorermüdung und lange, hügelige Ausfahrten. Woche 8 ist Entlastung, Woche 12 Formaufbau bis zum Renntag.',
+    weeksDef: [
+      { note: 'Test', s: [['kraft', VB.off(KRAFT.ein, 60, KRAFT.einD), 1], ['z2', VB.antritte(6, 90, '1h30', 8), 2], ['test', PG.test20(), 3], ['long', VB.lit(150, '2:30h'), 4], ['vo2', VB.eb(4, 8, 1.04, 4, 90), 6], ['long', VB.lit(180, '3h00'), 7]] },
+      { s: [['kraft', VB.off(KRAFT.ein, 60, KRAFT.einD), 1], ['z2', VB.antritte(6, 90, '1h30', 8), 2], ['vo2', VB.eb(5, 8, 1.04, 4, 102), 3], ['z2', VB.fatN(4, 10, 130), 4], ['thr', VB.durab('I', 187), 6], ['long', VB.lit(210, '3h30'), 7]] },
+      { s: [['kraft', VB.off(KRAFT.ka, 75, KRAFT.kaD), 1], ['long', VB.lit(120, '2:00'), 2], ['vo2', VB.eb(5, 10, 1.02, 5, 112), 3], ['z2', VB.fatN(4, 15, 150), 4], ['thr', VB.kra(4, 10, 180), 6], ['long', VB.lit(240, '4:00'), 7]] },
+      { note: 'leichter', easy: true, s: [['kraft', VB.off(KRAFT.ka, 75, KRAFT.kaD), 1], ['z2', VB.antritte(6, 90, '1h30', 8), 2], ['vo2', VB.eb(4, 8, 1.04, 4, 90), 3], ['long', VB.lit(120, '2:00'), 4], ['thr', VB.kra(3, 10, 150), 6], ['long', VB.lit(180, '3h00'), 7]] },
+      { s: [['kraft', VB.off(KRAFT.ka, 75, KRAFT.kaD), 1], ['z2', VB.antritte(6, 90, '1h30', 8), 2], ['vo2', VB.torque(4, 138), 3], ['long', VB.lit(120, '2h'), 4], ['thr', VB.durab('I', 187), 6], ['long', VB.lit(240, '4:00'), 7]] },
+      { s: [['kraft', VB.off(KRAFT.ka, 75, KRAFT.kaD), 1], ['long', VB.lit(120, '2h'), 2], ['vo2', VB.torque(5, 135), 3], ['z2', VB.fatN(4, 15, 150), 4], ['thr', VB.durab('II', 188), 6], ['long', VB.lit(270, '4:30h'), 7]] },
+      { s: [['kraft', VB.off(KRAFT.ka, 75, KRAFT.kaD), 1], ['long', VB.lit(120, '2h'), 2], ['vo2', VB.torque(5, 148, true), 3], ['z2', VB.fatN(4, 10, 130), 4], ['thr', VB.durab('II', 228, true), 6], ['long', VB.lit(300, '5h00'), 7]] },
+      { note: 'Entlastung', easy: true, s: [['kraft', VB.off(KRAFT.del, 60, KRAFT.delD), 1], ['z2', VB.lit(60, '1:00'), 2], ['vo2', VB.eb(4, 8, 1.04, 4, 90), 3], ['z2', VB.lit(105, '1:45'), 4], ['z2', VB.antritte(6, 90, '1h30', 8), 6], ['long', VB.lit(150, '2h30'), 7]] },
+      { s: [['kraft', VB.off(KRAFT.max, 60, KRAFT.maxD), 1], ['z2', VB.antritte(8, 96, '1h30', 8), 2], ['vo2', VB.dec(5, 4, 133), 3], ['long', VB.lit(120, '2h'), 4], ['thr', VB.durab('II', 228, true), 6], ['long', VB.hilly(270), 7]] },
+      { s: [['kraft', VB.off(KRAFT.max, 60, KRAFT.maxD), 1], ['z2', VB.antritte(8, 96, '1h30', 8), 2], ['vo2', VB.dec(6, 4, 140), 3], ['long', VB.lit(135, '2:15h'), 4], ['thr', VB.durab('II', 188), 6], ['long', VB.hilly(300), 7]] },
+      { s: [['kraft', VB.off(KRAFT.max, 60, KRAFT.maxD), 1], ['z2', VB.antritte(8, 96, '1h30', 8), 2], ['vo2', VB.dec(5, 4, 133), 3], ['long', VB.lit(150, '2h30'), 4], ['thr', VB.durab('II', 188), 6], ['long', VB.hilly(240), 7]] },
+      { note: 'Rennwoche', easy: true, s: [['z2', VB.antritte(6, 87, '1h30', 8), 2], ['z2', VB.lit(60, '1h00'), 3], ['vo2', VB.dec(4, 4, 124), 4], ['thr', VB.vorbel(), 6], ['race', VB.off('Raceday', 360, 'Renntag – draußen fahren, gleichmäßig einteilen, früh essen und trinken. Viel Erfolg!', 'Rennen'), 7]] },
+    ] },
+  { id: 'crit6', name: 'Crit', weeks: 6, color: '#ffffff', per: '5 Einheiten pro Woche · 6–11 h',
+    desc: 'Sechs Wochen für Kriterien und kurze Rennen: Sprints, kurze harte Intervalle (30/30, 15/45, 30/15), Rennfinale-Intervalle und wechselnde Tempi. Woche 4 ist leichter, Woche 6 Formaufbau mit Vorbelastung.',
+    weeksDef: [
+      { s: [['z2', VB.antritte(6, 90, '1h30'), 2], ['vo2', VB.ie3030(3, 10, 90), 3], ['z2', VB.lit(90, '1h30'), 4], ['vo2', VB.dec(5, 5, 90), 6], ['long', VB.lit(150, '2h30'), 7]] },
+      { s: [['z2', VB.antritte(6, 120, '1h30'), 2], ['vo2', VB.ie('HIT – IE 3×5×15/45', 3, 5, 15, 45, 1.5, 90), 3], ['sit', VB.sprint('SIT – Sprint Training (5×20")', 5, 20, 90), 4], ['vo2', VB.eb(6, 4, 1.1, 3, 95, 'HIT – HIT_EB (6×4 min)'), 6], ['long', VB.lit(210, '3h30'), 7]] },
+      { s: [['z2', VB.lit(90, '1h30'), 2], ['vo2', VB.rwi(), 3], ['long', VB.lit(120, '2h'), 4], ['vo2', VB.hitvar(), 6], ['long', VB.lit(240, '4h'), 7]] },
+      { note: 'leichter', easy: true, s: [['z2', VB.fatmax(90), 2], ['z2', VB.lit(60, '1h'), 3], ['sit', VB.sit(), 4], ['vo2', VB.ie('HIT – IE: 3×8×30/30 + 8 min SwSp', 3, 8, 30, 30, 1.2, 90, [], [W(240, .55), W(480, .9)]), 6], ['long', VB.lit(150, '2h30'), 7]] },
+      { s: [['z2', VB.antritte(6, 90, '1h30'), 2], ['thr', VB.swspStart(), 3], ['z2', VB.lit(90, '1h30'), 5], ['vo2', VB.hitinc(), 6], ['long', VB.lit(180, '3h'), 7]] },
+      { note: 'Formaufbau', easy: true, s: [['z2', VB.fatmax(90), 2], ['vo2', VB.ie3015(3, 7, 60), 3], ['long', VB.lit(120, '2h'), 4], ['thr', VB.vorbel(), 6]] },
+    ] },
+  { id: 'hit4', name: 'Rad HIT', weeks: 4, color: '#edff9a', per: '4–5 Einheiten pro Woche · ca. 7 h',
+    desc: 'Vier kompakte Wochen mit Rampentest zum Start, hochintensiven Intervallen (30/30, 30/15, EB) und Sprints, dazwischen ruhige Grundlage und FatMax-Einheiten. Ruhetage sind Tag 1 und 4.',
+    weeksDef: [
+      { note: 'Test', s: [['rec', VB.lit(45, '0h45 min'), 2], ['test', PG.test(), 2], ['vo2', VB.ie('HIT – IE: 4×10×30/30 + 15 min SwSp', 4, 10, 30, 30, 1.2, 120, [], [W(240, .55), W(900, .9)]), 3], ['vo2', VB.eb(5, 5, 1.08, 5, 90), 5], ['sit', VB.sprint('SIT – Booster LIT: 7×30s Sprint', 7, 30, 60, 210), 6], ['vo2', VB.ie3015(3, 11, 75), 7]] },
+      { s: [['long', VB.lit(120, '2h'), 2], ['z2', VB.fm20(), 3], ['z2', VB.lit(90, '1:30h'), 5], ['z2', VB.lit(60, '1h'), 6], ['vo2', VB.eb(4, 5, 1.1, 5, 80), 7]] },
+      { s: [['z2', VB.lit(90, '1:30h'), 2], ['long', VB.lit(120, '2h'), 3], ['long', VB.lit(120, '2h'), 5], ['z2', VB.lit(60, '1h'), 6], ['vo2', VB.ie3015(3, 13, 80), 7]] },
+      { s: [['long', VB.lit(120, '2h'), 2], ['z2', VB.fm20(), 3], ['z2', VB.lit(90, '1h30'), 5], ['z2', VB.pyra60(), 6], ['vo2', VB.eb(3, 8, 1.05, 4, 82), 7]] },
     ] },
   { id: 'base8', name: 'Grundlagen-Aufbau', weeks: 8, color: '#a3ad6f', per: '3 Einheiten pro Woche · 3–6 h',
     desc: 'Das Ausdauer-Fundament: fast alles locker, ein Sweet-Spot-Training pro Woche und ein Longride, der von 1:30 auf 3 h wächst. Ideal für den Winter oder den Wiedereinstieg.',
@@ -3207,6 +3306,7 @@ for (const P of PLANS) {
   }));
   P.easy = P.weeksDef.map((w, i) => w.easy ? i : -1).filter(i => i >= 0);
   P.slots = P.weeksDef.map(w => w.s.map(x => x[0]));
+  P.days = P.weeksDef.map(w => w.s.map(x => x[2] || 0)); // optional: Wochentag (1–7)
 }
 const PLAN_SCIENCE = [
   ['Viel locker, wenig hart', 'Ausdauerprofis trainieren rund 80 % locker und 20 % intensiv. Diese Verteilung bringt mehr als „immer mittel“.', 'Seiler & Kjerland 2006; Stöggl & Sperlich 2014'],
@@ -3228,7 +3328,7 @@ function planNext() {
   return null;
 }
 const planCount = P => P.w.reduce((a, x) => a + x.length, 0);
-const SLOT_COLOR = { thr: '#cfdf82', z2: '#76796a', vo2: '#edff9a', long: '#a3ad6f', test: '#c9c9c0', rec: '#4a4a4f' };
+const SLOT_COLOR = { thr: '#cfdf82', z2: '#76796a', vo2: '#edff9a', long: '#a3ad6f', test: '#c9c9c0', rec: '#4a4a4f', sit: '#ffffff', kraft: '#9a9a94', race: '#ffffff' };
 function planMarkFromRide(rd) {
   const P = planDef(); if (!P || !rd.woId) return;
   const wo = workoutById(rd.woId); if (!wo || (rd.timer || 0) < woTotal(wo) * 0.7) return;
@@ -3251,10 +3351,11 @@ function renderPlanBanner() {
     b.innerHTML = `<div class="pbWeek"><small>Woche</small><b>${n ? n.w + 1 : P.weeks}</b><small>von ${P.weeks}</small></div><div class="pbText"><b>${esc(P.name)}</b>
       <span>${n ? 'Als Nächstes: <b>' + esc(wo?.name || n.id) + '</b> · ' + fmtT(woTotal(wo)) : 'Alle ' + all + ' Einheiten erledigt'}</span>
       <div class="pbBar"><i style="width:${done / all * 100}%"></i></div></div>
-      ${n ? `<button class="pbBtn" data-plan-pick="${esc(n.id)}">Auswählen</button>` : ''}<button class="pbLink" data-plan-open>Ganzer Plan</button>`;
+      ${n ? (wo?.off ? `<button class="pbBtn" data-plan-done="${n.w}-${n.i}">Erledigt</button>` : `<button class="pbBtn" data-plan-pick="${esc(n.id)}">Auswählen</button>`) : ''}<button class="pbLink" data-plan-open>Ganzer Plan</button>`;
   }
   b.querySelectorAll('[data-plan-open]').forEach(x => x.onclick = openPlan);
   b.querySelectorAll('[data-plan-pick]').forEach(x => x.onclick = () => pickWorkout(x.dataset.planPick, 'Plan'));
+  b.querySelectorAll('[data-plan-done]').forEach(x => x.onclick = () => { plan.done[x.dataset.planDone] = new Date().toISOString().slice(0, 10); savePlan(); renderPlanBanner(); fillSelects(); });
 }
 const scienceHtml = () => `<details class="science"><summary>Worauf die Pläne basieren</summary><ul>${PLAN_SCIENCE.map(([t, d, src]) => `<li><b>${esc(t)}</b> ${esc(d)} <small>${esc(src)}</small></li>`).join('')}</ul></details>`;
 function weekBars(P) {
@@ -3271,12 +3372,12 @@ function openPlan() {
   } else {
     const n = planNext();
     body.innerHTML = `<div class="planCard" style="--pc:${P.color};margin-top:6px"><div class="pcHead"><div><b>${esc(P.name)}</b><span>gestartet am ${new Date(plan.start).toLocaleDateString('de-DE')} · ${Object.keys(plan.done).length} von ${planCount(P)} Einheiten erledigt</span></div></div>${weekBars(P)}</div>` +
-      P.w.map((wk, w) => `<div class="pWeek${n && n.w === w ? ' cur' : ''}"><div class="pwL">Woche ${w + 1}${P.weeksDef[w].note ? '<small>' + esc(P.weeksDef[w].note) + '</small>' : ''}</div><div class="pwS">${wk.map((id, i) => {
+      P.w.map((wk, w) => `<div class="pWeek${n && n.w === w ? ' cur' : ''}"><div class="pwL">Woche ${w + 1}${P.weeksDef[w].note ? '<small>' + esc(P.weeksDef[w].note) + '</small>' : ''}<small>${fmtMin(Math.round(wk.reduce((a, id) => a + woTotal(workoutById(id)), 0) / 60))}</small></div><div class="pwS">${wk.map((id, i) => {
         const wo = workoutById(id), dn = plan.done[w + '-' + i], nx = n && n.w === w && n.i === i, slot = P.slots[w][i];
-        return `<button class="pSess${dn ? ' done' : ''}${nx ? ' next' : ''}" data-sess="${w}-${i}" data-id="${esc(id)}" style="--cc:${SLOT_COLOR[slot]}" title="${esc(wo?.desc || '')}"><em>${dn ? '✓ ' : ''}${SLOT[slot]}</em><b>${esc(wo?.name || id)}</b><small>${wo ? fmtT(woTotal(wo)) : ''}</small></button>`; }).join('')}</div></div>`).join('') +
+        return `<button class="pSess${dn ? ' done' : ''}${nx ? ' next' : ''}" data-sess="${w}-${i}" data-id="${esc(id)}" style="--cc:${SLOT_COLOR[slot]}" title="${esc(wo?.desc || '')}"><em>${dn ? '✓ ' : ''}${P.days[w][i] ? 'Tag ' + P.days[w][i] + ' · ' : ''}${SLOT[slot]}</em><b>${esc(wo?.name || id)}</b><small>${wo ? fmtT(woTotal(wo)) : ''}</small></button>`; }).join('')}</div></div>`).join('') +
       '<p class="sub" style="margin-top:12px">Klick auf eine Einheit wählt sie aus. Nach der Fahrt hakt Kurbeln sie automatisch ab (ab 70 % der Dauer). Rechtsklick hakt von Hand ab oder wieder auf. Die Reihenfolge innerhalb einer Woche ist frei – nur zwei harte Tage nicht direkt hintereinander.</p>' + scienceHtml();
     body.querySelectorAll('[data-sess]').forEach(x => {
-      x.onclick = () => { pickWorkout(x.dataset.id, 'Plan'); d.style.display = 'none'; };
+      x.onclick = () => { const wo = workoutById(x.dataset.id); if (wo?.off) { const k = x.dataset.sess; if (plan.done[k]) delete plan.done[k]; else plan.done[k] = new Date().toISOString().slice(0, 10); savePlan(); renderPlanBanner(); openPlan(); toast(plan.done[k] ? wo.name + ' abgehakt.' : wo.name + ' wieder offen.', 3000); return; } pickWorkout(x.dataset.id, 'Plan'); d.style.display = 'none'; };
       x.oncontextmenu = e => { e.preventDefault(); const k = x.dataset.sess; if (plan.done[k]) delete plan.done[k]; else plan.done[k] = new Date().toISOString().slice(0, 10); savePlan(); renderPlanBanner(); fillSelects(); openPlan(); };
     });
   }
@@ -3571,14 +3672,14 @@ function fillSelects() {
   $('#selRoute').value = route.id;
   const wo = w => `<option value="${w.id}">${esc(w.name)} · ${fmtT(woTotal(w))}</option>`;
   $('#selWorkout').innerHTML = og('Ohne Workout', ['<option value="none">Kein Workout – freie Fahrt</option>', '<option value="manual">Fester Wattwert (ERG)</option>']) +
-    woCats().filter(c => c !== 'Beliebt').map(c => og(c, allWorkouts().filter(w => woCat(w) === c).map(wo))).join('') + og('Trainingsplan', PLAN_WORKOUTS.map(wo));
+    woCats().filter(c => c !== 'Beliebt').map(c => og(c, allWorkouts().filter(w => woCat(w) === c).map(wo))).join('') + og('Trainingsplan', PLAN_WORKOUTS.filter(w => !w.off).map(wo));
   $('#selWorkout').value = workoutById(settings.workoutId) || settings.workoutId === 'none' ? settings.workoutId : 'none';
   const cats = woCats(), cur = workoutById(settings.workoutId);
   if (!cats.includes(settings.woCat)) settings.woCat = cats.includes('Plan') ? 'Plan' : cur && !cur.fav ? woCat(cur) : 'Beliebt';
   $('#catRow').innerHTML = cats.map(c => `<button class="${c === settings.woCat ? 'on' : ''}" data-cat="${esc(c)}" style="--cc:${catColor(c)}" title="${esc(WO_CAT_TIP[c] || { Plan: 'Die Einheiten dieser Woche aus deinem Trainingsplan', Beliebt: 'Die meistgenutzten Workouts', Frei: 'Ohne Workout fahren' }[c] || '')}"><i class="cdot"></i>${esc(c === 'Plan' ? 'Mein Plan' : c)}</button>`).join('');
   $('#catRow').querySelectorAll('[data-cat]').forEach(b => b.onclick = () => { settings.woCat = b.dataset.cat; saveSettings(); fillSelects(); });
   let list;
-  if (settings.woCat === 'Plan') { const n = planNext(), P = planDef(); list = P.w[n.w].map((id, i) => workoutById(id) && Object.assign({}, workoutById(id), { _plan: { w: n.w, i, done: !!plan.done[n.w + '-' + i], next: n.i === i } })).filter(Boolean); }
+  if (settings.woCat === 'Plan') { const n = planNext(), P = planDef(); list = P.w[n.w].map((id, i) => workoutById(id) && Object.assign({}, workoutById(id), { _plan: { w: n.w, i, done: !!plan.done[n.w + '-' + i], next: n.i === i } })).filter(w => w && !w.off); }
   else if (settings.woCat === 'Frei') list = FREE_CARDS;
   else if (settings.woCat === 'Beliebt') list = FAV_WORKOUTS;
   else list = allWorkouts().filter(w => woCat(w) === settings.woCat);
