@@ -503,6 +503,7 @@ body,#landing,#setup .card.menu,#planDlg .card.menu,#calDlg .card,#dashDlg .card
 .ddp{background:var(--s1)!important;border:1px solid var(--ln)}
 #wbox .bar{background:var(--ln)}
 #mapBox,#map{background:#1a1a1c!important}
+#map.tiles-dark .leaflet-tile-pane{filter:invert(1) grayscale(1) brightness(.72) contrast(1.18)} /* helle Straßenkarte → dunkle Graustufen im App-Design */
 #wbox .rem{color:var(--acc)}
 #tour .ring{outline:2px solid var(--acc);outline-offset:0}
 #ghostBox .gsub{font-size:12px;color:var(--tx2);font-variant-numeric:tabular-nums}
@@ -2463,7 +2464,7 @@ document.addEventListener('visibilitychange', () => { if (document.visibilitySta
 // ---------- 2D-Karte (OpenStreetMap) ----------
 function fitCanvas(c) { const r = c.getBoundingClientRect(), d = devicePixelRatio || 1; const w = Math.round(r.width * d), h = Math.round(r.height * d); if (c.width !== w || c.height !== h) { c.width = w; c.height = h; } return [w, h]; }
 const TILES = { // alle getestet: funktionieren auch, wenn Kurbeln als Datei geöffnet wird
-  dark: { name: 'Dunkel (Esri)', url: 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', sub: 'abc', max: 19, native: 16, attr: 'Karte © <a href="https://www.esri.com" target="_blank">Esri</a>, HERE, Garmin, © OpenStreetMap-Mitwirkende' },
+  dark: { name: 'Kurbeln dunkel', url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', sub: 'abc', max: 19, cls: 'tiles-dark', attr: 'Karte © <a href="https://www.esri.com" target="_blank">Esri</a>, HERE, Garmin, © OpenStreetMap-Mitwirkende' },
   esri: { name: 'Straßenkarte (Esri)', url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', sub: 'abc', max: 19, attr: 'Karte © <a href="https://www.esri.com" target="_blank">Esri</a>, HERE, Garmin, © OpenStreetMap-Mitwirkende' },
   cyclosm: { name: 'Radkarte (CyclOSM)', url: 'https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', sub: 'abc', max: 20, attr: '<a href="https://www.cyclosm.org" target="_blank">CyclOSM</a> · © <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>-Mitwirkende' },
   topo: { name: 'Topografisch (OpenTopoMap)', url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', sub: 'abc', max: 17, attr: '© <a href="https://opentopomap.org" target="_blank">OpenTopoMap</a> (CC-BY-SA) · © <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>-Mitwirkende' },
@@ -2486,7 +2487,8 @@ function setTiles(key) {
   if (!map) return;
   const t = TILES[key] || TILES.esri; if (tileLayer) map.removeLayer(tileLayer);
   let errs = 0;
-  tileLayer = L.tileLayer(t.url, { maxZoom: t.max, maxNativeZoom: t.native || t.max, subdomains: t.sub, attribution: t.attr, crossOrigin: false, detectRetina: true }).addTo(map);
+  map.getContainer().classList.toggle('tiles-dark', !!t.cls);
+  tileLayer = L.tileLayer(t.url, { maxZoom: t.max, subdomains: t.sub, attribution: t.attr, crossOrigin: false, detectRetina: true }).addTo(map);
   tileLayer.on('tileerror', () => { if (++errs === 6 && key !== 'esri') { toast('Karten-Server „' + t.name + '“ liefert keine Kacheln – wechsle auf die Esri-Straßenkarte.', 5000); settings.mapStyle = 'esri'; saveSettings(); if ($('#selMap')) $('#selMap').value = 'esri'; setTiles('esri'); } });
 }
 const gradeCol = g => g > .08 ? '#ffffff' : g > .05 ? '#f7ffd2' : g > .03 ? '#edff9a' : g > .01 ? '#b7c472' : g < -.03 ? '#55565a' : g < -.01 ? '#6e6f6a' : '#8a8c80';
