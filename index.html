@@ -507,6 +507,14 @@ body,#landing,#setup .card.menu,#planDlg .card.menu,#calDlg .card,#dashDlg .card
 #wbox .rem .u{font-size:16px;font-family:var(--uifont);letter-spacing:0}
 #tour .ring{outline:2px solid var(--acc);outline-offset:0}
 #setup .mhead .ver{font-size:11px;color:var(--tx2);margin-left:10px;font-family:var(--numfont)}
+body:not(.riding) footer,body:not(.riding) #viewSeg,body:not(.riding) #btnPip{display:none!important}
+@media (min-width:761px){
+  #setup .card.menu{width:min(1120px,100%)}
+  #setup .rcard{flex-basis:250px!important}#setup .rprof{height:100px}#setup .rname{font-size:17px}#setup .rstats{font-size:13.5px}
+  #setup .wgrid{grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}#setup .wprof{height:56px}#setup .wname{font-size:16.5px}
+  #setup .planBanner{padding:18px 22px}#setup .pbText b{font-size:19px}
+  #setup .sec .sh h3{font-size:20px!important}
+}
 #ghostBox .gsub{font-size:12px;color:var(--tx2);font-variant-numeric:tabular-nums}
 button.primary,.planCard .primary,#calDlg button.primary,#dashDlg button.primary,#planDlg .actions button.primary{color:var(--onacc)!important}
 #mapBox .leaflet-control-attribution{background:rgba(12,12,13,.75)!important;color:var(--tx2)!important}#mapBox .leaflet-control-attribution a{color:var(--tx)!important}
@@ -1231,7 +1239,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <button id="btnDash" title="Deine Form, FTP und Wochen im Überblick">Dashboard</button>
   <button id="btnPlan" title="Trainingsplan">Trainingsplan</button>
   <button id="btnHist" title="Deine gespeicherten Fahrten">Meine Fahrten</button>
-  <button id="btnSetup">Menü</button>
+  <button id="btnSetup">Kurbeln</button>
 </header>
 
 <div id="stage">
@@ -1325,7 +1333,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <!-- Setup -->
   <div class="overlay" id="setup">
     <div class="card menu">
-      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 2.2</span></div>
+      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 2.3</span></div>
       <div class="warnbox" id="noBt" style="display:none">Bluetooth geht nur in <b>Google Chrome</b> oder Edge. Die Demo funktioniert trotzdem.</div>
       <div class="warnbox" id="recoverBox" style="display:none">Nicht gespeicherte Fahrt vom <span id="recoverDate"></span> gefunden. <button id="btnRecover">Ansehen</button></div>
       <div id="planBanner"></div>
@@ -2379,8 +2387,19 @@ function updateGhostHUD() {
   $('#hGhS').textContent = !ride.started || gd == null ? '' : Math.round(Math.abs(dx)) + ' m ' + (dx >= 0 ? 'vorne' : 'hinten');
 }
 
+// Höhenprofil, Workout-Verlauf und Karte/Werte/Video nur während der Fahrt
+let wasRiding = null;
+function syncRideUI() {
+  const riding = ride.state === 'running' || ride.state === 'paused';
+  if (riding === wasRiding) return; wasRiding = riding;
+  document.body.classList.toggle('riding', riding);
+  if (!riding && settings.view !== 'map') setView('map');
+  if (map) setTimeout(() => map.invalidateSize(), 30);
+}
+
 // ---------- HUD ----------
 function updateHUD() {
+  syncRideUI();
   updateGhostHUD();
   const p3 = powerHist.length ? powerHist.reduce((a, x) => a + x[1], 0) / powerHist.length : 0;
   $('#hP').textContent = Math.round(p3);
@@ -4087,7 +4106,7 @@ if (!document.fullscreenEnabled) $('#btnFull').style.display = 'none';
 initMap();
 loadSetup();
 setView(settings.view); renderRecent(); setTheme('hell');
-if (settings.svOn) setSV(true);
+if (settings.svOn) { settings.svOn = false; saveSettings(); } // Karte startet immer ohne Street View
 stravaRenderState();
 (async () => { // gespeicherten Workout-Ordner wieder öffnen
   try {

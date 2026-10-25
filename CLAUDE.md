@@ -14,6 +14,7 @@ Sie läuft in Chrome auf dem MacBook und wird über GitHub Pages veröffentlicht
   **Keine Emojis** (auch nicht in Knöpfen oder Meldungen), klare Text-Buttons, farbige Punkte statt Icons; Werte-Fenster ist ein kleiner Symbol-Knopf (SVG) neben „Video“.
 - Handy/Tablet: Block „Tablet & Handy“ (Media Queries 1180 px / 760 px) am Ende des Menü-CSS; Workout-Box dort unten über der Steuerleiste. iPhone/iPad: kein Web-Bluetooth → Hinweis auf App „Bluefy“.
 - Einführung beim ersten Besuch: `TOUR`, `startTour` (localStorage `kurbel.tour`), erneut über „Einführung“ im Menü.
+- Außerhalb der Fahrt (`syncRideUI`, Body-Klasse `riding`): keine Fußleiste (Höhenprofil/Workout), keine Umschaltung Karte/Werte/Video, kein Werte-Fenster-Knopf; Menü dafür größer. Menü-Knopf heißt „Kurbeln“. Street View startet immer aus.
 - Oben in der Leiste ersetzt ein neues Fenster (Dashboard, Plan, Fahrten, Menü) das offene (Klick-Listener auf `header` vor `#btnSetup`).
 
 ## Aufbau von index.html (Suchbegriffe)
