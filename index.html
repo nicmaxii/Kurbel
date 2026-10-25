@@ -502,6 +502,16 @@ html,body{background:var(--bg)}
 #mapBox,#map{background:#1a1a1c!important}
 #wbox .rem{color:var(--acc)}
 #tour .ring{outline:2px solid var(--acc);outline-offset:0}
+
+.dot.on{background:var(--acc)!important}.dot.wait{background:var(--tx2)!important}
+.sw input:checked{background:var(--acc)!important}
+button.danger,:root[data-theme=hell] button.danger{color:var(--tx)!important;border-color:var(--ln)!important}
+:root[data-theme=hell] .okbox{background:#22270f;border-color:#4b5720;color:var(--acc)}
+footer .cap{display:none}
+#landing .lgrain{position:absolute;inset:-50%;z-index:1;opacity:.11;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:lgr .5s steps(2) infinite}
+@keyframes lgr{50%{transform:translate(-3%,2%)}}
+@media (prefers-reduced-motion:reduce){#landing .lgrain{animation:none}}
+#map.rot .leaflet-tile{width:257px!important;height:257px!important}
 input[type=range]{accent-color:var(--acc)}
 .leaflet-bar a,.leaflet-bar a:hover{background:var(--s1)!important;color:var(--tx)!important;border-color:var(--ln)!important}
 .leaflet-container .leaflet-control-attribution{background:rgba(12,12,13,.7);color:var(--tx2)}
@@ -1183,7 +1193,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 <div id="landing">
   <canvas id="lcv"></canvas>
   <nav class="lnav"><span class="brand">kurbeln</span><a data-go="map">Fahren</a><a data-go="data">Werte</a><a data-go="workouts">Workouts</a><a data-go="routes">Strecken</a><a data-go="video">Video</a><a data-go="history">Meine Fahrten</a><a class="cta" data-go="map">Losfahren</a></nav>
-  <div class="lhero"><h1>kurbeln</h1>
+  <div class="lgrain"></div><div class="lhero"><h1>kurbeln</h1>
     <div class="lbtns"><button class="b1" data-go="map">Losfahren</button><button class="b2" data-go="demo">Demo ansehen ›</button></div></div>
   <div class="lhint">Scrollen oder heranzoomen, um einzutauchen<span>⌄</span></div>
   <div id="lfade"></div>
@@ -1385,10 +1395,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <section class="dCard"><h3>FTP-Schätzung</h3><p class="sub" id="dEstTxt"></p><h3 style="margin-top:14px">Form</h3><p class="sub" id="dFormTxt"></p></section>
         <section class="dCard"><h3>Trainingsplan</h3><div id="dPlan"></div></section>
       </div>
-      <section class="dCard"><h3>Fitness &amp; Ermüdung <span class="dLeg"><span><i style="background:#2563eb"></i>Fitness (42 Tage)</span><span><i style="background:#e8400f"></i>Ermüdung (7 Tage)</span></span></h3><div id="dPmc" class="dChart"></div></section>
+      <section class="dCard"><h3>Fitness &amp; Ermüdung <span class="dLeg"><span><i style="background:#edff9a"></i>Fitness (42 Tage)</span><span><i style="background:#9a9a94"></i>Ermüdung (7 Tage)</span></span></h3><div id="dPmc" class="dChart"></div></section>
       <div class="dGrid2">
         <section class="dCard"><h3>Stunden pro Woche</h3><div id="dWeeks" class="dChart"></div></section>
-        <section class="dCard"><h3>Leistungskurve <span class="dLeg"><span><i style="background:#e8400f"></i>6 Wochen</span><span><i style="background:#2563eb"></i>Gesamt</span></span></h3><div id="dCurve" class="dChart"></div></section>
+        <section class="dCard"><h3>Leistungskurve <span class="dLeg"><span><i style="background:#9a9a94"></i>6 Wochen</span><span><i style="background:#edff9a"></i>Gesamt</span></span></h3><div id="dCurve" class="dChart"></div></section>
       </div>
       <section class="dCard"><h3>Zeit in den Zonen · letzte 4 Wochen</h3><div id="dZones"></div></section>
       <section class="dCard"><h3>Letzte Fahrten</h3><div id="dRecent"></div></section>
@@ -2351,7 +2361,7 @@ function updateHUD() {
   const g = gradeAt(route, ride.distance) * 100;
   $('#hG').textContent = g.toFixed(1);
   $('#grade').classList.toggle('onCob', !!cobbleAt(route, ride.distance));
-  $('#grade').style.borderColor = g > 7 ? '#f85149' : g > 4 ? '#f97316' : g > 1.5 ? '#eab308' : g < -1.5 ? '#3b82f6' : 'rgba(255,255,255,.08)';
+  $('#grade').style.borderColor = g > 7 ? '#ffffff' : g > 4 ? '#edff9a' : g > 1.5 ? '#a3ad6f' : 'rgba(255,255,255,.08)';
   // Workout-Box
   const wo = (ride.state === 'running' || ride.state === 'paused') ? ride.workout : null;
   const box = $('#wbox');
@@ -2370,7 +2380,7 @@ function updateHUD() {
   if (!sa) return;
   const tgt = currentTarget();
   $('#wTgt').textContent = tgt == null ? 'frei' : tgt;
-  { const d = tgt ? (p3 - tgt) / tgt : 0; $('#wNow').style.color = !tgt || !ride.started ? '' : Math.abs(d) < .05 ? '#16a34a' : d > 0 ? '#ea580c' : '#2563eb'; }
+  { const d = tgt ? (p3 - tgt) / tgt : 0; $('#wNow').style.color = !tgt || !ride.started ? '' : Math.abs(d) < .05 ? '#edff9a' : d > 0 ? '#ffffff' : '#9a9a94'; }
   $('#wBar').style.width = (sa.tIn / sa.s.dur * 100) + '%';
   $('#wRem').textContent = fmtT(sa.rem);
   $('#wTot').textContent = fmtT(woTotal(wo) - t);
@@ -2436,7 +2446,7 @@ function setTiles(key) {
   tileLayer = L.tileLayer(t.url, { maxZoom: t.max, maxNativeZoom: t.native || t.max, subdomains: t.sub, attribution: t.attr, crossOrigin: false, detectRetina: true }).addTo(map);
   tileLayer.on('tileerror', () => { if (++errs === 6 && key !== 'esri') { toast('Karten-Server „' + t.name + '“ liefert keine Kacheln – wechsle auf die Esri-Straßenkarte.', 5000); settings.mapStyle = 'esri'; saveSettings(); if ($('#selMap')) $('#selMap').value = 'esri'; setTiles('esri'); } });
 }
-const gradeCol = g => g > .08 ? '#c0262d' : g > .05 ? '#e8590c' : g > .03 ? '#f2a516' : g > .01 ? '#8bbf3a' : g < -.03 ? '#2f6fd6' : g < -.01 ? '#5aa0e6' : '#2f9e44';
+const gradeCol = g => g > .08 ? '#ffffff' : g > .05 ? '#f7ffd2' : g > .03 ? '#edff9a' : g > .01 ? '#b7c472' : g < -.03 ? '#55565a' : g < -.01 ? '#6e6f6a' : '#8a8c80';
 function latLonAt(r, d) { const [i, t] = routePos(r, d); return [r.lat[i] + (r.lat[i + 1] - r.lat[i]) * t, r.lon[i] + (r.lon[i + 1] - r.lon[i]) * t]; }
 function drawRouteOnMap(force) {
   if (!map) return;
@@ -2459,27 +2469,27 @@ function drawRouteOnMap(force) {
     if (c !== cur) { if (pts.length) pts.push([r.lat[i], r.lon[i]]); flush(); cur = c; pts = [[r.lat[i], r.lon[i]]]; } else pts.push([r.lat[i], r.lon[i]]);
   }
   pts.push([r.lat[n - 1], r.lon[n - 1]]); flush();
-  (r.cobbles || []).forEach(c => { const pts = []; for (let x = c.a; x <= c.b; x += 20) pts.push(latLonAt(r, x)); pts.push(latLonAt(r, c.b)); L.polyline(pts, { color: '#5b3a1e', weight: 7, opacity: .95, dashArray: '3 5', lineCap: 'butt', interactive: false }).addTo(routeGroup); });
+  (r.cobbles || []).forEach(c => { const pts = []; for (let x = c.a; x <= c.b; x += 20) pts.push(latLonAt(r, x)); pts.push(latLonAt(r, c.b)); L.polyline(pts, { color: '#9a9a94', weight: 7, opacity: .95, dashArray: '3 5', lineCap: 'butt', interactive: false }).addTo(routeGroup); });
   doneLine = L.polyline([], { color: '#f2f2ee', weight: 4, opacity: .6, dashArray: '1 7', lineCap: 'round', interactive: false }).addTo(routeGroup);
   (r.pois || []).forEach(p => {
     const ll = latLonAt(r, p.d);
     L.circleMarker(ll, { radius: 5, color: '#1b1f24', weight: 2, fillColor: '#fff', fillOpacity: 1 }).bindTooltip(p.name, { permanent: true, direction: 'top', offset: [0, -6], className: 'poi-tip' }).addTo(routeGroup);
   });
   const s0 = [r.lat[0], r.lon[0]], s1 = [r.lat[n - 1], r.lon[n - 1]];
-  L.circleMarker(s0, { radius: 7, color: '#fff', weight: 3, fillColor: '#2f9e44', fillOpacity: 1 }).bindTooltip('Start', { direction: 'right', className: 'poi-tip' }).addTo(routeGroup);
+  L.circleMarker(s0, { radius: 7, color: '#fff', weight: 3, fillColor: '#edff9a', fillOpacity: 1 }).bindTooltip('Start', { direction: 'right', className: 'poi-tip' }).addTo(routeGroup);
   if (!r.loop) L.circleMarker(s1, { radius: 7, color: '#fff', weight: 3, fillColor: '#1b1f24', fillOpacity: 1 }).bindTooltip('Ziel', { permanent: true, direction: 'right', className: 'poi-tip keep' }).addTo(routeGroup);
   riderMarker = L.marker(s0, { icon: L.divIcon({ className: '', html: '<div class="rider"><div class="arr"></div><div class="dot"></div></div>', iconSize: [30, 30], iconAnchor: [15, 15] }), interactive: false, zIndexOffset: 1000 }).addTo(routeGroup);
   zoomToRoute();
 }
 function zoomToRoute() { if (!map || !route.lat) return; const b = L.latLngBounds([]); for (let i = 0; i < route.lat.length; i += 10) b.extend([route.lat[i], route.lon[i]]); map.fitBounds(b, { padding: [60, 60] }); }
 // Karte in Fahrtrichtung: der Karten-Container wird größer als sichtbar (Diagonale) und um die Mitte gedreht
-const mapRot = { on: false, a: 0 }, TILT = { deg: 42, p: 1400, y: .62 };
+const mapRot = { on: false, a: 0 }, TILT = { deg: 32, p: 1500, y: .6 };
 function sizeMapRot(on) {
   const m = $('#map'), b = $('#mapBox');
   if (on) { // leicht schräg von hinten: Fahrer bei ~62 % der Höhe, Container groß genug, dass auch der ferne Rand oben gefüllt ist
     const w = b.clientWidth, h = b.clientHeight, cy = h * TILT.y, P = TILT.p, th = TILT.deg * Math.PI / 180;
     const Y = cy * 1.12, rY = Y * P / (P * Math.cos(th) - Y * Math.sin(th)), sc = P / (P + rY * Math.sin(th));
-    const R = Math.min(2600, Math.max(Math.hypot(w / 2, h - cy), Math.hypot(rY, w / 2 / sc)) * 1.08), D = Math.ceil(2 * R);
+    const R = Math.min(1700, Math.max(Math.hypot(w / 2, h - cy), Math.hypot(rY, w / 2 / sc)) * 1.08), D = Math.ceil(2 * R);
     Object.assign(m.style, { inset: 'auto', left: (w - D) / 2 + 'px', top: cy - D / 2 + 'px', width: D + 'px', height: D + 'px' }); }
   else { Object.assign(m.style, { inset: '', left: '', top: '', width: '', height: '', transform: '' }); m.style.removeProperty('--unrot'); mapRot.a = 0; }
   m.classList.toggle('rot', on); map.invalidateSize({ pan: false });
@@ -2647,7 +2657,7 @@ function updateViews() {
     $('#dTgt').textContent = v.tgt == null ? '–' : v.tgt; $('#dTgtU').style.display = v.tgt == null ? 'none' : '';
     $('#dTs').textContent = v.sub + (v.nxt ? ' · ' + v.nxt : '');
     const diff = v.tgt ? (v.p3 - v.tgt) / v.tgt : 0;
-    $('#dTbox').style.borderColor = !v.tgt ? '' : Math.abs(diff) < .05 ? '#3fb950' : diff > 0 ? '#f97316' : '#3b82f6';
+    $('#dTbox').style.borderColor = !v.tgt ? '' : Math.abs(diff) < .05 ? '#edff9a' : diff > 0 ? '#ffffff' : '#9a9a94';
     $('#dC').textContent = Math.round(v.cad); $('#dH').textContent = v.hr ?? '–'; $('#dS').textContent = v.v.toFixed(1);
     $('#dT').textContent = fmtT(v.t); $('#dD').textContent = v.d.toFixed(2); $('#dG').textContent = v.g.toFixed(1);
     $('#dAP').textContent = S.length ? Math.round(S.reduce((a, s) => a + s[1], 0) / S.length) : 0;
@@ -2746,12 +2756,12 @@ $('#vidExt').onclick = () => { if (vidCur?.kind === 'yt') { window.open(ytWatchU
 // ---------- Schwebendes Werte-Fenster (Bild-im-Bild) ----------
 let pipWin = null;
 const PIP_HTML = `<style>
-*{box-sizing:border-box}body{margin:0;background:#0d1117;color:#e6edf3;font:14px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;height:100vh;display:grid;grid-template-rows:auto 1fr auto;user-select:none}
-.p{padding:6px 12px 0;display:flex;align-items:baseline;gap:10px}.pv{font-size:min(26vw,30vh);font-weight:800;line-height:1;font-variant-numeric:tabular-nums}.u{color:#8b98a8;font-size:14px;font-weight:600}
-.t{margin-left:auto;text-align:right}.tv{font-size:min(10vw,13vh);font-weight:800;font-variant-numeric:tabular-nums;line-height:1}.ts{color:#8b98a8;font-size:12px}
-.g{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px 12px}.c .l{font-size:10px;color:#8b98a8;text-transform:uppercase;letter-spacing:.06em}.c .v{font-size:min(7vw,10vh);font-weight:700;font-variant-numeric:tabular-nums}
-.b{display:flex;gap:6px;padding:0 12px 10px}.b button{flex:1;background:#1f2630;color:#e6edf3;border:1px solid #2d3642;border-radius:8px;padding:6px;font:inherit;cursor:pointer}
-.bar{height:5px;background:#2d3642;margin:6px 12px 0;border-radius:3px;overflow:hidden}.bar div{height:100%;background:#4c8dff;width:0}
+*{box-sizing:border-box}body{margin:0;background:#0c0c0d;color:#f2f2ee;font:14px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;height:100vh;display:grid;grid-template-rows:auto 1fr auto;user-select:none}
+.p{padding:6px 12px 0;display:flex;align-items:baseline;gap:10px}.pv{font-size:min(26vw,30vh);font-weight:800;line-height:1;font-variant-numeric:tabular-nums}.u{color:#9a9a94;font-size:14px;font-weight:600}
+.t{margin-left:auto;text-align:right}.tv{font-size:min(10vw,13vh);font-weight:800;font-variant-numeric:tabular-nums;line-height:1}.ts{color:#9a9a94;font-size:12px}
+.g{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px 12px}.c .l{font-size:10px;color:#9a9a94;text-transform:uppercase;letter-spacing:.06em}.c .v{font-size:min(7vw,10vh);font-weight:700;font-variant-numeric:tabular-nums}
+.b{display:flex;gap:6px;padding:0 12px 10px}.b button{flex:1;background:#1e1e21;color:#f2f2ee;border:1px solid #2e2e33;border-radius:8px;padding:6px;font:inherit;cursor:pointer}
+.bar{height:5px;background:#2e2e33;margin:6px 12px 0;border-radius:3px;overflow:hidden}.bar div{height:100%;background:#4c8dff;width:0}
 </style>
 <div><div class="p"><span class="pv" id="pP">0</span><span class="u">W</span><div class="t"><div class="tv" id="pT">–</div><div class="ts" id="pTs">Freie Fahrt</div></div></div><div class="bar"><div id="pBar"></div></div></div>
 <div class="g"><div class="c"><div class="l">rpm</div><div class="v" id="pC">0</div></div><div class="c"><div class="l">Puls</div><div class="v" id="pH">–</div></div><div class="c"><div class="l">Zeit</div><div class="v" id="pZ">0:00</div></div><div class="c"><div class="l">km/h</div><div class="v" id="pS">0</div></div></div>
@@ -2782,7 +2792,7 @@ function updPip(v) {
   $$('pBar').style.width = sa ? (sa.tIn / sa.s.dur * 100) + '%' : '0';
   $$('pC').textContent = Math.round(v.cad); $$('pH').textContent = v.hr ?? '–'; $$('pZ').textContent = fmtT(v.t); $$('pS').textContent = v.v.toFixed(0);
   $$('pPause').textContent = ride.state === 'paused' ? '▶︎' : '❚❚';
-  const r = v.tgt ? (v.p3 - v.tgt) / v.tgt : 0; $$('pP').style.color = !v.tgt ? '#e6edf3' : Math.abs(r) < .05 ? '#7ee787' : r > 0 ? '#ffa657' : '#79c0ff';
+  const r = v.tgt ? (v.p3 - v.tgt) / v.tgt : 0; $$('pP').style.color = !v.tgt ? '#e6edf3' : Math.abs(r) < .05 ? '#edff9a' : r > 0 ? '#ffffff' : '#9a9a94';
 }
 $('#btnPip').onclick = openPip;
 $('#btnFull').onclick = () => { try { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); } catch (e) { toast('Vollbild wird hier nicht unterstützt'); } };
@@ -2906,7 +2916,7 @@ document.addEventListener('drop', e => {
 });
 
 // ---------- Footer-Diagramme ----------
-const ZC = ['#7d8796', '#3b82f6', '#22c55e', '#eab308', '#f97316', '#ef4444', '#a855f7'];
+const ZC = ['#4a4a4f', '#76796a', '#a3ad6f', '#cfdf82', '#edff9a', '#f7ffd2', '#ffffff']; // Zonen 1–7: Grau → Lime → Weiß
 const zoneColor = r => ZC[r < .55 ? 0 : r < .75 ? 1 : r < .9 ? 2 : r < 1.05 ? 3 : r < 1.2 ? 4 : r < 1.5 ? 5 : 6];
 function drawProfile() {
   const c = $('#prof'), g = c.getContext('2d'), [W, H] = fitCanvas(c); if (!W) return;
@@ -2916,16 +2926,14 @@ function drawProfile() {
   const n = Math.min(W, r.ele.length);
   for (let i = 0; i < n; i++) {
     const d0 = i / n * r.len, d1 = (i + 1) / n * r.len, e0 = eleAt(r, d0), gr = (eleAt(r, d1) - e0) / (d1 - d0 || 1);
-    g.fillStyle = gr > .07 ? '#b9473f' : gr > .04 ? '#c27a32' : gr > .015 ? '#a8933a' : gr < -.015 ? '#3c6aa8' : '#4f7a46';
+    g.fillStyle = gr > .07 ? '#f7ffd2' : gr > .04 ? '#edff9a' : gr > .015 ? '#a3ad6f' : gr < -.015 ? '#38383c' : '#5a5b56';
     const x0 = i / n * W, y = yOf(e0); g.fillRect(x0, y, W / n + 1, bot - y);
   }
   const pd = r.loop ? ((ride.distance % r.len) + r.len) % r.len : Math.min(ride.distance, r.len);
   const px = pd / r.len * W, py = yOf(eleAt(r, pd));
   g.fillStyle = cssv('--text'); g.fillRect(px - 1, top - 8, 2, bot - top + 8); g.beginPath(); g.arc(px, py, 5 * (devicePixelRatio || 1), 0, TAU); g.fillStyle = ACC(); g.fill();
-  if (r.cobbles?.length) { g.fillStyle = '#5b3a1e'; r.cobbles.forEach(c => { const x0 = c.a / r.len * W, x1 = Math.max(x0 + 2, c.b / r.len * W); g.fillRect(x0, bot - 5 * (devicePixelRatio || 1), x1 - x0, 5 * (devicePixelRatio || 1)); }); }
+  if (r.cobbles?.length) { g.fillStyle = '#9a9a94'; r.cobbles.forEach(c => { const x0 = c.a / r.len * W, x1 = Math.max(x0 + 2, c.b / r.len * W); g.fillRect(x0, bot - 5 * (devicePixelRatio || 1), x1 - x0, 5 * (devicePixelRatio || 1)); }); }
   const dpr = devicePixelRatio || 1; g.font = (10 * dpr) + 'px sans-serif'; g.textAlign = 'center';
-  let lastLX = -1e9, lastLW = 0; (r.pois || []).forEach(p => { const x = p.d / r.len * W; if (x < 4 || x > W - 4) return; const lw = g.measureText(p.name).width; if (x - lastLX < (lastLW + lw) / 2 + 8 * dpr) return; lastLX = x; lastLW = lw; g.fillStyle = cssv('--grid'); g.fillRect(x, top - 2, 1, bot - top + 2); g.fillStyle = cssv('--muted'); g.fillText(p.name, clamp(x, 40 * dpr, W - 40 * dpr), top - 5); });
-  $('#profCap').textContent = r.name + ' · ' + Math.round(r.ascent) + ' Hm' + (r.loop ? ' · Rundkurs' : '');
 }
 function drawWorkout(c, wo, opts = {}) {
   const g = c.getContext('2d'), [W, H] = fitCanvas(c); if (!W) return;
@@ -2951,7 +2959,6 @@ function drawWorkout(c, wo, opts = {}) {
     S.forEach((s, i) => { const x = (i + off) / tot * W, y = yOf(Math.min(maxW, s[1])); i ? g.lineTo(x, y) : g.moveTo(x, y); }); g.stroke(); g.lineWidth = 1;
     const px = Math.min(1, (ride.elapsed + off) / tot) * W; g.fillStyle = ACC(); g.fillRect(px - 1, 0, 2.5, H);
   }
-  if (opts.cap) opts.cap.textContent = wo.name + ' · ' + fmtT(tot) + ' · FTP ' + ftp + ' W';
 }
 function frame() {
   if ((frame.n || 0) % 3 === 0) try { updateMap(); } catch (e) { console.error(e); }
@@ -3008,8 +3015,8 @@ function drawSummaryChart(rd) {
   const line = (fn, max, col) => { g.strokeStyle = col; g.lineWidth = 1.2 * (devicePixelRatio || 1); g.beginPath(); S.forEach((s, i) => { const x = i / (S.length - 1) * W, y = H - 4 - fn(s, i) / max * (H - 10); i ? g.lineTo(x, y) : g.moveTo(x, y); }); g.stroke(); };
   const sm = S.map((s, i) => { let a = 0, k = 0; for (let j = Math.max(0, i - 4); j <= i; j++) { a += S[j][1]; k++; } return a / k; });
   line((s, i) => sm[i], maxP, ACC());
-  if (S.some(s => s[3])) line(s => s[3], 220, '#f85149aa');
-  if (S.some(s => s[7] != null)) { const sp = S.map((s, i) => { let a = 0, k = 0; for (let j = Math.max(0, i - 4); j <= i; j++) { a += S[j][7] || 0; k++; } return a / k; }); line((s, i) => sp[i], maxP, '#e8400fcc'); }
+  if (S.some(s => s[3])) line(s => s[3], 220, '#9a9a94aa');
+  if (S.some(s => s[7] != null)) { const sp = S.map((s, i) => { let a = 0, k = 0; for (let j = Math.max(0, i - 4); j <= i; j++) { a += S[j][7] || 0; k++; } return a / k; }); line((s, i) => sp[i], maxP, '#ffffffaa'); }
 }
 class FitWriter {
   constructor() { this.b = []; this.defs = {}; }
@@ -3100,7 +3107,7 @@ const PG = {
 function fmtMin(min) { const h = Math.floor(min / 60), m = min % 60; return h ? h + (m ? ':' + String(m).padStart(2, '0') : '') + ' h' : m + ' min'; }
 const SLOT = { thr: 'Schwelle', z2: 'Grundlage', vo2: 'VO2max', long: 'Longride', test: 'Test', rec: 'Locker' };
 const PLANS = [
-  { id: 'ftp12', name: 'FTP-Builder', weeks: 12, color: '#2563eb', per: '4 Einheiten pro Woche · 4–8 h',
+  { id: 'ftp12', name: 'FTP-Builder', weeks: 12, color: '#edff9a', per: '4 Einheiten pro Woche · 4–8 h',
     desc: 'Mehr Watt an der Schwelle. Jede Woche: Schwelle, Grundlage, VO2max und ein Longride, der von 1:30 auf 3 h wächst. Die Intervalle werden von Block zu Block länger und härter. Jede 4. Woche Entlastung, am Ende Formaufbau und Test.',
     weeksDef: [
       { note: 'Einstieg + Test', s: [['test', PG.test()], ['z2', PG.z2(60)], ['thr', PG.ss(3, 10, .88)], ['long', PG.long(90)]] },
@@ -3116,7 +3123,7 @@ const PLANS = [
       { s: [['thr', PG.thr(2, 25, .98)], ['z2', PG.z2(90)], ['vo2', PG.vo2(6, 4, 1.1, 3)], ['long', PG.long(180, 20)]] },
       { note: 'Formaufbau + Test', easy: true, s: [['vo2', PG.opener()], ['z2', PG.z2(45)], ['rec', PG.rec(30)], ['test', PG.test()]] },
     ] },
-  { id: 'base8', name: 'Grundlagen-Aufbau', weeks: 8, color: '#0891b2', per: '3 Einheiten pro Woche · 3–6 h',
+  { id: 'base8', name: 'Grundlagen-Aufbau', weeks: 8, color: '#a3ad6f', per: '3 Einheiten pro Woche · 3–6 h',
     desc: 'Das Ausdauer-Fundament: fast alles locker, ein Sweet-Spot-Training pro Woche und ein Longride, der von 1:30 auf 3 h wächst. Ideal für den Winter oder den Wiedereinstieg.',
     weeksDef: [
       { s: [['z2', PG.z2(60)], ['thr', PG.ss(3, 8, .85)], ['long', PG.long(90)]] },
@@ -3128,7 +3135,7 @@ const PLANS = [
       { s: [['z2', PG.z2(90)], ['thr', PG.ss(3, 15, .92)], ['long', PG.long(180, 15)]] },
       { note: 'Entlastung + Test', easy: true, s: [['z2', PG.z2(45)], ['rec', PG.rec(30)], ['test', PG.test()]] },
     ] },
-  { id: 'short6', name: 'Fit mit wenig Zeit', weeks: 6, color: '#ef4444', per: '3 Einheiten pro Woche · unter 3,5 h',
+  { id: 'short6', name: 'Fit mit wenig Zeit', weeks: 6, color: '#f7ffd2', per: '3 Einheiten pro Woche · unter 3,5 h',
     desc: 'Für volle Wochen: je ein Schwellen-, ein VO2max- und ein längeres Grundlagentraining, alles unter 75 Minuten. Bei wenig Zeit bringen Intervalle am meisten.',
     weeksDef: [
       { note: 'Einstieg + Test', s: [['test', PG.test()], ['thr', PG.ss(3, 10, .88)], ['long', PG.z2(60)]] },
@@ -3170,7 +3177,7 @@ function planNext() {
   return null;
 }
 const planCount = P => P.w.reduce((a, x) => a + x.length, 0);
-const SLOT_COLOR = { thr: '#eab308', z2: '#3b82f6', vo2: '#f97316', long: '#2563eb', test: '#0ea5e9', rec: '#8b95a5' };
+const SLOT_COLOR = { thr: '#cfdf82', z2: '#76796a', vo2: '#edff9a', long: '#a3ad6f', test: '#c9c9c0', rec: '#4a4a4f' };
 function planMarkFromRide(rd) {
   const P = planDef(); if (!P || !rd.woId) return;
   const wo = workoutById(rd.woId); if (!wo || (rd.timer || 0) < woTotal(wo) * 0.7) return;
@@ -3227,9 +3234,9 @@ function openPlan() {
 }
 
 // ---------- Auswahl-Karten (Strecken & Workouts) ----------
-const CAT_STYLE = { 'Plan': ['', '#2563eb'], 'Beliebt': ['', '#1d1d1f'], 'Frei': ['', '#1d1d1f'], 'Zone 2': ['', '#3b82f6'], 'Tempo & Sweet Spot': ['', '#16a34a'], 'Schwelle': ['', '#eab308'],
-  'VO2max': ['', '#f97316'], 'HIT': ['', '#ef4444'], 'Sprint': ['', '#a855f7'], 'Erholung': ['', '#8b95a5'], 'Test': ['', '#0ea5e9'] };
-const catEmoji = c => '', catColor = c => (CAT_STYLE[c] || [0, '#64748b'])[1];
+const CAT_STYLE = { 'Plan': ['', '#edff9a'], 'Beliebt': ['', '#f2f2ee'], 'Frei': ['', '#f2f2ee'], 'Zone 2': ['', '#76796a'], 'Tempo & Sweet Spot': ['', '#a3ad6f'], 'Schwelle': ['', '#cfdf82'],
+  'VO2max': ['', '#edff9a'], 'HIT': ['', '#f7ffd2'], 'Sprint': ['', '#ffffff'], 'Erholung': ['', '#4a4a4f'], 'Test': ['', '#c9c9c0'] };
+const catEmoji = c => '', catColor = c => (CAT_STYLE[c] || [0, '#9a9a94'])[1];
 function woIF(wo) { // Intensität ≈ NP/FTP
   let a = 0, t = 0; for (const s of wo?.segs || []) { let p = s.free ? 0.9 : (s.p0 + s.p1) / 2; if (s.abs) p /= settings.ftp; a += s.dur * p ** 4; t += s.dur; }
   return t ? (a / t) ** 0.25 : 0;
@@ -3239,7 +3246,7 @@ function woSvg(wo) {
   const T = woTotal(wo) || 1; let x = 0, out = '';
   for (const s of wo.segs) {
     const f = v => s.abs ? v / settings.ftp : v, p0 = s.free ? 1.25 : f(s.p0), p1 = s.free ? 1.25 : f(s.p1), w = s.dur / T * 100, h = v => 40 - Math.min(v, 1.7) / 1.7 * 38;
-    out += `<polygon points="${x.toFixed(2)},40 ${x.toFixed(2)},${h(p0).toFixed(1)} ${(x + w).toFixed(2)},${h(p1).toFixed(1)} ${(x + w).toFixed(2)},40" fill="${s.free ? '#a855f7' : zoneColor((p0 + p1) / 2)}"${s.free ? ' opacity=".55"' : ''}/>`;
+    out += `<polygon points="${x.toFixed(2)},40 ${x.toFixed(2)},${h(p0).toFixed(1)} ${(x + w).toFixed(2)},${h(p1).toFixed(1)} ${(x + w).toFixed(2)},40" fill="${s.free ? '#5a5b56' : zoneColor((p0 + p1) / 2)}"${s.free ? ' opacity=".55"' : ''}/>`;
     x += w;
   }
   return `<svg viewBox="0 0 100 40" preserveAspectRatio="none">${out}</svg>`;
@@ -3249,14 +3256,14 @@ function routeSvg(r) {
   const lo = Math.min(...e), hi = Math.max(...e), span = Math.max(hi - lo, 60);
   const pts = e.map((v, i) => `${(i / N * 100).toFixed(1)},${(38 - (v - lo) / span * 32).toFixed(1)}`).join(' ');
   const gid = 'g' + r.id.replace(/\W/g, '');
-  const cob = (r.cobbles || []).map(c => `<rect x="${(c.a / r.len * 100).toFixed(2)}" y="38" width="${Math.max(.6, (c.b - c.a) / r.len * 100).toFixed(2)}" height="2" fill="#7c4a1e"/>`).join('');
+  const cob = (r.cobbles || []).map(c => `<rect x="${(c.a / r.len * 100).toFixed(2)}" y="38" width="${Math.max(.6, (c.b - c.a) / r.len * 100).toFixed(2)}" height="2" fill="#9a9a94"/>`).join('');
   return `<svg viewBox="0 0 100 40" preserveAspectRatio="none"><polygon points="0,40 ${pts} 100,40" fill="currentColor" fill-opacity=".08"/><polyline points="${pts}" fill="none" stroke="currentColor" stroke-opacity=".75" stroke-width="1.2" vector-effect="non-scaling-stroke"/>${cob}</svg>`;
 }
 function routeTags(r) {
   const perKm = r.ascent / Math.max(r.len / 1000, 1);
   const t = [];
   if (r.cobbles?.length) t.push(['Kopfsteinpflaster', '#7c4a1e']);
-  t.push(perKm < 6 ? ['Flach', '#16a34a'] : perKm < 15 ? ['Hügelig', '#eab308'] : ['Bergig', '#ef4444']);
+  t.push(perKm < 6 ? ['Flach', '#9a9a94'] : perKm < 15 ? ['Hügelig', '#9a9a94'] : ['Bergig', '#9a9a94']);
   if (r.loop) t.push(['Rundkurs', '#64748b']);
   return t.map(([x, c]) => `<span class="tag" style="--tc:${c}">${x}</span>`).join('');
 }
@@ -3339,7 +3346,7 @@ function openCal() {
 setInterval(() => { const e = document.getElementById('calSpd'); if (e) e.textContent = Date.now() - (live.speedTs || 0) < 2500 ? live.speed.toFixed(1) : '–'; }, 250);
 
 // ---------- Dashboard ----------
-const DC = { a: '#2563eb', b: '#e8400f' }; // validierte Zwei-Farben-Palette (CVD-sicher)
+const DC = { a: '#edff9a', b: '#9a9a94' }; // validierte Zwei-Farben-Palette (CVD-sicher)
 const DUR = [5, 15, 30, 60, 120, 180, 300, 480, 600, 720, 1200, 1800, 3600];
 const durLbl = t => t < 60 ? t + ' s' : t < 3600 ? t / 60 + ' min' : t / 3600 + ' h';
 function mmp(P, durs) { // beste Durchschnittsleistung je Dauer (Werte null = nicht zählbar)
