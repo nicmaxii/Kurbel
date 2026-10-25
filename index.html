@@ -507,11 +507,6 @@ body,#landing,#setup .card.menu,#planDlg .card.menu,#calDlg .card,#dashDlg .card
 #wbox .rem .u{font-size:16px;font-family:var(--uifont);letter-spacing:0}
 #tour .ring{outline:2px solid var(--acc);outline-offset:0}
 #setup .mhead .ver{font-size:11px;color:var(--tx2);margin-left:10px;font-family:var(--numfont)}
-#lfx{position:absolute;left:16px;bottom:18px;z-index:4;display:flex;gap:4px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--tx2);opacity:calc(1 - var(--p) * 4)}
-#lfx span{margin-right:4px}
-#lfx button{background:var(--s1);color:var(--tx);border:1px solid var(--ln);border-radius:999px;padding:4px 10px;font:inherit;font-size:12px;cursor:pointer}
-#lfx button.on{background:var(--acc);color:var(--onacc);border-color:var(--acc)}
-@media (max-width:760px){#lfx{bottom:58px}}
 #ghostBox .gsub{font-size:12px;color:var(--tx2);font-variant-numeric:tabular-nums}
 button.primary,.planCard .primary,#calDlg button.primary,#dashDlg button.primary,#planDlg .actions button.primary{color:var(--onacc)!important}
 #mapBox .leaflet-control-attribution{background:rgba(12,12,13,.75)!important;color:var(--tx2)!important}#mapBox .leaflet-control-attribution a{color:var(--tx)!important}
@@ -1210,7 +1205,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <div class="lgrain"></div><div class="lhero"><h1>kurbeln</h1>
     <div class="lbtns"><button class="b1" data-go="map">Losfahren</button><button class="b2" data-go="demo">Demo ansehen ›</button></div></div>
   <div class="lhint">Scrollen oder heranzoomen, um einzutauchen<span>⌄</span></div>
-  <div id="lfx" aria-label="Effekt"><span>Effekt</span><button data-fx="spur">Spur</button><button data-fx="echo">Echo</button><button data-fx="linien">Speed-Linien</button><button data-fx="dreh">Drehung</button><button data-fx="aus">Aus</button></div>
   <div id="lfade"></div>
 </div>
 <div id="app">
@@ -1333,7 +1327,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <!-- Setup -->
   <div class="overlay" id="setup">
     <div class="card menu">
-      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Stand 25.10. · 7</span></div>
+      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Stand 25.10. · 8</span></div>
       <div class="warnbox" id="noBt" style="display:none">Bluetooth geht nur in <b>Google Chrome</b> oder Edge. Die Demo funktioniert trotzdem.</div>
       <div class="warnbox" id="recoverBox" style="display:none">Nicht gespeicherte Fahrt vom <span id="recoverDate"></span> gefunden. <button id="btnRecover">Ansehen</button></div>
       <div id="planBanner"></div>
@@ -4038,41 +4032,18 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
   const scene = new THREE.Scene(); renderer.setClearColor(0x000000, 0);
   // Bewegungsspur wie bei einer Langzeitbelichtung: jedes Bild leicht unscharf nach links verschoben nachziehen (halbe Auflösung reicht)
   const trail = document.getElementById('ltrail'), tc = trail.getContext('2d'), still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // Effekte hinter der Kurbel – zum Ausprobieren über die Auswahl unten links (Spur, Echo, Speed-Linien, Drehung, Aus)
-  L.fx = (() => { try { return localStorage.getItem('kurbel.fx') || 'spur'; } catch (e) { return 'spur'; } })();
-  const lines = [], ctr = new THREE.Vector3(); let fxN = 0;
+  // Fahrtwind hinter der Kurbel: dezente helle Linien ziehen langsam nach links
+  const lines = [];
   function drawFx(p, dt) {
-    const W = trail.width, H = trail.height, k = 1 - sm(0.2, 0.6, p), fx = L.fx; fxN++;
-    tc.filter = 'none';
-    if (fx === 'spur') { // weiche Langzeitbelichtung nach links
-      tc.globalCompositeOperation = 'copy'; tc.filter = 'blur(1px)'; tc.globalAlpha = 0.955 * k; tc.drawImage(trail, -5, 0);
-      tc.globalCompositeOperation = 'lighter'; tc.filter = 'blur(3px)'; tc.globalAlpha = 0.06 * k; tc.drawImage(cv, 0, 0, W, H);
-    } else if (fx === 'echo') { // scharfe Nachbilder wie Stroboskop
-      tc.globalCompositeOperation = 'copy'; tc.globalAlpha = 0.9 * k; tc.drawImage(trail, -4, 0);
-      if (fxN % 9 === 0) { tc.globalCompositeOperation = 'source-over'; tc.globalAlpha = 0.35 * k; tc.drawImage(cv, 0, 0, W, H); }
-    } else if (fx === 'linien') { // Fahrtwind: helle Linien ziehen durch
-      tc.globalCompositeOperation = 'source-over'; tc.globalAlpha = 1; tc.clearRect(0, 0, W, H);
-      while (lines.length < 46) lines.push({ x: Math.random() * W * 1.4, y: H * (0.42 + Math.random() * 0.42), l: 30 + Math.random() * 160, v: 280 + Math.random() * 520, a: 0.15 + Math.random() * 0.5, c: Math.random() < 0.25 });
-      tc.lineCap = 'round';
-      for (const ln of lines) {
-        ln.x -= ln.v * dt; if (ln.x + ln.l < 0) { ln.x = W + Math.random() * W * 0.4; ln.y = H * (0.42 + Math.random() * 0.42); }
-        tc.strokeStyle = ln.c ? `rgba(237,255,154,${ln.a * k})` : `rgba(242,242,238,${ln.a * 0.7 * k})`; tc.lineWidth = ln.c ? 1.6 : 1;
-        tc.beginPath(); tc.moveTo(ln.x, ln.y); tc.lineTo(ln.x + ln.l, ln.y); tc.stroke();
-      }
-    } else if (fx === 'dreh') { // Drehunschärfe um das Kettenblatt
-      ctr.setFromMatrixPosition(rotor.matrixWorld).project(camera);
-      const cx = (ctr.x + 1) / 2 * W, cy = (1 - ctr.y) / 2 * H;
-      tc.globalCompositeOperation = 'copy'; tc.globalAlpha = 0.88 * k; tc.filter = 'blur(0.6px)';
-      tc.save(); tc.translate(cx, cy); tc.rotate(0.07); tc.translate(-cx, -cy); tc.drawImage(trail, 0, 0); tc.restore();
-      tc.globalCompositeOperation = 'lighter'; tc.filter = 'none'; tc.globalAlpha = 0.09 * k; tc.drawImage(cv, 0, 0, W, H);
-    } else tc.clearRect(0, 0, W, H);
-    tc.filter = 'none'; tc.globalAlpha = 1; tc.globalCompositeOperation = 'source-over';
-  }
-  const fxBar = document.getElementById('lfx');
-  if (fxBar) {
-    const upd = () => fxBar.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.fx === L.fx));
-    fxBar.querySelectorAll('button').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); L.fx = b.dataset.fx; try { localStorage.setItem('kurbel.fx', L.fx); } catch (er) {} tc.clearRect(0, 0, trail.width, trail.height); lines.length = 0; upd(); }));
-    upd();
+    const W = trail.width, H = trail.height, k = 1 - sm(0.2, 0.6, p);
+    tc.clearRect(0, 0, W, H);
+    while (lines.length < 30) lines.push({ x: Math.random() * W * 1.4, y: H * (0.42 + Math.random() * 0.42), l: 30 + Math.random() * 150, v: 110 + Math.random() * 220, a: 0.06 + Math.random() * 0.2, c: Math.random() < 0.25 });
+    tc.lineCap = 'round';
+    for (const ln of lines) {
+      ln.x -= ln.v * dt; if (ln.x + ln.l < 0) { ln.x = W + Math.random() * W * 0.4; ln.y = H * (0.42 + Math.random() * 0.42); }
+      tc.strokeStyle = ln.c ? `rgba(237,255,154,${ln.a * k})` : `rgba(242,242,238,${ln.a * 0.7 * k})`; tc.lineWidth = ln.c ? 1.4 : 1;
+      tc.beginPath(); tc.moveTo(ln.x, ln.y); tc.lineTo(ln.x + ln.l, ln.y); tc.stroke();
+    }
   }
   const camera = new THREE.PerspectiveCamera(28, 1, 0.01, 100);
 
@@ -4168,7 +4139,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
     L.p += (L.target - L.p) * Math.min(1, dt * 6);
     if (Math.abs(L.target - L.p) < 0.0005) L.p = L.target;
     const p = L.p, e = ease(p);
-    const rz = (L.fx === 'dreh' ? -t * 1.5 * (1 - p) : Math.sin(t * 0.6) * 0.16 * (1 - p)) - t * 0.9 * sm(0.15, 1, p);
+    const rz = Math.sin(t * 0.6) * 0.16 * (1 - p) - t * 0.9 * sm(0.15, 1, p);
     rotor.rotation.z = rz;
     [pf, pb].forEach(pd => { pd.rotation.z = -rz; });
     const idleY = 0.62 + Math.sin(t * 0.25) * 0.12 + mouse.x * 0.35, idleX = -0.22 + mouse.y * 0.2;
