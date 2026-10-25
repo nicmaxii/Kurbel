@@ -76,22 +76,24 @@ header{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(-
 @media (max-width:760px){.hrow{grid-template-columns:1fr auto}.hrow .n{display:none}}
 .vrec{display:flex;gap:8px;align-items:center;margin-top:6px}.vrec button:first-child{flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis}
 #stage.view-data #dash{display:grid}
-#stage.view-data .hud,#stage.view-data #grade,#stage.view-data #mapTools,#stage.view-data #sv{display:none!important}
+#stage.view-data .hud,#stage.view-data #wbox,#stage.view-data #mapTools,#stage.view-data #sv{display:none!important}
 #stage.view-video #vid{display:block}
 #stage.view-video #mapTools,#stage.view-video #sv{display:none!important}
 #stage.view-video.hasVid #vidBar{display:flex}
-#stage.hudOff .hud,#stage.hudOff #grade{display:none!important}
+#stage.hudOff .hud,#stage.hudOff #wbox{display:none!important}
 #stage.view-video .m{background:var(--hud)}
 .dot.on{background:var(--ok)}
 .chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);padding:4px 9px;white-space:nowrap;border:1px solid var(--line);border-radius:999px}
 .dot{width:8px;height:8px;border-radius:50%;background:#555}.dot.on{background:var(--ok)}.dot.wait{background:var(--warn)}
 .spacer{flex:1}
 #stage{position:relative;overflow:hidden;min-height:0}
+#mapBox{position:absolute;inset:0;overflow:hidden;z-index:0;background:#dfe3e8}
 #map{position:absolute;inset:0;background:#dfe3e8;z-index:0}
-.hud,#grade,#controls,#toast,#mapTools{z-index:1100}
+#map.rot{transform-origin:50% 50%}#map.rot .leaflet-tooltip{rotate:var(--unrot,0deg)}
+.hud,#wbox,#controls,#toast,#mapTools{z-index:1100}
 .overlay{z-index:1200!important}
 #sv{position:absolute;top:0;right:0;bottom:0;width:50%;display:none;background:#111;z-index:2;border-left:2px solid #000}
-#stage.svOn #map{right:50%}
+#stage.svOn #mapBox{right:50%}
 #stage.svOn #sv{display:block}
 #stage.svOn #mapTools{right:calc(50% + 12px);bottom:90px}
 #stage.svOn #controls{left:25%;flex-wrap:wrap;justify-content:center;max-width:calc(50% - 24px)}
@@ -120,17 +122,19 @@ details summary{cursor:pointer;color:#8ab4ff;font-size:13px;margin-top:6px}
 .m.big .v{font-size:50px}
 .row2{display:flex;gap:8px}
 #grade .cob{display:none;font-size:12px;font-weight:700;color:#8a5a2b;margin-top:2px}#grade.onCob .cob{display:block}#grade.onCob{box-shadow:0 0 0 2px #8a5a2b inset}
-#grade{position:absolute;top:12px;left:50%;transform:translateX(-50%);text-align:center}
-#grade .v{font-size:40px}
-#wbox{min-width:220px}
-#wbox .tgt{font-size:44px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1}
+#wbox{position:absolute;top:12px;left:50%;transform:translateX(-50%);text-align:center;min-width:360px;padding:8px 18px 10px}
+#wbox .wrow{display:flex;align-items:flex-end;justify-content:center;gap:22px;margin-top:2px}
+#wbox .wl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+#wbox .tgt{font-size:34px;font-weight:700;font-variant-numeric:tabular-nums;font-family:var(--numfont);line-height:1.1}
+#wbox .rem{font-size:58px;font-weight:700;font-variant-numeric:tabular-nums;font-family:var(--numfont);line-height:1}
+#wbox .wpm{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;min-height:14px}
 #wbox .bar{height:6px;background:#2d3642;border-radius:3px;margin:6px 0;overflow:hidden}
 #wbox .bar div{height:100%;background:var(--accent);width:0}
 #wbox .sub{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
 #controls{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:none;gap:8px;align-items:center;background:var(--hud);backdrop-filter:blur(6px);padding:8px;border-radius:12px;border:1px solid var(--hudline)}
 #controls .grp{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);padding:0 6px}
 #controls input[type=range]{width:110px}
-#toast{position:absolute;top:110px;left:50%;transform:translateX(-50%);background:var(--hud);border:1px solid var(--line);padding:10px 18px;border-radius:10px;font-size:16px;opacity:0;transition:opacity .3s;pointer-events:none;max-width:80%;text-align:center}
+#toast{position:absolute;top:230px;left:50%;transform:translateX(-50%);background:var(--hud);border:1px solid var(--line);padding:10px 18px;border-radius:10px;font-size:16px;opacity:0;transition:opacity .3s;pointer-events:none;max-width:80%;text-align:center}
 #toast.show{opacity:1}
 footer{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border-top:1px solid var(--line);height:120px}
 footer .pane{background:var(--panel);position:relative}
@@ -379,7 +383,7 @@ details.sec.more>summary{color:var(--text);font-weight:600;font-size:17px}
 .pSess.done{background:#ecfdf3;border-color:#bbf7d0;border-left-color:#16a34a}.pSess.done span{color:#16a34a;font-weight:900}
 .pSess.next{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
 @media (max-width:640px){.pwS{grid-template-columns:repeat(2,1fr)}#setup .mhead h2{font-size:27px}}
-#btnPip{display:inline-flex;align-items:center;justify-content:center;padding:6px 10px}#btnPip svg{display:block}
+#btnPip,#btnFull{display:inline-flex;align-items:center;justify-content:center;padding:6px 10px}#btnPip svg,#btnFull svg{display:block}
 /* Ruhiger Apple-Look fürs Menü (überschreibt die verspielten Stile oben) */
 #setup .card.menu,#planDlg .card.menu,#calDlg .card,#dashDlg .card,.dtip{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;color:#1d1d1f}
 #setup .card.menu,#planDlg .card.menu{border-radius:22px;box-shadow:0 24px 60px rgba(0,0,0,.14)}
@@ -1102,6 +1106,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <button id="btnHome" class="brand" title="Zur Startseite">Kurbel</button>
   <div class="seg" id="viewSeg"><button data-view="map">Karte</button><button data-view="data">Werte</button><button data-view="video">Video</button></div>
   <button id="btnPip" title="Kleines Werte-Fenster, das über anderen Fenstern schwebt – z. B. über YouTube oder Netflix in einem anderen Fenster" aria-label="Werte-Fenster"><svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x=".75" y=".75" width="16.5" height="12.5" rx="2.5"/><rect x="9" y="7" width="6" height="4.2" rx="1" fill="currentColor" stroke="none"/></svg></button>
+  <button id="btnFull" title="Vollbild (Esc beendet)" aria-label="Vollbild"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M1.5 5.5v-4h4M10.5 1.5h4v4M14.5 10.5v4h-4M5.5 14.5h-4v-4"/></svg></button>
   <div class="dd" id="connDD">
     <button id="btnConn" aria-haspopup="true" aria-expanded="false"><span id="connDots"></span>Connections <span class="caret">▾</span></button>
     <div class="ddp" id="connPanel" role="menu">
@@ -1126,7 +1131,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 </header>
 
 <div id="stage">
-  <div id="map"></div>
+  <div id="mapBox" class="leaflet-container"><div id="map"></div></div>
   <div id="noMap">Diese Strecke hat keine Kartendaten (alter Import ohne Koordinaten).<br>Bitte die GPX-Datei einfach neu importieren.</div>
   <div class="hud">
     <div class="m big"><div class="l" id="hPl">Leistung (3s)</div><div class="v"><span id="hP">0</span><span class="u">W</span></div></div>
@@ -1138,8 +1143,22 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="m"><div class="l">Tempo</div><div class="v"><span id="hS">0.0</span><span class="u">km/h</span></div></div>
       <div class="m"><div class="l">Ø Leistung</div><div class="v"><span id="hAP">0</span><span class="u">W</span></div></div>
     </div>
+    <div class="row2" id="pmRow" style="display:none">
+      <div class="m"><div class="l">Powermeter (3s)</div><div class="v"><span id="hPM">–</span><span class="u">W</span></div></div>
+      <div class="m"><div class="l">Ø Powermeter</div><div class="v"><span id="hPMa">–</span><span class="u">W</span></div></div>
+    </div>
   </div>
-  <div class="m" id="grade"><div class="l">Steigung</div><div class="v"><span id="hG">0.0</span><span class="u">%</span></div><div class="cob" id="hCob">Pavé</div></div>
+  <div class="m" id="wbox" style="display:none">
+    <div class="l" id="wName">Workout</div>
+    <div class="wrow">
+      <div class="wc"><div class="wl">Ziel</div><div class="tgt"><span id="wTgt">0</span><span class="u">W</span></div></div>
+      <div class="wc wmain"><div class="wl">Intervall noch</div><div class="rem" id="wRem">0:00</div></div>
+      <div class="wc"><div class="wl" id="wNowL">Leistung</div><div class="tgt"><span id="wNow">0</span><span class="u">W</span></div><div class="wpm" id="wPm"></div></div>
+    </div>
+    <div class="bar"><div id="wBar"></div></div>
+    <div class="sub">Workout noch <span id="wTot">0:00</span> · <span id="wNext"></span></div>
+    <div class="sub" id="wBias"></div>
+  </div>
   <div class="hud right">
     <div class="row2">
       <div class="m"><div class="l">Zeit</div><div class="v" id="hT">0:00</div></div>
@@ -1149,19 +1168,15 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="m"><div class="l">Höhenmeter</div><div class="v"><span id="hA">0</span><span class="u">m</span></div></div>
       <div class="m"><div class="l">Energie</div><div class="v"><span id="hK">0</span><span class="u">kJ</span></div></div>
     </div>
-    <div class="m" id="wbox" style="display:none">
-      <div class="l" id="wName">Workout</div>
-      <div class="tgt"><span id="wTgt">0</span><span class="u">W Ziel</span></div>
-      <div class="bar"><div id="wBar"></div></div>
-      <div class="sub">Intervall: <b id="wRem">0:00</b> · Rest: <span id="wTot">0:00</span></div>
-      <div class="sub" id="wNext"></div>
-      <div class="sub" id="wBias"></div>
+    <div class="row2">
+      <div class="m" id="grade"><div class="l">Steigung</div><div class="v"><span id="hG">0.0</span><span class="u">%</span></div><div class="cob" id="hCob">Pavé</div></div>
     </div>
   </div>
   <div id="sv"><div id="svPano"></div><div id="svMsg">Street View wird geladen …</div><div id="svInfo"></div></div>
   <div id="mapTools">
     <button id="btnSV" title="Google Street View neben der Karte ein-/ausblenden">Street View</button>
     <button id="btnFollow" style="display:none">◎ Karte folgen</button>
+    <button id="btnHeadUp"></button>
     <button id="btnZoomRoute">⤢ Ganze Strecke</button>
   </div>
   <div id="dash">
@@ -1261,7 +1276,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <div><label>Gewicht (kg) <span class="i" data-tip="Für das Tempo auf der Strecke und W/kg.">i</span></label><input type="number" id="iWeight" min="30" max="200" step="0.5"></div>
           <div><label>Steigungen (%) <span class="i" data-tip="Wie stark der Trainer Steigungen nachbildet. 100 % = echt, 50 % = halb so steil (wie bei Zwift).">i</span></label><input type="number" id="iDiff" min="0" max="100" step="5"></div>
         </div>
-        <div class="srow"><span>PowerMatch <span class="i" data-tip="Ist ein Powermeter verbunden, gibt er die Wattzahl vor – für Anzeige, Tempo, Aufzeichnung und ERG-Ziel. Der Trainer wird automatisch nachgeregelt.">i</span></span><label class="sw"><input type="checkbox" id="cPM"></label></div>
+        <div class="srow"><span>PowerMatch <span class="i" data-tip="Aus (empfohlen): Der Trainer steuert das Workout, der Powermeter wird nebenher aufgezeichnet – beide Wattzahlen siehst du während der Fahrt und in der Strava-Beschreibung. An: Der Powermeter gibt die Wattzahl vor und der Trainer wird nachgeregelt.">i</span></span><label class="sw"><input type="checkbox" id="cPM"></label></div>
       </section>
 
       <details class="sec more">
@@ -1493,7 +1508,8 @@ const LS = {
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } },
   del(k) { try { localStorage.removeItem(k); } catch (e) {} }
 };
-const settings = Object.assign({ ftp: 200, weight: 75, bike: 9, difficulty: 50, routeId: 'ka_turmberg', workoutId: 'none', manualW: 150, erg: true, powerMatch: true, mapStyle: 'esri', view: 'map', theme: 'original', gKey: '', svOn: false, svEvery: 200, svLimit: 4500 }, LS.get('kurbel.settings', {}));
+const settings = Object.assign({ ftp: 200, weight: 75, bike: 9, difficulty: 50, routeId: 'ka_turmberg', workoutId: 'none', manualW: 150, erg: true, powerMatch: false, mapStyle: 'esri', view: 'map', theme: 'original', gKey: '', svOn: false, svEvery: 200, svLimit: 4500 }, LS.get('kurbel.settings', {}));
+if (!settings.pmV2) { settings.powerMatch = false; settings.pmV2 = 1; } // Standard jetzt: Trainer steuert, Powermeter wird nur mitgeschrieben
 if (!/^(ka_|gpx_|dirgpx_)/.test(settings.routeId)) settings.routeId = 'ka_turmberg';
 const strava = Object.assign({ clientId: '', secret: '', access: '', refresh: '', expires: 0, athlete: '', virtual: true, auto: false }, LS.get('kurbel.strava', {}));
 const saveStrava = () => LS.set('kurbel.strava', strava);
@@ -2092,7 +2108,8 @@ function updConnDots() {
 // ---------- Fahrt ----------
 const ride = { state: 'idle', elapsed: 0, distance: 0, v: 0, heading: 0, samples: [], lastSec: -1, bias: 0, wSkip: 0, lastSent: {}, route: null, workout: null };
 let route = routeById(settings.routeId);
-const powerHist = [], trainerHist = [];
+const powerHist = [], trainerHist = [], pmHist = [];
+const pmFresh = () => !!pm && Date.now() - live.pmLast < 3000 && live.pmRaw != null;
 const avgHist = h => h.length ? h.reduce((a, x) => a + x[1], 0) / h.length : 0;
 let wakeLock = null;
 
@@ -2168,7 +2185,7 @@ function physics(dt, P, grade) {
 function recordSample() {
   ride.tgt.push(currentTarget());
   const hr = Date.now() - live.lastHr < 5000 ? Math.round(live.hr) : 0;
-  ride.samples.push([Date.now(), Math.round(live.power), Math.round(live.cadence), hr, +ride.v.toFixed(3), +ride.distance.toFixed(1), +eleAt(route, ride.distance).toFixed(1)]);
+  ride.samples.push([Date.now(), Math.round(live.power), Math.round(live.cadence), hr, +ride.v.toFixed(3), +ride.distance.toFixed(1), +eleAt(route, ride.distance).toFixed(1), pmFresh() && !pmActive() ? Math.round(live.pmRaw) : null]);
 }
 
 let lastTick = performance.now(), lastTickWall = performance.now();
@@ -2177,6 +2194,7 @@ function tick() {
   if (Date.now() - live.lastData > 3000) { live.power = 0; live.cadence = 0; }
   powerHist.push([Date.now(), live.power]); while (powerHist.length && powerHist[0][0] < Date.now() - 3000) powerHist.shift();
   trainerHist.push([Date.now(), Date.now() - live.trainerLast < 2000 ? live.trainerPower : 0]); while (trainerHist.length && trainerHist[0][0] < Date.now() - 3000) trainerHist.shift();
+  pmHist.push([Date.now(), pmFresh() ? live.pmRaw : 0]); while (pmHist.length && pmHist[0][0] < Date.now() - 3000) pmHist.shift();
   checkPmDev();
   if (ride.state === 'running' && !ride.started) { // warten auf die ersten Wattwerte
     if (live.power >= 10 && Date.now() - live.lastData < 2000) {
@@ -2228,8 +2246,11 @@ function updateHUD() {
   $('#hP').textContent = Math.round(p3);
   const tW = Date.now() - live.trainerLast < 2000 ? Math.round(avgHist(trainerHist)) : null;
   if (pm && devState.pm === 'on') $('#sPM').textContent = pm.name + (Date.now() - live.pmLast < 3000 ? ' · ' + Math.round(live.pmRaw ?? live.power) + ' W' : ' · keine Daten');
+  const pW = pmFresh() ? Math.round(avgHist(pmHist)) : null;
+  $('#pmRow').style.display = pm && devState.pm === 'on' && !pmActive() ? '' : 'none';
+  if (!pmActive()) { $('#hPM').textContent = pW ?? '–'; const S7 = ride.samples.filter(s => s[7] != null); $('#hPMa').textContent = S7.length ? Math.round(S7.reduce((a, s) => a + s[7], 0) / S7.length) : '–'; }
   $('#hPl').textContent = pmActive() ? 'Leistung (3s) · Powermeter' + (tW != null ? ' · Trainer misst ' + tW + ' W' : '') + (live.pmDev ? ' !' : settings.erg && ride.lastSent?.mode === 'erg' ? ' · Korrektur ' + (live.pmOffset >= 0 ? '+' : '') + Math.round(live.pmOffset) + ' W' : '')
-    : pm && !settings.powerMatch ? 'Leistung (3s) · Trainer (PowerMatch aus)' : pm && devState.pm === 'on' ? 'Leistung (3s) · Trainer – Powermeter sendet nichts' : 'Leistung (3s)';
+    : pm && !settings.powerMatch ? 'Leistung (3s) · Trainer' : pm && devState.pm === 'on' ? 'Leistung (3s) · Trainer – Powermeter sendet nichts' : 'Leistung (3s)';
   $('#hC').textContent = Math.round(live.cadence);
   $('#hH').textContent = Date.now() - live.lastHr < 5000 ? Math.round(live.hr) : '–';
   $('#hS').textContent = (ride.v * 3.6).toFixed(1);
@@ -2249,6 +2270,8 @@ function updateHUD() {
   const box = $('#wbox');
   if (!wo) { box.style.display = 'none'; return; }
   box.style.display = '';
+  $('#wNow').textContent = Math.round(p3); $('#wNowL').textContent = pm && !pmActive() ? 'Trainer' : 'Leistung';
+  $('#wPm').textContent = pm && devState.pm === 'on' && !pmActive() ? 'Powermeter ' + (pW ?? '–') + ' W' : '';
   $('#wName').textContent = wo.name + (settings.erg ? ' · ERG' : ' · Sim');
   if (wo.manual) {
     $('#wTgt').textContent = settings.manualW; $('#wBar').style.width = '0';
@@ -2260,6 +2283,7 @@ function updateHUD() {
   if (!sa) return;
   const tgt = currentTarget();
   $('#wTgt').textContent = tgt == null ? 'frei' : tgt;
+  { const d = tgt ? (p3 - tgt) / tgt : 0; $('#wNow').style.color = !tgt || !ride.started ? '' : Math.abs(d) < .05 ? '#16a34a' : d > 0 ? '#ea580c' : '#2563eb'; }
   $('#wBar').style.width = (sa.tIn / sa.s.dur * 100) + '%';
   $('#wRem').textContent = fmtT(sa.rem);
   $('#wTot').textContent = fmtT(woTotal(wo) - t);
@@ -2310,6 +2334,8 @@ function initMap() {
   map = L.map('map', { zoomControl: false, attributionControl: true, zoomSnap: 0.25 }).setView([49.0069, 8.4037], 13);
   L.control.zoom({ position: 'bottomleft' }).addTo(map);
   map.attributionControl.setPrefix(false);
+  $('#mapBox').appendChild(map._controlContainer); // Zoom & Quellenangabe drehen nicht mit der Karte mit
+  new ResizeObserver(() => { if (mapRot.on) sizeMapRot(true); }).observe($('#mapBox'));
   setTiles(settings.mapStyle);
   const zcls = () => map.getContainer().classList.toggle('lowzoom', map.getZoom() < 12.5); map.on('zoomend', zcls); zcls();
   map.on('dragstart', () => { if (ride.state === 'running' || ride.state === 'paused') { follow = false; $('#btnFollow').style.display = ''; } });
@@ -2358,6 +2384,17 @@ function drawRouteOnMap(force) {
   zoomToRoute();
 }
 function zoomToRoute() { if (!map || !route.lat) return; const b = L.latLngBounds([]); for (let i = 0; i < route.lat.length; i += 10) b.extend([route.lat[i], route.lon[i]]); map.fitBounds(b, { padding: [60, 60] }); }
+// Karte in Fahrtrichtung: der Karten-Container wird größer als sichtbar (Diagonale) und um die Mitte gedreht
+const mapRot = { on: false, a: 0 };
+function sizeMapRot(on) {
+  const m = $('#map'), b = $('#mapBox');
+  if (on) { const w = b.clientWidth, h = b.clientHeight, D = Math.ceil(Math.hypot(w, h)); Object.assign(m.style, { inset: 'auto', left: (w - D) / 2 + 'px', top: (h - D) / 2 + 'px', width: D + 'px', height: D + 'px' }); }
+  else { Object.assign(m.style, { inset: '', left: '', top: '', width: '', height: '', transform: '' }); m.style.removeProperty('--unrot'); mapRot.a = 0; }
+  m.classList.toggle('rot', on); map.invalidateSize({ pan: false });
+}
+function setHeadUp(on) { settings.headUp = on; saveSettings(); $('#btnHeadUp').textContent = on ? 'Norden oben' : 'Fahrtrichtung oben'; updateMap(); }
+$('#btnHeadUp').onclick = () => setHeadUp(settings.headUp === false);
+$('#btnHeadUp').textContent = settings.headUp !== false ? 'Norden oben' : 'Fahrtrichtung oben';
 function updateMap() {
   if (!map || !route.lat || !riderMarker) return;
   const riding = ride.state === 'running' || ride.state === 'paused';
@@ -2366,6 +2403,13 @@ function updateMap() {
   riderMarker.setLatLng(ll);
   const ang = Math.atan2((ah[1] - ll[1]) * Math.cos(ll[0] * Math.PI / 180), ah[0] - ll[0]) * 180 / Math.PI;
   const el = riderMarker.getElement()?.querySelector('.arr'); if (el) el.style.transform = 'rotate(' + ang.toFixed(0) + 'deg)';
+  const want = riding && follow && settings.headUp !== false;
+  if (want !== mapRot.on) { mapRot.on = want; sizeMapRot(want); }
+  if (want) {
+    const a2 = latLonAt(route, d + 80), brg = Math.atan2((a2[1] - ll[1]) * Math.cos(ll[0] * Math.PI / 180), a2[0] - ll[0]) * 180 / Math.PI;
+    let diff = ((-brg - mapRot.a) % 360 + 540) % 360 - 180; mapRot.a += diff * 0.15;
+    $('#map').style.transform = 'rotate(' + mapRot.a.toFixed(1) + 'deg)'; $('#map').style.setProperty('--unrot', (-mapRot.a).toFixed(1) + 'deg');
+  }
   if (riding && follow) map.panTo(ll, { animate: false });
   if (riding && performance.now() - lastDoneUpd > 1000 && doneLine) {
     lastDoneUpd = performance.now();
@@ -2394,7 +2438,7 @@ function loadGoogle() {
   if (!settings.gKey) return Promise.reject(new Error('Kein Google-API-Schlüssel eingetragen – siehe „Connections → Google Street View“.'));
   sv.loading = new Promise((res, rej) => {
     window.__kurbelGm = () => res();
-    window.gm_authFailure = () => { sv.authFailed = true; svMsg('Google hat den API-Schlüssel abgelehnt. Prüfe: Schlüssel richtig kopiert? Rechnungskonto verknüpft? „Maps JavaScript API“ aktiviert?'); toast('Street View: API-Schlüssel wurde abgelehnt', 6000); };
+    window.gm_authFailure = () => { sv.authFailed = true; svMsg('Google hat den Schlüssel abgelehnt. Prüfe in der Google Cloud Console: 1) „Maps JavaScript API“ aktiviert? 2) Rechnungskonto verknüpft? 3) Bei „Websites“-Einschränkung muss ' + (location.protocol === 'file:' ? 'die Einschränkung entfernt werden – lokal geöffnete Dateien haben keine Web-Adresse' : location.origin + '/* eingetragen sein') + '. Änderungen bei Google brauchen bis zu 5 Minuten, danach Kurbel neu laden.'); toast('Street View: API-Schlüssel wurde abgelehnt', 6000); };
     const sc = document.createElement('script');
     sc.src = 'https://maps.googleapis.com/maps/api/js?key=' + encodeURIComponent(settings.gKey) + '&v=weekly&language=de&region=DE&loading=async&callback=__kurbelGm';
     sc.async = true; sc.onerror = () => { sv.loading = null; rej(new Error('Google Maps konnte nicht geladen werden (Internet?)')); };
@@ -2634,6 +2678,8 @@ function updPip(v) {
   const r = v.tgt ? (v.p3 - v.tgt) / v.tgt : 0; $$('pP').style.color = !v.tgt ? '#e6edf3' : Math.abs(r) < .05 ? '#7ee787' : r > 0 ? '#ffa657' : '#79c0ff';
 }
 $('#btnPip').onclick = openPip;
+$('#btnFull').onclick = () => { try { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); } catch (e) { toast('Vollbild wird hier nicht unterstützt'); } };
+document.addEventListener('fullscreenchange', () => { $('#btnFull').title = document.fullscreenElement ? 'Vollbild beenden' : 'Vollbild (Esc beendet)'; if (map) setTimeout(() => map.invalidateSize(), 200); });
 
 
 // ---------- Design-Varianten ----------
@@ -2809,6 +2855,15 @@ function frame() {
 
 // ---------- Auswertung & Export ----------
 function bestAvg(P, n) { if (P.length < n) return null; let s = 0, b = 0; for (let i = 0; i < P.length; i++) { s += P[i]; if (i >= n) s -= P[i - n]; if (i >= n - 1) b = Math.max(b, s / n); } return Math.round(b); }
+function npOf(P) { if (P.length < 30) return 0; const r = []; let s = 0; for (let i = 0; i < P.length; i++) { s += P[i]; if (i >= 30) s -= P[i - 30]; if (i >= 29) r.push(Math.pow(s / 30, 4)); } return Math.pow(r.reduce((a, b) => a + b, 0) / r.length, .25); }
+// Powermeter parallel zum Trainer aufgezeichnet (Index 7): Vergleich nur über Sekunden, in denen beide Werte da sind
+function pmStats(rd) {
+  const S = (rd.samples || []).filter(s => s[7] != null); if (S.length < 30) return null;
+  const T = S.map(s => s[1]), M = S.map(s => s[7]), avg = a => a.reduce((x, y) => x + y, 0) / a.length;
+  return { n: S.length, tAvg: avg(T), tNp: npOf(T), pAvg: avg(M), pNp: npOf(M) };
+}
+const pmNote = st => { const p = st.pm; if (!p) return ''; const d = p.tAvg ? (p.pAvg / p.tAvg - 1) * 100 : 0;
+  return `Watt Trainer: Ø ${Math.round(p.tAvg)} W · NP ${Math.round(p.tNp)} W\nWatt Powermeter: Ø ${Math.round(p.pAvg)} W · NP ${Math.round(p.pNp)} W (${d >= 0 ? '+' : '−'}${Math.abs(d).toFixed(0)} % zum Trainer)`; };
 function stats(rd) {
   const S = rd.samples, P = S.map(s => s[1]), n = S.length || 1;
   const avg = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0;
@@ -2819,7 +2874,7 @@ function stats(rd) {
   const IF = np / rd.ftp;
   return { timer, elapsed: S.length ? (S[S.length - 1][0] - S[0][0]) / 1000 + 1 : 0, dist, avgP: avg(P), maxP: Math.max(0, ...P), np, IF, tss: timer * np * IF / (rd.ftp * 3600) * 100,
     avgHr: avg(hrs), maxHr: Math.max(0, ...hrs), avgCad: avg(cads), maxCad: Math.max(0, ...cads), kj: P.reduce((a, b) => a + b, 0) / 1000, asc,
-    avgV: dist / timer, maxV: Math.max(0, ...S.map(s => s[4])), b1: bestAvg(P, 60), b5: bestAvg(P, 300), b20: bestAvg(P, 1200) };
+    avgV: dist / timer, maxV: Math.max(0, ...S.map(s => s[4])), b1: bestAvg(P, 60), b5: bestAvg(P, 300), b20: bestAvg(P, 1200), pm: pmStats(rd) };
 }
 let summaryRide = null;
 function showSummary(rd) {
@@ -2831,6 +2886,7 @@ function showSummary(rd) {
     cell('Zeit', fmtT(st.timer), ''), cell('Distanz', (st.dist / 1000).toFixed(2), 'km'), cell('Ø Leistung', Math.round(st.avgP), 'W'), cell('NP', Math.round(st.np), 'W'),
     cell('Max. Leistung', st.maxP, 'W'), cell('Ø Puls', st.avgHr ? Math.round(st.avgHr) : '–', 'bpm'), cell('Ø Trittfrequenz', Math.round(st.avgCad), 'rpm'), cell('Arbeit', Math.round(st.kj), 'kJ'),
     cell('Höhenmeter', Math.round(st.asc), 'm'), cell('TSS', Math.round(st.tss), ''), cell('Beste 5 min', st.b5 ?? '–', 'W'), cell('Beste 20 min', st.b20 ?? '–', 'W'),
+    ...(st.pm ? [cell('Ø Powermeter', Math.round(st.pm.pAvg), 'W'), cell('NP Powermeter', Math.round(st.pm.pNp), 'W')] : []),
   ].join('');
   const t20 = /FTP-Test 20/.test(rd.workoutName || '') && st.b20, newFtp = rd.ramp && st.b1 ? Math.round(st.b1 * .75) : t20 ? Math.round(st.b20 * .95) : 0;
   $('#sumFtp').textContent = rd.ramp && st.b1 ? `Rampentest: beste 1-min-Leistung ${st.b1} W → geschätzte FTP ≈ ${newFtp} W (75 %). Im Setup übernehmen?` : t20 ? `20-min-Test: bester 20-min-Schnitt ${st.b20} W → geschätzte FTP ≈ ${newFtp} W (95 %). Im Setup übernehmen?` : '';
@@ -2846,6 +2902,7 @@ function drawSummaryChart(rd) {
   const sm = S.map((s, i) => { let a = 0, k = 0; for (let j = Math.max(0, i - 4); j <= i; j++) { a += S[j][1]; k++; } return a / k; });
   line((s, i) => sm[i], maxP, ACC());
   if (S.some(s => s[3])) line(s => s[3], 220, '#f85149aa');
+  if (S.some(s => s[7] != null)) { const sp = S.map((s, i) => { let a = 0, k = 0; for (let j = Math.max(0, i - 4); j <= i; j++) { a += S[j][7] || 0; k++; } return a / k; }); line((s, i) => sp[i], maxP, '#e8400fcc'); }
 }
 class FitWriter {
   constructor() { this.b = []; this.defs = {}; }
@@ -3619,7 +3676,7 @@ async function stravaUpload(rd, opt = {}) {
   const fd = new FormData();
   fd.append('file', new Blob([buildFIT(rd, false, opt)], { type: 'application/octet-stream' }), fname);
   fd.append('data_type', 'fit'); fd.append('name', rideTitle(rd)); fd.append('trainer', '1'); fd.append('external_id', fname);
-  fd.append('description', `Indoor mit Kurbel · ${rd.routeName}${rd.workoutName ? ' · ' + rd.workoutName : ''} · NP ${Math.round(st.np)} W · TSS ${Math.round(st.tss)}`);
+  fd.append('description', `Indoor mit Kurbel · ${rd.routeName}${rd.workoutName ? ' · ' + rd.workoutName : ''} · NP ${Math.round(st.np)} W · TSS ${Math.round(st.tss)}${st.pm ? '\n\n' + pmNote(st) : ''}`);
   const r = await fetch('https://www.strava.com/api/v3/uploads', { method: 'POST', headers: { Authorization: 'Bearer ' + tok }, body: fd });
   let j = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error(j.message || j.error || 'HTTP ' + r.status);
@@ -3653,7 +3710,8 @@ async function doStravaUpload() {
     const dupNote = dup ? ` <span style="opacity:.75">(Es gab sie schon einmal: <a href="https://www.strava.com/activities/${dup}" target="_blank" style="color:inherit">ältere Kopie</a> – die kannst du auf Strava löschen.)</span>` : '';
     m.innerHTML = res.id ? `<div class="okbox">✓ Hochgeladen! <a href="https://www.strava.com/activities/${res.id}" target="_blank" style="color:inherit">Aktivität auf Strava ansehen →</a>${dupNote}</div>` : '<div class="okbox">✓ Hochgeladen – Strava verarbeitet die Datei noch, sie erscheint gleich in deinem Feed.</div>';
   } catch (e) {
-    m.innerHTML = `<div class="warnbox">Strava-Upload fehlgeschlagen: ${esc(e.message)}${/duplicate/i.test(e.message) ? ' (diese Fahrt ist schon auf Strava)' : ''}. Du kannst die .fit-Datei auch manuell hochladen.</div>`;
+    const em = String(e.message || e), hint = /Failed to fetch|NetworkError/i.test(em) ? ' – keine Verbindung zu Strava (Internet?)' : /401|Authorization|invalid|expired|Nicht mit Strava/i.test(em) ? ' – bitte Strava neu verbinden (Connections → Strava → Einrichten)' : '';
+    m.innerHTML = `<div class="warnbox">Strava-Upload fehlgeschlagen: ${esc(em)}${hint}${/duplicate/i.test(e.message) ? ' (diese Fahrt ist schon auf Strava)' : ''}. Du kannst die .fit-Datei auch manuell hochladen.</div>`;
   } finally { b.disabled = false; }
 }
 function stravaRenderState() {
@@ -3772,11 +3830,11 @@ stravaRenderState();
     else { $('#btnDirReload').style.display = ''; $('#btnDirReload').textContent = 'Ordner „' + h.name + '“ laden'; $('#dirInfo').textContent = 'Chrome fragt einmal pro Sitzung nach Zugriff.'; }
   } catch (e) { console.warn(e); }
 })();
-(async () => { // Rückkehr von Strava (wenn Kurbel über http://localhost läuft)
+(async () => { // Rückkehr von Strava (gehostet oder über http://localhost)
   const q = new URLSearchParams(location.search);
   if (q.get('state') !== 'kurbel') return;
   history.replaceState(null, '', location.pathname);
-  try { await stravaHandleCode(location.href.includes('code=') ? 'http://x/?' + q.toString() : 'http://x/?error=' + (q.get('error') || 'unbekannt')); toast('Mit Strava verbunden ✓ – du kannst diesen Tab schließen.', 8000); openStrava(); }
+  try { await stravaHandleCode(q.has('code') ? 'http://x/?' + q.toString() : 'http://x/?error=' + (q.get('error') || 'unbekannt')); toast('Mit Strava verbunden ✓ – du kannst diesen Tab schließen.', 8000); openStrava(); }
   catch (e) { toast('Strava: ' + e.message, 6000); }
 })();
 setInterval(tick, 250);

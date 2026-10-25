@@ -25,13 +25,14 @@ Sie läuft in Chrome auf dem MacBook und wird über GitHub Pages veröffentlicht
 | Tagesform | `DF`, `dayBias()`, `renderDayForm`, Vorschlag aus TSB `formSuggest` |
 | Bluetooth | `BleTrainer` (FTMS 0x1826; Fallback Tacx FE-C `6e40fec1…`, Wahoo `a026e005…`), `PowerMeter` (CPS 0x1818, Nullabgleich 0x2A66 Opcode 0x0C), `connectHR`, `DemoTrainer`, `DemoPowerMeter` |
 | Kalibrieren | `trainer.spinDown` (FTMS 0x13 + Status 0x2ADA; FE-C Seite 1/2), `calTrainer`, `calPM`, Dialog `#calDlg` |
-| Fahrt | `ride`, `startRide` (Zeit startet erst bei ersten Watt), `tick`, `physics`, `controlTrainer` (ERG/SIM), PowerMatch (Regelkreis Ziel vs. Powermeter, `live.pmOffset`, Plausibilität `checkPmDev`) |
+| Fahrt | `ride`, `startRide` (Zeit startet erst bei ersten Watt), `tick`, `physics`, `controlTrainer` (ERG/SIM), PowerMatch (optional, Standard aus seit `pmV2`: Regelkreis Ziel vs. Powermeter, `live.pmOffset`, `checkPmDev`). Standard: Trainer steuert, Powermeter läuft mit (`pmHist`, `pmFresh`, Sample-Index 7, `pmStats`/`pmNote` → Zusammenfassung + Strava-Beschreibung) |
+| Fahrt-Anzeige | `updateHUD`; oben Mitte `#wbox` (Ziel, „Intervall noch“ groß, aktuelle Watt + Powermeter), Steigung `#grade` rechts; Vollbild `#btnFull` |
 | Export | `rideRecord` (inkl. `routeId`, `woId`, `tgt`), `buildFIT` (mit GPS-Koordinaten, sub_sport 58 = virtuell), `buildTCX`, Garmin-Trick (manufacturer 1, product 3121) |
-| Strava | OAuth `#sAuth` (gehostet: gleicher Tab, `approval_prompt=force`; Datei: neuer Tab + Adresse einfügen), Rückkehr-Handler setzt `window.__stravaReturn`, `stravaUpload` (Duplikat → neue Kennung), immer VirtualRide wenn GPS |
+| Strava | OAuth `#sAuth` (öffnet neuen Tab; gehostet kommt Strava auf die Seite zurück, Rückkehr-Handler „Rückkehr von Strava“ liest `?state=kurbel&code=`; Datei: Adresse einfügen), `stravaUpload` (Duplikat → neue Kennung), immer VirtualRide wenn GPS |
 | Verlauf | IndexedDB `kurbel` v2 (`kv`, `rides`), `saveRideToHistory`, `openHistory`, Backup/Restore |
 | Dashboard | `openDash`, `ftpEstimate` (Test < 6 Wochen → hoch; sonst CP-Modell aus frei gefahrenen Abschnitten, ERG zählt nicht), `pmc` (CTL 42 / ATL 7), `lineChart`, `barChart`; Palette `#2563eb` / `#e8400f` (validiert) |
 | Setup-Menü | `fillSelects`, `renderRouteCards`, `renderWoCards`, `woCats`, `pickWorkout`, `renderPlanBanner` |
-| Karte | Leaflet, `TILES` (Esri Straße/Satellit, CyclOSM, OpenTopoMap – OSM und CARTO blockieren lokal geöffnete Dateien) |
+| Karte | Leaflet in `#mapBox`; Fahrtrichtung oben über `mapRot`/`sizeMapRot` (Container auf Diagonale vergrößert und gedreht, Steuerelemente aus dem Container herausgezogen), Knopf `#btnHeadUp`;  `TILES` (Esri Straße/Satellit, CyclOSM, OpenTopoMap – OSM und CARTO blockieren lokal geöffnete Dateien) |
 | Startseite | `KurbelLanding` (three.js-Kurbel), Glue mit `enter(intent)` |
 
 ## Testen
@@ -45,7 +46,8 @@ Playwright (Chromium) gegen die lokale Datei oder `python3 -m http.server`:
 
 ## Offen / Ideen
 
-- Powermeter vs. Trainer: Max sah 350 W getreten, 130 W angezeigt. Diagnose-Anzeige („Trainer misst … W“) und Plausibilitätsschutz sind drin – echte Werte von Max stehen noch aus.
+- Powermeter vs. Trainer: große Abweichung bei Max, PowerMatch klappte nicht → jetzt Standard „Trainer steuert, Powermeter läuft mit“.
+- Street View: bei Max noch nicht gelaufen – genaue Meldung steht aus (Schlüssel gilt pro Adresse: gehostet und lokale Datei getrennt eintragen).
 - Kalibrierung und FE-C/Wahoo-Steuerung nur mit Mocks getestet.
 - Eventuell eigene Domain für GitHub Pages (dann Strava-Callback-Domain anpassen und Backup neu einspielen).
 - Mögliche weitere Strecken: Flandern-Rundfahrt, Champs-Élysées.
