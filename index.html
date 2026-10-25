@@ -274,7 +274,7 @@ details.sec.more>summary{color:var(--text);font-weight:600;font-size:17px}
 #setup .dfSeg button{display:flex;flex-direction:column;align-items:center;gap:1px;border-radius:12px!important;padding:8px 4px!important;background:var(--s0)!important;border:2px solid transparent!important;font-size:13px!important;white-space:normal}
 #setup .dfSeg button b{font-weight:800}#setup .dfSeg button small{color:var(--tx2);font-size:11.5px}
 #setup .dfSeg button.sug{border:2px dashed var(--acc)!important}
-#setup .dfSeg button.on{background:var(--sel)!important;color:var(--onsel)!important;border-color:var(--sel)!important}#setup .dfSeg button.on small{color:#d1d1d6}
+#setup .dfSeg button.on{background:var(--sel)!important;color:var(--onsel)!important;border-color:var(--sel)!important}#setup .dfSeg button.on small{color:var(--onsel);opacity:.75}
 #calDlg button.primary,#dashDlg button.primary,#planDlg .actions button.primary{background:var(--acc)!important;border:0!important;border-radius:999px!important;font-weight:800!important;color:var(--onacc)!important;padding:10px 22px!important;box-shadow:none}
 #calDlg button.primary:disabled{opacity:.5}
 #dashDlg .card.dash{width:min(1040px,100%);padding:26px 28px;background:var(--s1)}
@@ -1334,7 +1334,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <!-- Setup -->
   <div class="overlay" id="setup">
     <div class="card menu">
-      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 2.6</span></div>
+      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 2.7</span></div>
       <div class="warnbox" id="noBt" style="display:none">Bluetooth geht nur in <b>Google Chrome</b> oder Edge. Die Demo funktioniert trotzdem.</div>
       <div class="warnbox" id="recoverBox" style="display:none">Nicht gespeicherte Fahrt vom <span id="recoverDate"></span> gefunden. <button id="btnRecover">Ansehen</button></div>
       <div id="planBanner"></div>
