@@ -48,7 +48,6 @@ Playwright (Chromium) gegen die lokale Datei oder `python3 -m http.server`:
 
 ## Offen / Ideen
 
-- Design-Vorschau im Stil dunkel/Lime (Inter Tight, Körnung, Kurbel-Startbild) unter `vorschau/` – Max wählt Logo-Variante A–H, danach ggf. in die App übernehmen.
 - Technische Kennungen bleiben `kurbel` (localStorage, IndexedDB, Strava-`state`, `KurbelLanding`).
 
 - Powermeter vs. Trainer: große Abweichung bei Max, PowerMatch klappte nicht → jetzt Standard „Trainer steuert, Powermeter läuft mit“.
