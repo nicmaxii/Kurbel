@@ -504,7 +504,7 @@ body,#landing,#setup .card.menu,#planDlg .card.menu,#calDlg .card,#dashDlg .card
 #wbox .bar{background:var(--ln)}
 #mapBox,#map{background:#1a1a1c!important}
 #map.tiles-dark .leaflet-tile-pane{filter:invert(1) grayscale(1) brightness(.72) contrast(1.18)} /* helle Straßenkarte → dunkle Graustufen im App-Design */
-#wbox .rem{color:var(--acc)}
+#wbox .rem .u{font-size:16px;font-family:var(--uifont);letter-spacing:0}
 #tour .ring{outline:2px solid var(--acc);outline-offset:0}
 #ghostBox .gsub{font-size:12px;color:var(--tx2);font-variant-numeric:tabular-nums}
 button.primary,.planCard .primary,#calDlg button.primary,#dashDlg button.primary,#planDlg .actions button.primary{color:var(--onacc)!important}
@@ -1256,8 +1256,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <div class="m" id="wbox" style="display:none">
     <div class="wrow">
       <div class="wc"><div class="wl">Ziel</div><div class="tgt"><span id="wTgt">0</span><span class="u">W</span></div></div>
-      <div class="wc wmain"><div class="rem" id="wRem">0:00</div></div>
-      <div class="wc"><div class="wl" id="wNowL">Leistung</div><div class="tgt"><span id="wNow">0</span><span class="u">W</span></div><div class="wpm" id="wPm"></div></div>
+      <div class="wc wmain"><div class="rem"><span id="wNow">0</span><span class="u">W</span></div><div class="wpm" id="wPm"></div></div>
+      <div class="wc"><div class="wl">Intervall</div><div class="tgt" id="wRem">0:00</div></div>
     </div>
     <div class="bar"><div id="wBar"></div></div>
     <div class="sub">Workout noch <span id="wTot">0:00</span> · <span id="wNext"></span></div>
@@ -2412,8 +2412,8 @@ function updateHUD() {
   $('#hPbox').style.display = wo ? 'none' : '';
   if (!wo) { box.style.display = 'none'; return; }
   box.style.display = '';
-  $('#wNow').textContent = Math.round(p3); $('#wNowL').textContent = pm && !pmActive() ? 'Trainer' : 'Leistung';
-  $('#wPm').textContent = pm && devState.pm === 'on' && !pmActive() ? 'Powermeter ' + (pW ?? '–') + ' W' : '';
+  $('#wNow').textContent = Math.round(p3);
+  $('#wPm').textContent = pm && devState.pm === 'on' && !pmActive() ? 'Trainer · Powermeter ' + (pW ?? '–') + ' W' : '';
   if (wo.manual) {
     $('#wTgt').textContent = settings.manualW; $('#wBar').style.width = '0';
     $('#wRem').textContent = '∞'; $('#wTot').textContent = '–'; $('#wNext').textContent = '↑/↓ ändert den Wert um 5 W'; $('#wBias').textContent = '';
