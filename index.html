@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Kurbel – Indoor Trainer</title>
+<title>Kurbeln – Indoor Trainer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0d1117;--panel:#161b22;--panel2:#1f2630;--line:#2d3642;--text:#e6edf3;--muted:#8b98a8;--accent:#4c8dff;--onAccent:#fff;--ok:#3fb950;--warn:#d29922;--bad:#f85149;--hud:rgba(13,17,23,.76);--hudline:rgba(255,255,255,.08);--grid:rgba(255,255,255,.18);--font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;--numfont:var(--font);--hfont:var(--font);--radius:10px}
@@ -1149,15 +1149,15 @@ svg.leaflet-image-layer.leaflet-interactive path {
 <body>
 <div id="landing">
   <canvas id="lcv"></canvas>
-  <nav class="lnav"><span class="brand">Kurbel</span><a data-go="map">Fahren</a><a data-go="data">Werte</a><a data-go="workouts">Workouts</a><a data-go="routes">Strecken</a><a data-go="video">Video</a><a data-go="history">Meine Fahrten</a><a class="cta" data-go="map">Losfahren</a></nav>
-  <div class="lhero"><h1>Kurbel.</h1>
+  <nav class="lnav"><span class="brand">Kurbeln</span><a data-go="map">Fahren</a><a data-go="data">Werte</a><a data-go="workouts">Workouts</a><a data-go="routes">Strecken</a><a data-go="video">Video</a><a data-go="history">Meine Fahrten</a><a class="cta" data-go="map">Losfahren</a></nav>
+  <div class="lhero"><h1>Kurbeln.</h1>
     <div class="lbtns"><button class="b1" data-go="map">Losfahren</button><button class="b2" data-go="demo">Demo ansehen ›</button></div></div>
   <div class="lhint">Scrollen oder heranzoomen, um einzutauchen<span>⌄</span></div>
   <div id="lfade"></div>
 </div>
 <div id="app">
 <header>
-  <button id="btnHome" class="brand" title="Zur Startseite">Kurbel</button>
+  <button id="btnHome" class="brand" title="Zur Startseite">Kurbeln</button>
   <div class="seg" id="viewSeg"><button data-view="map">Karte</button><button data-view="data">Werte</button><button data-view="video">Video</button></div>
   <button id="btnPip" title="Kleines Werte-Fenster, das über anderen Fenstern schwebt – z. B. über YouTube oder Netflix in einem anderen Fenster" aria-label="Werte-Fenster"><svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x=".75" y=".75" width="16.5" height="12.5" rx="2.5"/><rect x="9" y="7" width="6" height="4.2" rx="1" fill="currentColor" stroke="none"/></svg></button>
   <button id="btnFull" title="Vollbild (Esc beendet)" aria-label="Vollbild"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M1.5 5.5v-4h4M10.5 1.5h4v4M14.5 10.5v4h-4M5.5 14.5h-4v-4"/></svg></button>
@@ -1165,7 +1165,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <button id="btnConn" aria-haspopup="true" aria-expanded="false"><span id="connDots"></span>Connections <span class="caret">▾</span></button>
     <div class="ddp" id="connPanel" role="menu">
       <div class="ddh">Geräte</div>
-      <div class="crow"><span class="dot" id="dTrainer"></span><div class="ct"><b>Smart-Trainer</b><span id="sTrainer">Nicht verbunden</span></div><span class="i" data-tip="Smart-Trainer mit Bluetooth (FTMS), z. B. Wahoo, Tacx, Elite. Kurbel steuert den Widerstand – im ERG-Modus nach Wattzahl, sonst nach der Steigung der Strecke.">i</span><button id="btnTrainer">Verbinden</button></div>
+      <div class="crow"><span class="dot" id="dTrainer"></span><div class="ct"><b>Smart-Trainer</b><span id="sTrainer">Nicht verbunden</span></div><span class="i" data-tip="Smart-Trainer mit Bluetooth (FTMS), z. B. Wahoo, Tacx, Elite. Kurbeln steuert den Widerstand – im ERG-Modus nach Wattzahl, sonst nach der Steigung der Strecke.">i</span><button id="btnTrainer">Verbinden</button></div>
       <div class="crow"><span class="dot" id="dPM"></span><div class="ct"><b>Powermeter</b><span id="sPM">Nicht verbunden</span></div><span class="i" data-tip="Pedale, Kurbel oder Nabe. Mit PowerMatch (im Menü unter Profil) gibt der Powermeter die Wattzahl vor und der Trainer wird automatisch nachgeregelt.">i</span><button id="btnPM">Verbinden</button></div>
       <div class="crow"><span class="dot" id="dHR"></span><div class="ct"><b>Puls</b><span id="sHR">Nicht verbunden</span></div><span class="i" data-tip="Brustgurt oder Garmin-Uhr. Bei der Uhr vorher „Herzfrequenz übertragen“ einschalten.">i</span><button id="btnHR">Verbinden</button></div>
       <div class="crow"><span class="dot" id="dDemo"></span><div class="ct"><b>Demo-Modus</b><span id="sDemo">Ohne Trainer ausprobieren</span></div><span class="i" data-tip="Simulierter Fahrer – zum Ausprobieren ohne Gerät. Danach startet „Powermeter verbinden“ einen Demo-Powermeter.">i</span><button id="btnDemo">Starten</button></div>
@@ -1316,7 +1316,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
             <button id="btnWo">Dateien hochladen</button>
             <button id="btnDir">Ordner verbinden</button>
             <button id="btnDirReload" style="display:none">Ordner neu laden</button>
-            <span class="i" data-tip="Mehrere Dateien auf einmal: beim Hochladen mehrere markieren oder einfach ins Fenster ziehen. Ordner: Kurbel liest ihn bei jedem Start neu ein – Unterordner (z. B. „Schwelle“) werden zu Kategorien. Unterstützt .zwo, .erg, .mrc (z. B. von whatsonzwift.com).">i</span>
+            <span class="i" data-tip="Mehrere Dateien auf einmal: beim Hochladen mehrere markieren oder einfach ins Fenster ziehen. Ordner: Kurbeln liest ihn bei jedem Start neu ein – Unterordner (z. B. „Schwelle“) werden zu Kategorien. Unterstützt .zwo, .erg, .mrc (z. B. von whatsonzwift.com).">i</span>
           </div>
           <div class="sub" id="dirInfo"></div>
         </details>
@@ -1395,7 +1395,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <!-- Street View -->
   <div class="overlay" id="svDlg" style="display:none">
     <div class="card menu" style="width:min(640px,100%)">
-      <div class="mhead"><h2>Street View</h2><span class="i" data-tip="Zeigt neben der Karte das echte Google-Straßenbild in Fahrtrichtung – alle paar hundert Meter ein neues Bild. Google schenkt dir 5.000 Bilder pro Monat; Kurbel stoppt vorher automatisch.">i</span></div>
+      <div class="mhead"><h2>Street View</h2><span class="i" data-tip="Zeigt neben der Karte das echte Google-Straßenbild in Fahrtrichtung – alle paar hundert Meter ein neues Bild. Google schenkt dir 5.000 Bilder pro Monat; Kurbeln stoppt vorher automatisch.">i</span></div>
       <section class="sec">
         <div class="srow" style="margin-top:0"><span>Street View neben der Karte</span><label class="sw"><input type="checkbox" id="cSV"></label></div>
         <div class="grid3" style="margin-top:12px">
@@ -1407,7 +1407,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       </section>
       <details class="sec more"><summary>Schlüssel bekommen (einmalig, ca. 5 Min.)</summary>
         <ol class="steps">
-          <li><a href="https://console.cloud.google.com/projectcreate" target="_blank">Google Cloud Console</a>: neues Projekt „Kurbel“.</li>
+          <li><a href="https://console.cloud.google.com/projectcreate" target="_blank">Google Cloud Console</a>: neues Projekt „Kurbeln“.</li>
           <li>Abrechnung: Rechnungskonto verknüpfen (Kreditkarte nötig, bleibt im Gratiskontingent).</li>
           <li><a href="https://console.cloud.google.com/apis/library/maps-backend.googleapis.com" target="_blank">Maps JavaScript API</a> aktivieren.</li>
           <li><a href="https://console.cloud.google.com/apis/credentials" target="_blank">Anmeldedaten</a> → API-Schlüssel erstellen, auf „Maps JavaScript API“ beschränken.</li>
@@ -1423,11 +1423,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <div class="card menu" style="width:min(600px,100%)">
       <div class="mhead"><h2>Garmin</h2></div>
       <section class="sec">
-        <div class="sh"><h3>Export nach der Fahrt</h3><span class="i" data-tip="Inoffizieller Trick: Kurbel kennzeichnet die Datei als Garmin-Aufzeichnung, damit Garmin Belastung und Erholungszeit berechnet. Ohne Puls rechnet Garmin nichts.">i</span></div>
+        <div class="sh"><h3>Export nach der Fahrt</h3><span class="i" data-tip="Inoffizieller Trick: Kurbeln kennzeichnet die Datei als Garmin-Aufzeichnung, damit Garmin Belastung und Erholungszeit berechnet. Ohne Puls rechnet Garmin nichts.">i</span></div>
         <ol class="steps"><li>In der Zusammenfassung „Für Garmin speichern“.</li><li>Auf <a href="https://connect.garmin.com/modern/import-data" target="_blank">Garmin Connect → Daten importieren</a> hochladen.</li><li>Uhr zweimal synchronisieren.</li></ol>
       </section>
       <section class="sec">
-        <div class="sh"><h3>Oder auf der Uhr mitzeichnen</h3><span class="i" data-tip="Offizieller Weg: Die Uhr rechnet selbst. Dann aus Kurbel nichts hochladen, sonst ist die Fahrt doppelt.">i</span></div>
+        <div class="sh"><h3>Oder auf der Uhr mitzeichnen</h3><span class="i" data-tip="Offizieller Weg: Die Uhr rechnet selbst. Dann aus Kurbeln nichts hochladen, sonst ist die Fahrt doppelt.">i</span></div>
         <div class="sub" style="margin-top:0">„Indoor-Radfahren“ auf der Uhr starten und Trainer oder Powermeter als Sensor koppeln (am besten per ANT+).</div>
       </section>
       <div class="actions"><button class="primary" id="garminDone">Fertig</button></div>
@@ -1507,7 +1507,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <h3>1 · Einmalig: eigene Strava-API-App anlegen</h3>
       <ol class="steps">
         <li>Öffne <a href="https://www.strava.com/settings/api" target="_blank" style="color:#8ab4ff">strava.com/settings/api</a> (eingeloggt).</li>
-        <li>Name: <code>Kurbel</code> · Kategorie: <code>Training</code> · Website: <code class="stHost" data-pre="http://">http://localhost</code></li>
+        <li>Name: <code>Kurbeln</code> · Kategorie: <code>Training</code> · Website: <code class="stHost" data-pre="http://">http://localhost</code></li>
         <li><b>Authorization Callback Domain:</b> <code class="stHost">localhost</code></li>
         <li>Speichern, dann <b>Client ID</b> und <b>Client Secret</b> hier eintragen.</li>
       </ol>
@@ -1518,11 +1518,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <h3>2 · Zugriff erlauben</h3>
       <div class="inline"><button class="primary" id="sAuth" style="background:#fc4c02;border-color:#fc4c02">Bei Strava anmelden &amp; erlauben</button></div>
       <div id="sPasteBox" class="sec" style="margin-top:14px">
-        <div class="sh"><h3>3 · Adresse zurückholen</h3><span class="i" data-tip="Strava schickt dich nach dem Erlauben zu „localhost“. Weil Kurbel als Datei läuft, zeigt Chrome dort „localhost refused to connect“ – das ist richtig so. In der Adresse dieser Seite steckt der Zugangscode, den Kurbel braucht. Er gilt nur wenige Minuten und nur einmal.">i</span></div>
+        <div class="sh"><h3>3 · Adresse zurückholen</h3><span class="i" data-tip="Strava schickt dich nach dem Erlauben zu „localhost“. Weil Kurbeln als Datei läuft, zeigt Chrome dort „localhost refused to connect“ – das ist richtig so. In der Adresse dieser Seite steckt der Zugangscode, den Kurbeln braucht. Er gilt nur wenige Minuten und nur einmal.">i</span></div>
         <ol class="steps" style="margin-top:0">
           <li>Im neuen Tab erscheint <b>„localhost refused to connect“</b> – <b>das ist normal</b>.</li>
           <li>Dort in die Adressleiste klicken (<kbd>⌘</kbd><kbd>L</kbd>) und kopieren (<kbd>⌘</kbd><kbd>C</kbd>).</li>
-          <li>Zurück zu Kurbel und hier einfügen – Kurbel verbindet automatisch.</li>
+          <li>Zurück zu Kurbeln und hier einfügen – Kurbeln verbindet automatisch.</li>
         </ol>
         <div class="inline" style="margin-top:10px"><button class="primary" id="sClip" style="background:#fc4c02;border-color:#fc4c02">Aus Zwischenablage einfügen</button></div>
         <div class="inline" style="margin-top:8px"><div style="flex:1"><input type="text" id="sPaste" placeholder="oder hier einfügen: http://localhost/kurbel?state=kurbel&code=…"></div><button id="sPasteGo">Verbinden</button></div>
@@ -1996,7 +1996,7 @@ class BleTrainer {
     }
     const lbl = { ftms: 'FTMS', fec: 'Tacx FE-C', wahoo: 'Wahoo' }[this.ctrl];
     setStatus('trainer', this.controllable ? 'on' : 'wait', this.name + (this.controllable ? ' · Steuerung ✓ (' + lbl + ')' : ' · nur Daten – keine Steuerung'));
-    if (!this.controllable) toast(''+this.name + ': Kurbel darf den Widerstand nicht steuern (' + (this.why || 'unbekannt') + '). Zwift, Garmin-Uhr/Edge oder Hersteller-App trennen und neu verbinden.', 9000);
+    if (!this.controllable) toast(''+this.name + ': Kurbeln darf den Widerstand nicht steuern (' + (this.why || 'unbekannt') + '). Zwift, Garmin-Uhr/Edge oder Hersteller-App trennen und neu verbinden.', 9000);
     this.retries = 0;
   }
   async onDisconnect() {
@@ -2030,7 +2030,7 @@ class BleTrainer {
   onCP(dv) { if (dv.byteLength >= 3 && dv.getUint8(0) === 0x80 && this.pending && dv.getUint8(1) === this.pending.op) { this.lastResp = dv; this.pending.res(dv.getUint8(2)); } }
   // Spin-Down-Kalibrierung
   async spinDown(cb) {
-    if (!this.controllable) throw new Error('Kurbel darf den Trainer gerade nicht steuern – andere Apps oder Uhren trennen und neu verbinden.');
+    if (!this.controllable) throw new Error('Kurbeln darf den Trainer gerade nicht steuern – andere Apps oder Uhren trennen und neu verbinden.');
     if (this.ctrl === 'wahoo') return cb({ type: 'app' });
     this.calCb = cb; this.calCoast = false; this.calHigh = null;
     if (this.ctrl === 'fec') { cb({ type: 'speedup' }); await this.fecPage([0x01, 0x80, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff]); return this.calWait(120000); }
@@ -2375,7 +2375,7 @@ document.addEventListener('visibilitychange', () => { if (document.visibilitySta
 
 // ---------- 2D-Karte (OpenStreetMap) ----------
 function fitCanvas(c) { const r = c.getBoundingClientRect(), d = devicePixelRatio || 1; const w = Math.round(r.width * d), h = Math.round(r.height * d); if (c.width !== w || c.height !== h) { c.width = w; c.height = h; } return [w, h]; }
-const TILES = { // alle getestet: funktionieren auch, wenn Kurbel als Datei geöffnet wird
+const TILES = { // alle getestet: funktionieren auch, wenn Kurbeln als Datei geöffnet wird
   esri: { name: 'Straßenkarte (Esri)', url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', sub: 'abc', max: 19, attr: 'Karte © <a href="https://www.esri.com" target="_blank">Esri</a>, HERE, Garmin, © OpenStreetMap-Mitwirkende' },
   cyclosm: { name: 'Radkarte (CyclOSM)', url: 'https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', sub: 'abc', max: 20, attr: '<a href="https://www.cyclosm.org" target="_blank">CyclOSM</a> · © <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>-Mitwirkende' },
   topo: { name: 'Topografisch (OpenTopoMap)', url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', sub: 'abc', max: 17, attr: '© <a href="https://opentopomap.org" target="_blank">OpenTopoMap</a> (CC-BY-SA) · © <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>-Mitwirkende' },
@@ -2500,7 +2500,7 @@ const SV_ERR = {
   ExpiredKeyMapError: 'Der Schlüssel ist abgelaufen oder gelöscht – bitte einen neuen erstellen.',
   DeletedApiProjectMapError: 'Das Google-Projekt zum Schlüssel wurde gelöscht – bitte einen neuen Schlüssel erstellen.',
 };
-const svErrText = c => 'Street View geht nicht: ' + (SV_ERR[c] || c) + (c === 'RefererNotAllowedMapError' ? (location.protocol === 'file:' ? '– bei lokal geöffneter Datei geht das nicht, Einschränkung entfernen oder die Online-Version nutzen.' : location.origin + '/*') : '') + ' Änderungen bei Google brauchen bis zu 5 Minuten, danach Kurbel neu laden.';
+const svErrText = c => 'Street View geht nicht: ' + (SV_ERR[c] || c) + (c === 'RefererNotAllowedMapError' ? (location.protocol === 'file:' ? '– bei lokal geöffneter Datei geht das nicht, Einschränkung entfernen oder die Online-Version nutzen.' : location.origin + '/*') : '') + ' Änderungen bei Google brauchen bis zu 5 Minuten, danach Kurbeln neu laden.';
 ['error', 'warn'].forEach(k => { const ce = console[k].bind(console); console[k] = (...a) => { const m = a.map(String).join(' ').match(/([A-Z][A-Za-z]+MapError)/); if (m && !sv.errCode) { sv.errCode = m[1]; if (sv.authFailed) svMsg(svErrText(m[1])); } ce(...a); }; });
 function loadGoogle() {
   if (window.google?.maps?.importLibrary) return Promise.resolve();
@@ -2508,7 +2508,7 @@ function loadGoogle() {
   if (!settings.gKey) return Promise.reject(new Error('Kein Google-API-Schlüssel eingetragen – siehe „Connections → Google Street View“.'));
   sv.loading = new Promise((res, rej) => {
     window.__kurbelGm = () => res();
-    window.gm_authFailure = () => { sv.authFailed = true; $('#svPano').style.visibility = 'hidden'; $('#svMsg').style.background = '#111'; if (sv.errCode) return svMsg(svErrText(sv.errCode)); svMsg('Google hat den Schlüssel abgelehnt. Prüfe in der Google Cloud Console: 1) „Maps JavaScript API“ aktiviert? 2) Rechnungskonto verknüpft? 3) Bei „Websites“-Einschränkung muss ' + (location.protocol === 'file:' ? 'die Einschränkung entfernt werden – lokal geöffnete Dateien haben keine Web-Adresse' : location.origin + '/* eingetragen sein') + '. Änderungen bei Google brauchen bis zu 5 Minuten, danach Kurbel neu laden.'); toast('Street View: API-Schlüssel wurde abgelehnt', 6000); };
+    window.gm_authFailure = () => { sv.authFailed = true; $('#svPano').style.visibility = 'hidden'; $('#svMsg').style.background = '#111'; if (sv.errCode) return svMsg(svErrText(sv.errCode)); svMsg('Google hat den Schlüssel abgelehnt. Prüfe in der Google Cloud Console: 1) „Maps JavaScript API“ aktiviert? 2) Rechnungskonto verknüpft? 3) Bei „Websites“-Einschränkung muss ' + (location.protocol === 'file:' ? 'die Einschränkung entfernt werden – lokal geöffnete Dateien haben keine Web-Adresse' : location.origin + '/* eingetragen sein') + '. Änderungen bei Google brauchen bis zu 5 Minuten, danach Kurbeln neu laden.'); toast('Street View: API-Schlüssel wurde abgelehnt', 6000); };
     const sc = document.createElement('script');
     sc.src = 'https://maps.googleapis.com/maps/api/js?key=' + encodeURIComponent(settings.gKey) + '&v=weekly&language=de&region=DE&loading=async&callback=__kurbelGm';
     sc.async = true; sc.onerror = () => { sv.loading = null; rej(new Error('Google Maps konnte nicht geladen werden (Internet?)')); };
@@ -2567,7 +2567,7 @@ $('#btnSV').onclick = () => setSV(!settings.svOn);
 $('#cSV').addEventListener('change', e => setSV(e.target.checked));
 $('#iGKey').addEventListener('change', e => {
   const k = e.target.value.trim();
-  if (k !== settings.gKey) { const reload = !!sv.loading || !!window.google?.maps; settings.gKey = k; saveSettings(); if (reload) toast('Neuer Schlüssel – bitte Kurbel einmal neu laden (⌘R).', 6000); else if (settings.svOn) svUpdate(true); }
+  if (k !== settings.gKey) { const reload = !!sv.loading || !!window.google?.maps; settings.gKey = k; saveSettings(); if (reload) toast('Neuer Schlüssel – bitte Kurbeln einmal neu laden (⌘R).', 6000); else if (settings.svOn) svUpdate(true); }
 });
 $('#iSvEvery').addEventListener('change', e => { settings.svEvery = +e.target.value; saveSettings(); });
 $('#iSvLimit').addEventListener('change', e => { settings.svLimit = clamp(+e.target.value || 0, 0, 100000); e.target.value = settings.svLimit; sv.limitNote = false; saveSettings(); svInfoUpd(); });
@@ -2729,7 +2729,7 @@ async function openPip() {
   }
   if (!pipWin) { pipWin = window.open('', 'kurbelWerte', 'width=380,height=280'); if (!pipWin) return toast('Popup wurde blockiert – bitte Popups für diese Datei erlauben.'); }
   const d = pipWin.document;
-  d.title = 'Kurbel · Werte'; d.body.innerHTML = PIP_HTML;
+  d.title = 'Kurbeln · Werte'; d.body.innerHTML = PIP_HTML;
   if (!viaPip) { const st = d.querySelector('style'); d.head.appendChild(st); }
   d.getElementById('pPause').onclick = () => { if (ride.state === 'running' || ride.state === 'paused') pauseRide(); };
   d.getElementById('pUp').onclick = () => adjust(1); d.getElementById('pDown').onclick = () => adjust(-1);
@@ -2805,17 +2805,17 @@ $('#bkSave').onclick = async () => {
   const ls = {}; try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k.startsWith('kurbel.')) ls[k] = localStorage.getItem(k); } } catch (e) {}
   let rides = []; try { rides = await idb.allRides(); } catch (e) {}
   const d = new Date(), p2 = x => String(x).padStart(2, '0');
-  download(`Kurbel-Backup_${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}.json`, JSON.stringify({ kurbelBackup: 1, created: d.toISOString(), localStorage: ls, rides }), 'application/json');
+  download(`Kurbeln-Backup_${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}.json`, JSON.stringify({ kurbelBackup: 1, created: d.toISOString(), localStorage: ls, rides }), 'application/json');
   toast('Backup gespeichert (' + rides.length + ' Fahrten)');
 };
 $('#bkLoad').onclick = () => { $('#fBackup').value = ''; $('#fBackup').click(); };
 $('#fBackup').onchange = async e => {
   const f = e.target.files[0]; if (!f) return;
   try {
-    const j = JSON.parse(await readText(f)); if (!j.kurbelBackup) throw new Error('Keine Kurbel-Backup-Datei');
+    const j = JSON.parse(await readText(f)); if (!j.kurbelBackup) throw new Error('Keine Kurbeln-Backup-Datei');
     Object.entries(j.localStorage || {}).forEach(([k, v]) => { if (k.startsWith('kurbel.')) localStorage.setItem(k, v); });
     for (const r of j.rides || []) await idb.putRide(r);
-    toast('Backup geladen – Kurbel startet neu …', 2500); setTimeout(() => location.reload(), 1500);
+    toast('Backup geladen – Kurbeln startet neu …', 2500); setTimeout(() => location.reload(), 1500);
   } catch (err) { toast('Backup konnte nicht geladen werden: ' + err.message, 5000); }
 };
 (async () => { // frühere letzte Fahrt einmalig in den Verlauf übernehmen
@@ -3028,14 +3028,14 @@ function buildTCX(rd) {
 <Lap StartTime="${iso(S[0][0])}"><TotalTimeSeconds>${st.timer.toFixed(0)}</TotalTimeSeconds><DistanceMeters>${st.dist.toFixed(1)}</DistanceMeters><MaximumSpeed>${st.maxV.toFixed(2)}</MaximumSpeed><Calories>${Math.round(st.kj)}</Calories>${st.avgHr ? `<AverageHeartRateBpm><Value>${Math.round(st.avgHr)}</Value></AverageHeartRateBpm><MaximumHeartRateBpm><Value>${st.maxHr}</Value></MaximumHeartRateBpm>` : ''}<Intensity>Active</Intensity><Cadence>${Math.round(st.avgCad)}</Cadence><TriggerMethod>Manual</TriggerMethod>
 <Track>
 ${tp}
-</Track></Lap><Notes>Kurbel · ${rd.routeName}${rd.workoutName ? ' · ' + rd.workoutName : ''}</Notes></Activity></Activities></TrainingCenterDatabase>`;
+</Track></Lap><Notes>Kurbeln · ${rd.routeName}${rd.workoutName ? ' · ' + rd.workoutName : ''}</Notes></Activity></Activities></TrainingCenterDatabase>`;
 }
 function download(name, data, mime) {
   const blob = new Blob([data], { type: mime }), a = document.createElement('a');
   a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
   setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
 }
-const fileBase = rd => { const d = new Date(rd.start), p = x => String(x).padStart(2, '0'); return `Kurbel_${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}`; };
+const fileBase = rd => { const d = new Date(rd.start), p = x => String(x).padStart(2, '0'); return `Kurbeln_${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}`; };
 function markExported() { const r = LS.get('kurbel.lastRide', null); if (r) { r.exported = true; LS.set('kurbel.lastRide', r); } $('#recoverBox').style.display = 'none'; }
 
 // ---------- Trainingspläne (aufbauend, wissenschaftlich begründet) ----------
@@ -3171,7 +3171,7 @@ function weekBars(P) {
 function openPlan() {
   const d = $('#planDlg'), P = planDef(), body = $('#planBody');
   if (!P) {
-    body.innerHTML = '<p class="sub" style="margin:4px 0 14px">Kurbel merkt sich, was du geschafft hast, und schlägt dir immer die nächste Einheit vor. Die Watt passen sich automatisch an deine FTP an.</p>' +
+    body.innerHTML = '<p class="sub" style="margin:4px 0 14px">Kurbeln merkt sich, was du geschafft hast, und schlägt dir immer die nächste Einheit vor. Die Watt passen sich automatisch an deine FTP an.</p>' +
       PLANS.map(p => `<div class="planCard" style="--pc:${p.color}"><div class="pcHead"><div><b>${esc(p.name)}</b><span>${p.weeks} Wochen · ${esc(p.per)}</span></div></div>
         <p>${esc(p.desc)}</p>${weekBars(p)}<button class="primary" data-plan-start="${p.id}">Plan starten</button></div>`).join('') + scienceHtml();
     body.querySelectorAll('[data-plan-start]').forEach(x => x.onclick = () => { plan = { v: 2, id: x.dataset.planStart, start: new Date().toISOString().slice(0, 10), done: {} }; savePlan(); settings.woCat = 'Plan'; renderPlanBanner(); fillSelects(); openPlan(); toast('Plan gestartet – los geht’s mit der ersten Einheit.', 4000); });
@@ -3181,7 +3181,7 @@ function openPlan() {
       P.w.map((wk, w) => `<div class="pWeek${n && n.w === w ? ' cur' : ''}"><div class="pwL">Woche ${w + 1}${P.weeksDef[w].note ? '<small>' + esc(P.weeksDef[w].note) + '</small>' : ''}</div><div class="pwS">${wk.map((id, i) => {
         const wo = workoutById(id), dn = plan.done[w + '-' + i], nx = n && n.w === w && n.i === i, slot = P.slots[w][i];
         return `<button class="pSess${dn ? ' done' : ''}${nx ? ' next' : ''}" data-sess="${w}-${i}" data-id="${esc(id)}" style="--cc:${SLOT_COLOR[slot]}" title="${esc(wo?.desc || '')}"><em>${dn ? '✓ ' : ''}${SLOT[slot]}</em><b>${esc(wo?.name || id)}</b><small>${wo ? fmtT(woTotal(wo)) : ''}</small></button>`; }).join('')}</div></div>`).join('') +
-      '<p class="sub" style="margin-top:12px">Klick auf eine Einheit wählt sie aus. Nach der Fahrt hakt Kurbel sie automatisch ab (ab 70 % der Dauer). Rechtsklick hakt von Hand ab oder wieder auf. Die Reihenfolge innerhalb einer Woche ist frei – nur zwei harte Tage nicht direkt hintereinander.</p>' + scienceHtml();
+      '<p class="sub" style="margin-top:12px">Klick auf eine Einheit wählt sie aus. Nach der Fahrt hakt Kurbeln sie automatisch ab (ab 70 % der Dauer). Rechtsklick hakt von Hand ab oder wieder auf. Die Reihenfolge innerhalb einer Woche ist frei – nur zwei harte Tage nicht direkt hintereinander.</p>' + scienceHtml();
     body.querySelectorAll('[data-sess]').forEach(x => {
       x.onclick = () => { pickWorkout(x.dataset.id, 'Plan'); d.style.display = 'none'; };
       x.oncontextmenu = e => { e.preventDefault(); const k = x.dataset.sess; if (plan.done[k]) delete plan.done[k]; else plan.done[k] = new Date().toISOString().slice(0, 10); savePlan(); renderPlanBanner(); fillSelects(); openPlan(); };
@@ -3689,7 +3689,7 @@ function toZWO(wo) {
     : b.type === 'ramp' ? `<Ramp Duration="${b.dur}" PowerLow="${f(b.p0)}" PowerHigh="${f(b.p1)}"/>`
     : b.type === 'intervals' ? `<IntervalsT Repeat="${b.reps}" OnDuration="${b.on}" OffDuration="${b.off}" OnPower="${f(b.pOn)}" OffPower="${f(b.pOff)}"/>`
     : `<FreeRide Duration="${b.dur}"/>`);
-  return `<workout_file>\n  <author>Kurbel</author>\n  <name>${esc(wo.name)}</name>\n  <description>${esc(wo.desc || '')}</description>\n  <sportType>bike</sportType>\n  <tags/>\n  <workout>\n    ${lines.join('\n    ')}\n  </workout>\n</workout_file>\n`;
+  return `<workout_file>\n  <author>Kurbeln</author>\n  <name>${esc(wo.name)}</name>\n  <description>${esc(wo.desc || '')}</description>\n  <sportType>bike</sportType>\n  <tags/>\n  <workout>\n    ${lines.join('\n    ')}\n  </workout>\n</workout_file>\n`;
 }
 const safeName = n => n.replace(/[\\/:*?"<>|]+/g, '-').trim().slice(0, 80) || 'Workout';
 async function edSave() {
@@ -3741,13 +3741,13 @@ async function stravaAccess() {
   if (Date.now() / 1000 > strava.expires - 120) await stravaToken({ grant_type: 'refresh_token', refresh_token: strava.refresh });
   return strava.access;
 }
-const rideTitle = rd => { const r = rd.routeName.replace(/ · [\d.]+ km.*$/, '').replace(/^Karlsruhe · /, ''); return 'Kurbel: ' + r + (rd.workoutName ? ' · ' + rd.workoutName : ''); };
+const rideTitle = rd => { const r = rd.routeName.replace(/ · [\d.]+ km.*$/, '').replace(/^Karlsruhe · /, ''); return 'Kurbeln: ' + r + (rd.workoutName ? ' · ' + rd.workoutName : ''); };
 async function stravaUpload(rd, opt = {}) {
   const tok = await stravaAccess(), st = stats(rd), fname = fileBase(rd) + (opt.uniq ? '_' + Date.now().toString(36) : '') + '.fit';
   const fd = new FormData();
   fd.append('file', new Blob([buildFIT(rd, false, opt)], { type: 'application/octet-stream' }), fname);
   fd.append('data_type', 'fit'); fd.append('name', rideTitle(rd)); fd.append('trainer', '1'); fd.append('external_id', fname);
-  fd.append('description', `Indoor mit Kurbel · ${rd.routeName}${rd.workoutName ? ' · ' + rd.workoutName : ''} · NP ${Math.round(st.np)} W · TSS ${Math.round(st.tss)}${st.pm ? '\n\n' + pmNote(st) : ''}`);
+  fd.append('description', `Indoor mit Kurbeln · ${rd.routeName}${rd.workoutName ? ' · ' + rd.workoutName : ''} · NP ${Math.round(st.np)} W · TSS ${Math.round(st.tss)}${st.pm ? '\n\n' + pmNote(st) : ''}`);
   const r = await fetch('https://www.strava.com/api/v3/uploads', { method: 'POST', headers: { Authorization: 'Bearer ' + tok }, body: fd });
   let j = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error(j.message || j.error || 'HTTP ' + r.status);
@@ -3870,7 +3870,7 @@ $('#btnGarmin').onclick = () => {
   if (!summaryRide?.samples.length) return toast('Keine Daten');
   const hr = summaryRide.samples.filter(s => s[3]).length / summaryRide.samples.length;
   download(fileBase(summaryRide) + '_garmin.fit', buildFIT(summaryRide, true), 'application/octet-stream'); markExported();
-  $('#stravaMsg').innerHTML = `<div class="${hr < .8 ? 'warnbox' : 'okbox'}">${hr < .8 ? 'In dieser Fahrt fehlen Pulsdaten – ohne Puls berechnet Garmin keine Belastung. ' : ''}Jetzt auf <a href="https://connect.garmin.com/modern/import-data" target="_blank" style="color:inherit"><b>connect.garmin.com → Daten importieren</b></a> die Datei hochladen, danach die Uhr <b>zweimal</b> mit der Connect-App synchronisieren. Läuft bei dir „Garmin → Strava“, lade die Fahrt nicht zusätzlich aus Kurbel zu Strava hoch, sonst ist sie doppelt da.</div>`;
+  $('#stravaMsg').innerHTML = `<div class="${hr < .8 ? 'warnbox' : 'okbox'}">${hr < .8 ? 'In dieser Fahrt fehlen Pulsdaten – ohne Puls berechnet Garmin keine Belastung. ' : ''}Jetzt auf <a href="https://connect.garmin.com/modern/import-data" target="_blank" style="color:inherit"><b>connect.garmin.com → Daten importieren</b></a> die Datei hochladen, danach die Uhr <b>zweimal</b> mit der Connect-App synchronisieren. Läuft bei dir „Garmin → Strava“, lade die Fahrt nicht zusätzlich aus Kurbeln zu Strava hoch, sonst ist sie doppelt da.</div>`;
 };
 $('#btnFit').onclick = () => { if (!summaryRide?.samples.length) return toast('Keine Daten'); download(fileBase(summaryRide) + '.fit', buildFIT(summaryRide), 'application/octet-stream'); markExported(); };
 $('#btnTcx').onclick = () => { if (!summaryRide?.samples.length) return toast('Keine Daten'); download(fileBase(summaryRide) + '.tcx', buildTCX(summaryRide), 'application/vnd.garmin.tcx+xml'); markExported(); };
@@ -3887,7 +3887,7 @@ document.addEventListener('keydown', e => {
 window.addEventListener('beforeunload', e => { if (ride.state === 'running' || ride.state === 'paused') { LS.set('kurbel.lastRide', Object.assign(rideRecord(), { done: false })); e.preventDefault(); e.returnValue = ''; } });
 
 // ---------- Start ----------
-if (!navigator.bluetooth) { $('#noBt').style.display = ''; if (/iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) $('#noBt').innerHTML = 'iPhone und iPad können im Browser kein Bluetooth. Nimm dort die kostenlose App <b>Bluefy</b> und öffne Kurbel darin – oder einen Mac, PC bzw. ein Android-Gerät mit Chrome. Die Demo funktioniert überall.'; }
+if (!navigator.bluetooth) { $('#noBt').style.display = ''; if (/iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) $('#noBt').innerHTML = 'iPhone und iPad können im Browser kein Bluetooth. Nimm dort die kostenlose App <b>Bluefy</b> und öffne Kurbeln darin – oder einen Mac, PC bzw. ein Android-Gerät mit Chrome. Die Demo funktioniert überall.'; }
 if (!document.fullscreenEnabled) $('#btnFull').style.display = 'none';
 { const r = LS.get('kurbel.lastRide', null); if (r && !r.exported && r.samples?.length > 60) { $('#recoverBox').style.display = ''; $('#recoverDate').textContent = new Date(r.start).toLocaleString('de-DE'); } }
 initMap();
@@ -4062,7 +4062,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
 <script>
 // ---------- Einführung beim ersten Besuch ----------
 const TOUR = [
-  { t: 'Willkommen bei Kurbel', p: 'Indoor-Training auf echten Strecken – mit Workouts, Trainingsplan und deinem Smart-Trainer. In einer Minute weißt du, wo alles ist.' },
+  { t: 'Willkommen bei Kurbeln', p: 'Indoor-Training auf echten Strecken – mit Workouts, Trainingsplan und deinem Smart-Trainer. In einer Minute weißt du, wo alles ist.' },
   { el: '#btnConn', t: 'Geräte verbinden', p: 'Hier verbindest du Smart-Trainer, Powermeter und Pulsgurt per Bluetooth. Ohne Gerät probierst du alles im Demo-Modus aus.' },
   { el: '#setup .sec', t: 'Strecke wählen', p: 'Im Menü suchst du dir eine Strecke aus: Touren rund um Karlsruhe, Klassiker wie Paris–Roubaix oder eine eigene GPX-Datei.' },
   { el: '#catRow', t: 'Workout wählen', p: 'Optional: Ein Workout gibt die Watt vor (ERG-Modus). Ohne Workout folgt der Widerstand einfach der Strecke.' },

@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kurbeln – Design-Vorschau</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;700;800;900&family=Anton&family=Space+Grotesk:wght@500;700&family=Fraunces:ital,opsz,wght@1,9..144,700&family=Unbounded:wght@600;800&family=Syne:wght@700;800&family=JetBrains+Mono:wght@700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0c0c0d;--lime:#edff9a;--lime2:#d9f26b;--paper:#f4f4ef;--grey:#9a9a94;--line:rgba(237,255,154,.25)}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--ink);color:#fff;font-family:"Inter Tight",-apple-system,Helvetica,Arial,sans-serif}
+a{color:inherit}
+/* ---------- Hero ---------- */
+.hero{position:relative;min-height:100vh;background:#111 url(hero.jpg) center right/cover no-repeat;overflow:hidden}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,12,13,.85) 0%,rgba(12,12,13,.35) 55%,rgba(12,12,13,0) 100%);pointer-events:none}
+nav{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:22px 40px}
+.wm{font-size:44px;line-height:1;color:#fff;transition:all .25s}
+nav ul{display:flex;gap:26px;list-style:none;margin:0;padding:0}
+nav li{color:var(--lime);font-size:26px;font-weight:700;letter-spacing:-.04em;cursor:pointer}
+nav li:hover{text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:2px}
+.hcopy{position:relative;z-index:2;padding:12vh 40px 0 14vw;max-width:1200px}
+h1{margin:0;color:var(--lime);font-weight:900;text-transform:uppercase;font-size:clamp(46px,7.4vw,118px);line-height:.86;letter-spacing:-.055em}
+.lead{margin:22px 0 34px;font-size:clamp(17px,1.7vw,26px);font-weight:700;letter-spacing:-.035em;line-height:1.15;max-width:760px}
+.btns{display:flex;flex-direction:column;gap:10px;width:min(480px,100%)}
+.btn{display:block;background:var(--lime);color:var(--ink);text-align:center;text-transform:uppercase;font-size:20px;font-weight:500;letter-spacing:-.01em;padding:26px 20px;border-radius:4px;text-decoration:none;border:0;cursor:pointer;font-family:inherit;transition:background .15s}
+.btn:hover{background:#fff}
+.btn.ghost{background:transparent;color:var(--lime);box-shadow:inset 0 0 0 2px var(--lime)}
+.btn.ghost:hover{background:var(--lime);color:var(--ink)}
+.grain{position:absolute;inset:-50%;z-index:1;opacity:.12;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:gr .5s steps(2) infinite}
+@keyframes gr{50%{transform:translate(-3%,2%)}}
+@media (prefers-reduced-motion:reduce){.grain{animation:none}}
+/* ---------- Abschnitte ---------- */
+section.s{padding:90px 40px;max-width:1280px;margin:0 auto}
+.kicker{color:var(--lime);font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+h2{margin:0 0 10px;font-size:clamp(34px,4.5vw,64px);font-weight:900;text-transform:uppercase;letter-spacing:-.05em;line-height:.9}
+.sub{color:#c9c9c2;font-size:18px;max-width:720px;line-height:1.45;margin:0 0 36px}
+/* Logo-Optionen */
+.logos{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.lo{border:1px solid #26262a;border-radius:6px;overflow:hidden;cursor:pointer;background:none;color:inherit;padding:0;text-align:left;font-family:inherit;transition:border-color .15s,transform .15s}
+.lo:hover{border-color:var(--lime)}
+.lo.on{border-color:var(--lime);box-shadow:0 0 0 2px var(--lime)}
+.lo .pv{display:grid;grid-template-rows:1fr 1fr}
+.lo .d,.lo .l{height:120px;display:flex;align-items:center;justify-content:center}
+.lo .d{background:#141416;color:#fff}
+.lo .l{background:var(--paper);color:var(--ink)}
+.lo .d .x{color:var(--lime)}
+.lo .meta{padding:12px 14px;border-top:1px solid #26262a;display:flex;justify-content:space-between;gap:10px;font-size:14px}
+.lo .meta b{font-weight:700}.lo .meta span{color:var(--grey)}
+.wmA{font-family:"Inter Tight";font-weight:900;letter-spacing:-.07em;font-size:52px}
+.wmB{font-family:"Anton";font-size:50px;letter-spacing:.01em;text-transform:uppercase}
+.wmC{font-family:"Space Grotesk";font-weight:700;font-size:48px;letter-spacing:-.04em}
+.wmD{font-family:"Fraunces";font-style:italic;font-weight:700;font-size:52px;letter-spacing:-.03em}
+.wmE{font-family:"Unbounded";font-weight:800;font-size:34px;text-transform:uppercase;letter-spacing:-.02em}
+.wmF{font-family:"Syne";font-weight:800;font-size:48px;letter-spacing:-.04em}
+.wmG{font-family:"JetBrains Mono";font-weight:700;font-size:40px;letter-spacing:-.04em}
+.wmH{font-family:"Instrument Serif";font-size:60px;letter-spacing:-.02em}
+nav .wm.wmE{font-size:30px}nav .wm.wmG{font-size:34px}nav .wm.wmH{font-size:52px}
+/* Farben */
+.sw{display:flex;gap:12px;flex-wrap:wrap}
+.sw div{width:170px;border-radius:6px;overflow:hidden;border:1px solid #26262a}
+.sw i{display:block;height:90px}
+.sw p{margin:0;padding:10px 12px;font-size:14px}.sw p span{display:block;color:var(--grey);font-size:12.5px;margin-top:2px}
+/* Fahrt-Anzeige */
+.ride{position:relative;border-radius:8px;overflow:hidden;background:#1a1b1d;height:440px;border:1px solid #26262a}
+.ride .mapfake{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 80%,#2a2c2f,#141416 70%)}
+.ride svg{position:absolute;inset:0;width:100%;height:100%}
+.tile{position:absolute;background:rgba(12,12,13,.82);backdrop-filter:blur(10px);border:1px solid #2a2a2e;border-radius:6px;padding:8px 14px}
+.tile .l{font-size:12px;color:var(--grey);text-transform:uppercase;letter-spacing:.06em}
+.tile .v{font-size:30px;font-weight:800;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.tile .v small{font-size:13px;color:var(--grey);margin-left:3px;font-weight:500}
+.wb{left:50%;top:18px;transform:translateX(-50%);display:flex;align-items:flex-end;gap:28px;padding:12px 26px 16px}
+.wb .rem{font-size:72px;font-weight:900;letter-spacing:-.06em;line-height:.85;color:var(--lime)}
+.wb .bar{position:absolute;left:26px;right:26px;bottom:8px;height:4px;background:#2a2a2e}.wb .bar i{display:block;height:100%;width:38%;background:var(--lime)}
+.ctrl{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);display:flex;gap:8px}
+.ctrl button{background:#1f1f22;color:#fff;border:1px solid #2f2f33;border-radius:4px;padding:10px 16px;font-family:inherit;font-size:14px;text-transform:uppercase;letter-spacing:.02em}
+.ctrl button.p{background:var(--lime);color:var(--ink);border-color:var(--lime)}
+footer{padding:40px;color:var(--grey);font-size:14px;border-top:1px solid #1f1f22;text-align:center}
+@media (max-width:760px){
+  nav{padding:16px}nav ul{display:none}.wm{font-size:34px}
+  .hcopy{padding:14vh 16px 40px}.hero{background-position:70% center}
+  section.s{padding:60px 16px}
+  .btn{padding:20px}
+  .ride{height:520px}.wb{left:12px;right:12px;transform:none;justify-content:space-between;gap:10px}.wb .rem{font-size:54px}
+  .tile.hide-m{display:none}
+}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="grain"></div>
+  <nav>
+    <div class="wm wmA" id="navWm">kurbeln<span class="x">.</span></div>
+    <ul><li>fahren</li><li>workouts</li><li>strecken</li><li>trainingsplan</li><li>meine fahrten</li></ul>
+  </nav>
+  <div class="hcopy">
+    <h1>Echte Strecken.<br>Echte Watt.<br>Dein Wohnzimmer.</h1>
+    <p class="lead">Indoor-Training mit deinem Smart-Trainer – auf Touren rund um Karlsruhe, auf den Klassikern der Tour und mit Workouts, die zu deiner Form passen.</p>
+    <div class="btns">
+      <a class="btn" href="../">Losfahren</a>
+      <a class="btn ghost" href="../">Demo ansehen</a>
+    </div>
+  </div>
+</header>
+
+<section class="s">
+  <div class="kicker">Logo</div>
+  <h2>Welche Schrift?</h2>
+  <p class="sub">Das Logo ist einfach das Wort „kurbeln“ in einer eigenen Schrift. Klick eine Variante an – sie erscheint oben in der Navigation, damit du sie im Zusammenspiel siehst.</p>
+  <div class="logos" id="logos">
+    <button class="lo on" data-wm="wmA" data-txt="kurbeln<span class=x>.</span>"><div class="pv"><div class="d"><span class="wmA">kurbeln<span class="x">.</span></span></div><div class="l"><span class="wmA">kurbeln.</span></div></div><div class="meta"><b>A · Sportlich</b><span>Inter Tight, eng</span></div></button>
+    <button class="lo" data-wm="wmB" data-txt="KURBELN"><div class="pv"><div class="d"><span class="wmB">Kurbeln</span></div><div class="l"><span class="wmB">Kurbeln</span></div></div><div class="meta"><b>B · Kräftig</b><span>Anton, schmal</span></div></button>
+    <button class="lo" data-wm="wmC" data-txt="kurbeln"><div class="pv"><div class="d"><span class="wmC">kurbeln</span></div><div class="l"><span class="wmC">kurbeln</span></div></div><div class="meta"><b>C · Technisch</b><span>Space Grotesk</span></div></button>
+    <button class="lo" data-wm="wmD" data-txt="Kurbeln"><div class="pv"><div class="d"><span class="wmD">Kurbeln</span></div><div class="l"><span class="wmD">Kurbeln</span></div></div><div class="meta"><b>D · Klassisch</b><span>Fraunces, kursiv</span></div></button>
+    <button class="lo" data-wm="wmE" data-txt="KURBELN"><div class="pv"><div class="d"><span class="wmE">Kurbeln</span></div><div class="l"><span class="wmE">Kurbeln</span></div></div><div class="meta"><b>E · Breit</b><span>Unbounded</span></div></button>
+    <button class="lo" data-wm="wmF" data-txt="kurbeln"><div class="pv"><div class="d"><span class="wmF">kurbeln</span></div><div class="l"><span class="wmF">kurbeln</span></div></div><div class="meta"><b>F · Eigenwillig</b><span>Syne</span></div></button>
+    <button class="lo" data-wm="wmG" data-txt="kurbeln<span class=x>_</span>"><div class="pv"><div class="d"><span class="wmG">kurbeln<span class="x">_</span></span></div><div class="l"><span class="wmG">kurbeln_</span></div></div><div class="meta"><b>G · Daten</b><span>JetBrains Mono</span></div></button>
+    <button class="lo" data-wm="wmH" data-txt="Kurbeln"><div class="pv"><div class="d"><span class="wmH">Kurbeln</span></div><div class="l"><span class="wmH">Kurbeln</span></div></div><div class="meta"><b>H · Edel</b><span>Instrument Serif</span></div></button>
+  </div>
+</section>
+
+<section class="s">
+  <div class="kicker">Farben</div>
+  <h2>Schwarz, Lime, Weiß.</h2>
+  <p class="sub">Dunkler Grund, ein einziger heller Akzent für alles, was zählt: Ziel, aktuelles Intervall, Hauptknopf.</p>
+  <div class="sw">
+    <div><i style="background:#0c0c0d"></i><p>Tinte<span>#0C0C0D · Hintergrund</span></p></div>
+    <div><i style="background:#edff9a"></i><p>Lime<span>#EDFF9A · Akzent</span></p></div>
+    <div><i style="background:#ffffff"></i><p>Weiß<span>#FFFFFF · Text</span></p></div>
+    <div><i style="background:#9a9a94"></i><p>Grau<span>#9A9A94 · Beschriftung</span></p></div>
+    <div><i style="background:#f4f4ef"></i><p>Papier<span>#F4F4EF · helle Flächen</span></p></div>
+  </div>
+</section>
+
+<section class="s">
+  <div class="kicker">Während der Fahrt</div>
+  <h2>So könnte es aussehen.</h2>
+  <p class="sub">Gleiche Anordnung wie jetzt – nur dunkel, mit Lime für die Intervallzeit und kantigen statt runden Formen.</p>
+  <div class="ride">
+    <div class="mapfake"></div>
+    <svg viewBox="0 0 1000 440" preserveAspectRatio="none" aria-hidden="true"><path d="M500 440 C 505 360, 470 300, 520 240 S 610 140, 590 60 S 560 10, 600 -20" fill="none" stroke="#edff9a" stroke-width="5" opacity=".9"/><path d="M500 440 C 505 360, 470 300, 520 240" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="2 9" opacity=".6"/><circle cx="500" cy="330" r="9" fill="#edff9a" stroke="#0c0c0d" stroke-width="3"/></svg>
+    <div class="tile wb"><div><div class="l">Ziel</div><div class="v">245<small>W</small></div></div><div class="rem">3:42</div><div><div class="l">Trainer</div><div class="v">248<small>W</small></div></div><div class="bar"><i></i></div></div>
+    <div class="tile hide-m" style="left:16px;top:18px"><div class="l">Trittfrequenz</div><div class="v">92<small>rpm</small></div></div>
+    <div class="tile hide-m" style="left:16px;top:96px"><div class="l">Puls</div><div class="v">151<small>bpm</small></div></div>
+    <div class="tile" style="right:16px;top:18px"><div class="l">Zeit</div><div class="v">42:18</div></div>
+    <div class="tile hide-m" style="right:16px;top:96px"><div class="l">Steigung</div><div class="v">6.4<small>%</small></div></div>
+    <div class="ctrl"><button>Pause</button><button>Intervall</button><button class="p">Beenden</button></div>
+  </div>
+</section>
+
+<footer>Design-Vorschau für Kurbeln · die App selbst ist unverändert</footer>
+
+<script>
+document.querySelectorAll('.lo').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.lo').forEach(x => x.classList.toggle('on', x === b));
+  const w = document.getElementById('navWm');
+  w.className = 'wm ' + b.dataset.wm; w.innerHTML = b.dataset.txt;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}));
+</script>
+</body>
+</html>

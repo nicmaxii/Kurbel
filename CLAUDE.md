@@ -1,6 +1,6 @@
 # Kurbel – Projektnotizen für Claude
 
-Kurbel ist eine Indoor-Radtraining-App (Zwift-Ersatz) als **eine einzige HTML-Datei** (`index.html`, ca. 1,1 MB).
+Kurbeln (früher „Kurbel“) ist eine Indoor-Radtraining-App (Zwift-Ersatz) als **eine einzige HTML-Datei** (`index.html`, ca. 1,1 MB).
 Sie läuft in Chrome auf dem MacBook und wird über GitHub Pages veröffentlicht. Nutzer: Max (spricht Deutsch).
 
 ## Arbeitsweise
@@ -47,6 +47,9 @@ Playwright (Chromium) gegen die lokale Datei oder `python3 -m http.server`:
 - FIT prüfen mit `@garmin/fitsdk` (Decoder, `checkIntegrity`).
 
 ## Offen / Ideen
+
+- Design-Vorschau im Stil dunkel/Lime (Inter Tight, Körnung, Kurbel-Startbild) unter `vorschau/` – Max wählt Logo-Variante A–H, danach ggf. in die App übernehmen.
+- Technische Kennungen bleiben `kurbel` (localStorage, IndexedDB, Strava-`state`, `KurbelLanding`).
 
 - Powermeter vs. Trainer: große Abweichung bei Max, PowerMatch klappte nicht → jetzt Standard „Trainer steuert, Powermeter läuft mit“.
 - Street View: bei Max noch nicht gelaufen – genaue Meldung steht aus (Schlüssel gilt pro Adresse: gehostet und lokale Datei getrennt eintragen).
