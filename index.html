@@ -248,7 +248,7 @@ details.sec.more>summary{color:var(--text);font-weight:600;font-size:17px}
 .lowzoom .leaflet-tooltip.poi-tip:not(.keep){display:none}
 /* ---- Startseite ---- */
 #landing{position:fixed;inset:0;background:var(--s1);z-index:5000;overflow:hidden;--p:0;color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;touch-action:none}
-#lcv{position:absolute;inset:0;width:100%;height:100%;display:block}
+#lcv,#ltrail{position:absolute;inset:0;width:100%;height:100%;display:block}#ltrail{filter:grayscale(1)}
 #lfade{position:absolute;inset:0;background:var(--s0);opacity:0;pointer-events:none;z-index:3}
 .lnav{position:absolute;top:0;left:0;right:0;height:48px;display:flex;align-items:center;justify-content:center;gap:34px;font-size:13px;background:var(--glass);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid rgba(0,0,0,.06);z-index:2;opacity:calc(1 - var(--p) * 2.5)}
 .lnav a{color:var(--tx);text-decoration:none;opacity:.8;cursor:pointer;letter-spacing:-.01em}.lnav a:hover{opacity:1}
@@ -508,7 +508,7 @@ html,body{background:var(--bg)}
 button.danger,:root[data-theme=hell] button.danger{color:var(--tx)!important;border-color:var(--ln)!important}
 :root[data-theme=hell] .okbox{background:#22270f;border-color:#4b5720;color:var(--acc)}
 footer .cap{display:none}
-#landing .lgrain{position:absolute;inset:-50%;z-index:1;opacity:.11;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:lgr .5s steps(2) infinite}
+#landing .lgrain{position:absolute;inset:-50%;z-index:1;opacity:.2;mix-blend-mode:screen;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:lgr .5s steps(2) infinite}
 @keyframes lgr{50%{transform:translate(-3%,2%)}}
 @media (prefers-reduced-motion:reduce){#landing .lgrain{animation:none}}
 #map.rot .leaflet-tile{width:257px!important;height:257px!important}
@@ -1191,7 +1191,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 </head>
 <body>
 <div id="landing">
-  <canvas id="lcv"></canvas>
+  <canvas id="ltrail" aria-hidden="true"></canvas><canvas id="lcv"></canvas>
   <nav class="lnav"><span class="brand">kurbeln</span><a data-go="map">Fahren</a><a data-go="data">Werte</a><a data-go="workouts">Workouts</a><a data-go="routes">Strecken</a><a data-go="video">Video</a><a data-go="history">Meine Fahrten</a><a class="cta" data-go="map">Losfahren</a></nav>
   <div class="lgrain"></div><div class="lhero"><h1>kurbeln</h1>
     <div class="lbtns"><button class="b1" data-go="map">Losfahren</button><button class="b2" data-go="demo">Demo ansehen ›</button></div></div>
@@ -3972,11 +3972,13 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
   const el = document.getElementById('landing'), cv = document.getElementById('lcv'), fade = document.getElementById('lfade');
   if (!window.THREE) { L.fail = true; return; }
   let renderer;
-  try { renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: false }); } catch (e) { L.fail = true; return; }
+  try { renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true }); } catch (e) { L.fail = true; return; }
   renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
-  const scene = new THREE.Scene(); scene.background = new THREE.Color(0x0c0c0d);
+  const scene = new THREE.Scene(); renderer.setClearColor(0x000000, 0);
+  // Bewegungsspur wie bei einer Langzeitbelichtung: jedes Bild leicht unscharf nach links verschoben nachziehen (halbe Auflösung reicht)
+  const trail = document.getElementById('ltrail'), tc = trail.getContext('2d'), still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const camera = new THREE.PerspectiveCamera(28, 1, 0.01, 100);
 
   // Umgebung (wie RoomEnvironment von three.js) für realistische Metall-Reflexe
@@ -4061,7 +4063,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
   const mouse = { x: 0, y: 0 };
   addEventListener('pointermove', e => { mouse.x = e.clientX / innerWidth - 0.5; mouse.y = e.clientY / innerHeight - 0.5; });
   const ease = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2, clamp01 = v => Math.max(0, Math.min(1, v)), sm = (a, b, v) => { const t = clamp01((v - a) / (b - a)); return t * t * (3 - 2 * t); };
-  function resize() { const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+  function resize() { const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); trail.width = Math.ceil(w / 2); trail.height = Math.ceil(h / 2); camera.aspect = w / h; camera.updateProjectionMatrix(); }
   addEventListener('resize', resize); resize();
   let last = performance.now(), t = 0;
   function loop(now) {
@@ -4083,6 +4085,12 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
     camera.lookAt(0, crankset.position.y * 0.35 * (1 - e), -10 * e);
     shadow.position.y = crankset.position.y - 2.35; shadow.material.opacity = 1 - sm(0, 0.3, p);
     renderer.render(scene, camera);
+    if (!still) {
+      const W = trail.width, H = trail.height, k = 1 - sm(0.2, 0.6, p);
+      tc.globalCompositeOperation = 'copy'; tc.filter = 'blur(1px)'; tc.globalAlpha = 0.955 * k; tc.drawImage(trail, -5, 0);
+      tc.globalCompositeOperation = 'lighter'; tc.filter = 'blur(3px)'; tc.globalAlpha = 0.06 * k; tc.drawImage(cv, 0, 0, W, H);
+      tc.filter = 'none'; tc.globalAlpha = 1;
+    }
     el.style.setProperty('--p', p.toFixed(4));
     fade.style.opacity = sm(0.8, 0.98, p);
     if (p >= 0.995 && !L.entered) { L.entered = true; L.running = false; L.onEnter && L.onEnter(); return; }
