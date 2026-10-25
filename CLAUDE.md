@@ -10,7 +10,7 @@ Sie läuft in Chrome auf dem MacBook und wird über GitHub Pages veröffentlicht
   Änderungen immer gezielt per Suchen/Ersetzen an eindeutigen Stellen.
 - In der three.js-Zeile wurde das erste `console.warn` durch `void 0,` ersetzt – nicht „reparieren“.
 - Nach jeder Änderung: Seite in Playwright laden und auf `pageerror` prüfen (siehe Tests), dann committen und pushen.
-- Design: Apple-artig weiß, Akzent ruhiges Blau `#2563eb` (Hover `#1d4ed8`, im dunklen Fahrt-Design `#4c8dff`), flache Buttons ohne 3D-Kante, Systemschrift (SF) wie auf der Startseite, Gewichte max. 600–700, dünne 1-px-Rahmen statt Schatten (Block „Ruhiger Apple-Look“ am Ende des Menü-CSS).
+- Design: dunkel & Lime (seit Okt. 2026): Farbvariablen `--s0/--s1/--s2` (Flächen), `--tx/--tx2`, `--ln`, `--acc` #EDFF9A (Lime) mit `--onacc` #0C0C0D, `--sel/--onsel` für gewählte Chips; Block „Kurbeln: Dunkel & Lime“ am Ende des ersten `<style>`. Keine festen Hex-Farben in neuen Regeln – immer Variablen. Schrift Inter Tight (`--uifont`), Logo „kurbeln“ klein in JetBrains Mono (`--logofont`). Startseite dunkel, 3D-Kurbel bleibt. Karte Standard „Dunkel (Esri)“. Flache Buttons, dünne 1-px-Rahmen.
   **Keine Emojis** (auch nicht in Knöpfen oder Meldungen), klare Text-Buttons, farbige Punkte statt Icons; Werte-Fenster ist ein kleiner Symbol-Knopf (SVG) neben „Video“.
 - Handy/Tablet: Block „Tablet & Handy“ (Media Queries 1180 px / 760 px) am Ende des Menü-CSS; Workout-Box dort unten über der Steuerleiste. iPhone/iPad: kein Web-Bluetooth → Hinweis auf App „Bluefy“.
 - Einführung beim ersten Besuch: `TOUR`, `startTour` (localStorage `kurbel.tour`), erneut über „Einführung“ im Menü.
