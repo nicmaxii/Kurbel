@@ -1334,7 +1334,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <!-- Setup -->
   <div class="overlay" id="setup">
     <div class="card menu">
-      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 2.7</span></div>
+      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 2.8</span></div>
       <div class="warnbox" id="noBt" style="display:none">Bluetooth geht nur in <b>Google Chrome</b> oder Edge. Die Demo funktioniert trotzdem.</div>
       <div class="warnbox" id="recoverBox" style="display:none">Nicht gespeicherte Fahrt vom <span id="recoverDate"></span> gefunden. <button id="btnRecover">Ansehen</button></div>
       <div id="planBanner"></div>
@@ -4258,7 +4258,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
     L.p += (L.target - L.p) * Math.min(1, dt * 6);
     if (Math.abs(L.target - L.p) < 0.0005) L.p = L.target;
     const p = L.p, e = ease(p);
-    const rz = Math.sin(t * 0.6) * 0.16 * (1 - p) - t * 0.9 * sm(0.15, 1, p);
+    const rz = Math.sin(t * 0.6) * 0.16 * (1 - p) + t * 0.9 * sm(0.15, 1, p); // Drehrichtung wie beim Vorwärtstreten
     rotor.rotation.z = rz;
     [pf, pb].forEach(pd => { pd.rotation.z = -rz; });
     const idleY = 0.62 + Math.sin(t * 0.25) * 0.12 + mouse.x * 0.35, idleX = -0.22 + mouse.y * 0.2;
