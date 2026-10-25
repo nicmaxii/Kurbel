@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Kurbeln – Indoor Trainer</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=JetBrains+Mono:wght@400..800&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0d1117;--panel:#161b22;--panel2:#1f2630;--line:#2d3642;--text:#e6edf3;--muted:#8b98a8;--accent:#4c8dff;--onAccent:#fff;--ok:#3fb950;--warn:#d29922;--bad:#f85149;--hud:rgba(13,17,23,.76);--hudline:rgba(255,255,255,.08);--grid:rgba(255,255,255,.18);--font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;--numfont:var(--font);--hfont:var(--font);--radius:10px}
 /* ---- Design-Varianten ---- */
@@ -475,9 +475,12 @@ details.sec.more>summary{color:var(--text);font-weight:600;font-size:17px}
 
 /* ---------- Kurbeln: Dunkel & Lime ---------- */
 :root{--s0:#161618;--s1:#1e1e21;--s2:#28282c;--tx:#f2f2ee;--tx2:#9a9a94;--ln:#2e2e33;--acc:#edff9a;--acc2:#f6ffc9;--accrgb:237,255,154;--onacc:#0c0c0d;--sel:#f2f2ee;--onsel:#0c0c0d;--glass:rgba(20,20,22,.86);
-  --uifont:"Inter Tight",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;--logofont:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;color-scheme:dark}
-:root[data-theme=hell]{--bg:#0c0c0d;--panel:#141416;--panel2:#1e1e21;--line:#2e2e33;--text:#f2f2ee;--muted:#9a9a94;--accent:#edff9a;--onAccent:#0c0c0d;--hud:rgba(14,14,16,.84);--hudline:rgba(255,255,255,.07);--grid:rgba(255,255,255,.16);--font:var(--uifont);--numfont:var(--uifont)}
+  --uifont:"Archivo",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;--logofont:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;color-scheme:dark}
+:root[data-theme=hell]{--bg:#0c0c0d;--panel:#141416;--panel2:#1e1e21;--line:#2e2e33;--text:#f2f2ee;--muted:#9a9a94;--accent:#edff9a;--onAccent:#0c0c0d;--hud:rgba(14,14,16,.84);--hudline:rgba(255,255,255,.07);--grid:rgba(255,255,255,.16);--font:var(--uifont);--numfont:var(--logofont)}
 html,body{background:var(--bg)}
+body,#landing,#setup .card.menu,#planDlg .card.menu,#calDlg .card,#dashDlg .card,#tour .tcard,button,input,select{font-stretch:88%}
+.m .v,.dt .v,#wbox .tgt,#wbox .rem,.dTile b,.calBig{letter-spacing:-.05em!important;font-stretch:100%}
+#setup .mhead h2,#planDlg .mhead h2,#calDlg h2,#dashDlg h2{letter-spacing:-.03em}
 :root[data-theme=hell] button:hover:not(:disabled){background:var(--s2)}
 :root[data-theme=hell] button.primary:hover:not(:disabled){background:var(--acc2)}
 :root[data-theme=hell] .seg button.on{background:var(--tx);color:var(--onsel);box-shadow:none}
