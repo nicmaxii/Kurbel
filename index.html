@@ -515,7 +515,9 @@ body:not(.riding) footer,body:not(.riding) #viewSeg,body:not(.riding) #btnPip{di
   #setup .planBanner{padding:18px 22px}#setup .pbText b{font-size:19px}
   #setup .sec .sh h3{font-size:20px!important}
 }
-.pcBtns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pcBtns{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.plTabs{margin-bottom:6px}.plTabs small{opacity:.6;margin-left:3px;font-family:var(--numfont)}.plCatSub{margin:0 0 12px}
+.plGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:12px;margin-bottom:12px}.plGrid .planCard{margin:0;display:flex;flex-direction:column}
 .pSess .psvg{display:block;width:100%;height:22px;margin-top:5px}.pSess .psvg svg{width:100%;height:100%;display:block}
 .pSess.sel{outline:2px solid var(--acc);outline-offset:-2px}
 .pvInfo{background:var(--s1);border:1px solid var(--ln);border-radius:14px;padding:12px 16px;margin:4px 0 10px;color:var(--tx2);font-size:14px}.pvInfo b{color:var(--tx)}.pvInfo p{margin:6px 0 8px;color:var(--tx)}
@@ -1339,7 +1341,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <!-- Setup -->
   <div class="overlay" id="setup">
     <div class="card menu">
-      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 2.9</span></div>
+      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 3.0</span></div>
       <div class="warnbox" id="noBt" style="display:none">Bluetooth geht nur in <b>Google Chrome</b> oder Edge. Die Demo funktioniert trotzdem.</div>
       <div class="warnbox" id="recoverBox" style="display:none">Nicht gespeicherte Fahrt vom <span id="recoverDate"></span> gefunden. <button id="btnRecover">Ansehen</button></div>
       <div id="planBanner"></div>
@@ -3220,7 +3222,7 @@ const VB = {
 function fmtMin(min) { const h = Math.floor(min / 60), m = min % 60; return h ? h + (m ? ':' + String(m).padStart(2, '0') : '') + ' h' : m + ' min'; }
 const SLOT = { thr: 'Schwelle', z2: 'Grundlage', vo2: 'VO2max', long: 'Longride', test: 'Test', rec: 'Locker', sit: 'Sprint', kraft: 'Kraft', race: 'Rennen' };
 const PLANS = [
-  { id: 'ftp12', name: 'FTP-Builder', weeks: 12, color: '#edff9a', per: '4 Einheiten pro Woche · 4–8 h',
+  { id: 'ftp12', cat: 'leistung', name: 'FTP-Builder', weeks: 12, color: '#edff9a', per: '4 Einheiten pro Woche · 4–8 h',
     desc: 'Mehr Watt an der Schwelle. Jede Woche: Schwelle, Grundlage, VO2max und ein Longride, der von 1:30 auf 3 h wächst. Die Intervalle werden von Block zu Block länger und härter. Jede 4. Woche Entlastung, am Ende Formaufbau und Test.',
     weeksDef: [
       { note: 'Einstieg + Test', s: [['test', PG.test()], ['z2', PG.z2(60)], ['thr', PG.ss(3, 10, .88)], ['long', PG.long(90)]] },
@@ -3236,7 +3238,7 @@ const PLANS = [
       { s: [['thr', PG.thr(2, 25, .98)], ['z2', PG.z2(90)], ['vo2', PG.vo2(6, 4, 1.1, 3)], ['long', PG.long(180, 20)]] },
       { note: 'Formaufbau + Test', easy: true, s: [['vo2', PG.opener()], ['z2', PG.z2(45)], ['rec', PG.rec(30)], ['test', PG.test()]] },
     ] },
-  { id: 'vo2b8', name: 'VO2max-Booster', weeks: 8, color: '#cfdf82', per: '5–7 Einheiten pro Woche · 8–13 h',
+  { id: 'vo2b8', cat: 'leistung', name: 'VO2max-Booster', weeks: 8, color: '#cfdf82', per: '5–7 Einheiten pro Woche · 8–13 h',
     desc: 'Acht Wochen polarisiert: viel lockere Grundlage (LIT) und zwei bis drei harte Einheiten pro Woche – lange VO2max-Intervalle (EB), kurze 30/15- und 40/20-Intervalle (IE), abnehmende Intervalle (DEC) und Sprints (SIT). Die Tage sind Vorschläge, Ruhetage sind frei.',
     weeksDef: [
       { s: [['z2', VB.lit(90, '1h30'), 2], ['vo2', VB.eb(5, 5, 1.08, 5, 90), 3], ['rec', VB.lit(45, '0h45'), 4], ['thr', VB.kra(3, 10, 90), 5], ['long', VB.lit(150, '2h30'), 6]] },
@@ -3248,7 +3250,7 @@ const PLANS = [
       { s: [['z2', VB.lit(90, '1h30'), 2], ['z2', VB.fatmax(120), 3], ['z2', VB.lit(105, '1h45'), 5], ['vo2', VB.eb(5, 5, 1.08, 5, 90), 6], ['z2', VB.lit(90, '1h30'), 6], ['long', VB.lit(180, '3h00'), 7]] },
       { s: [['sit', VB.sit(), 2], ['z2', VB.lit(90, '1h30'), 3], ['z2', VB.lit(60, '1h'), 4], ['vo2', VB.ie3015(3, 11, 75), 5], ['long', VB.lit(150, '2h30'), 6], ['long', VB.lit(270, '4h30'), 7]] },
     ] },
-  { id: 'base12', name: 'Base', weeks: 12, color: '#a3ad6f', per: '5 Einheiten pro Woche · 7–10 h',
+  { id: 'base12', cat: 'grundlage', name: 'Base', weeks: 12, color: '#a3ad6f', per: '5 Einheiten pro Woche · 7–10 h',
     desc: 'Zwölf Wochen Grundlagen-Aufbau mit FTP-Test am Anfang und Ende: viel LIT mit kurzen Antritten und Pyramiden, dazu pro Woche ein bis zwei Qualitätseinheiten (30/30, DEC, Kraftausdauer, Sweet Spot, EB). Jede 4. Woche etwas leichter. Ruhetage sind Tag 1 und 5.',
     weeksDef: [
       { note: 'Test', s: [['z2', VB.antritte(6, 90, '1h30'), 2], ['test', PG.test20(), 3], ['z2', VB.lit(105, '1h45'), 4], ['vo2', VB.ie3030(3, 8, 79), 6], ['long', VB.lit(120, '2h00'), 7]] },
@@ -3264,7 +3266,7 @@ const PLANS = [
       { s: [['z2', VB.antritte(8, 96, '1h36'), 2], ['vo2', VB.eb(4, 8, 1.04, 4, 90), 3], ['long', VB.lit(120, '2h00'), 4], ['vo2', VB.dec(6, 5, 93), 6], ['long', VB.lit(180, '3h00'), 7]] },
       { note: 'Test', easy: true, s: [['z2', VB.antritte(4, 64, '1h04'), 2], ['test', PG.test20(), 3], ['z2', VB.lit(80, '1h20'), 4], ['z2', VB.lit(100, '1h40'), 6], ['long', VB.lit(150, '2h30'), 7]] },
     ] },
-  { id: 'gf12', name: 'Peak Gran Fondo', weeks: 12, color: '#f7ffd2', per: '6 Einheiten pro Woche · 9–17 h',
+  { id: 'gf12', cat: 'rennen', name: 'Peak Gran Fondo', weeks: 12, color: '#f7ffd2', per: '6 Einheiten pro Woche · 9–17 h',
     desc: 'Zwölf Wochen auf einen langen Radmarathon hin: Krafttraining am Montag, VO2max- und Torque-Intervalle, Fatmax-Blöcke, Durability-Einheiten mit Vorermüdung und lange, hügelige Ausfahrten. Woche 8 ist Entlastung, Woche 12 Formaufbau bis zum Renntag.',
     weeksDef: [
       { note: 'Test', s: [['kraft', VB.off(KRAFT.ein, 60, KRAFT.einD), 1], ['z2', VB.antritte(6, 90, '1h30', 8), 2], ['test', PG.test20(), 3], ['long', VB.lit(150, '2:30h'), 4], ['vo2', VB.eb(4, 8, 1.04, 4, 90), 6], ['long', VB.lit(180, '3h00'), 7]] },
@@ -3280,7 +3282,7 @@ const PLANS = [
       { s: [['kraft', VB.off(KRAFT.max, 60, KRAFT.maxD), 1], ['z2', VB.antritte(8, 96, '1h30', 8), 2], ['vo2', VB.dec(5, 4, 133), 3], ['long', VB.lit(150, '2h30'), 4], ['thr', VB.durab('II', 188), 6], ['long', VB.hilly(240), 7]] },
       { note: 'Rennwoche', easy: true, s: [['z2', VB.antritte(6, 87, '1h30', 8), 2], ['z2', VB.lit(60, '1h00'), 3], ['vo2', VB.dec(4, 4, 124), 4], ['thr', VB.vorbel(), 6], ['race', VB.off('Raceday', 360, 'Renntag – draußen fahren, gleichmäßig einteilen, früh essen und trinken. Viel Erfolg!', 'Rennen'), 7]] },
     ] },
-  { id: 'crit6', name: 'Crit', weeks: 6, color: '#ffffff', per: '5 Einheiten pro Woche · 6–11 h',
+  { id: 'crit6', cat: 'rennen', name: 'Crit', weeks: 6, color: '#ffffff', per: '5 Einheiten pro Woche · 6–11 h',
     desc: 'Sechs Wochen für Kriterien und kurze Rennen: Sprints, kurze harte Intervalle (30/30, 15/45, 30/15), Rennfinale-Intervalle und wechselnde Tempi. Woche 4 ist leichter, Woche 6 Formaufbau mit Vorbelastung.',
     weeksDef: [
       { s: [['z2', VB.antritte(6, 90, '1h30'), 2], ['vo2', VB.ie3030(3, 10, 90), 3], ['z2', VB.lit(90, '1h30'), 4], ['vo2', VB.dec(5, 5, 90), 6], ['long', VB.lit(150, '2h30'), 7]] },
@@ -3290,7 +3292,7 @@ const PLANS = [
       { s: [['z2', VB.antritte(6, 90, '1h30'), 2], ['thr', VB.swspStart(), 3], ['z2', VB.lit(90, '1h30'), 5], ['vo2', VB.hitinc(), 6], ['long', VB.lit(180, '3h'), 7]] },
       { note: 'Formaufbau', easy: true, s: [['z2', VB.fatmax(90), 2], ['vo2', VB.ie3015(3, 7, 60), 3], ['long', VB.lit(120, '2h'), 4], ['thr', VB.vorbel(), 6]] },
     ] },
-  { id: 'hit4', name: 'Rad HIT', weeks: 4, color: '#edff9a', per: '4–5 Einheiten pro Woche · ca. 7 h',
+  { id: 'hit4', cat: 'leistung', name: 'Rad HIT', weeks: 4, color: '#edff9a', per: '4–5 Einheiten pro Woche · ca. 7 h',
     desc: 'Vier kompakte Wochen mit Rampentest zum Start, hochintensiven Intervallen (30/30, 30/15, EB) und Sprints, dazwischen ruhige Grundlage und FatMax-Einheiten. Ruhetage sind Tag 1 und 4.',
     weeksDef: [
       { note: 'Test', s: [['rec', VB.lit(45, '0h45 min'), 2], ['test', PG.test(), 2], ['vo2', VB.ie('HIT – IE: 4×10×30/30 + 15 min SwSp', 4, 10, 30, 30, 1.2, 120, [], [W(240, .55), W(900, .9)]), 3], ['vo2', VB.eb(5, 5, 1.08, 5, 90), 5], ['sit', VB.sprint('SIT – Booster LIT: 7×30s Sprint', 7, 30, 60, 210), 6], ['vo2', VB.ie3015(3, 11, 75), 7]] },
@@ -3298,7 +3300,7 @@ const PLANS = [
       { s: [['z2', VB.lit(90, '1:30h'), 2], ['long', VB.lit(120, '2h'), 3], ['long', VB.lit(120, '2h'), 5], ['z2', VB.lit(60, '1h'), 6], ['vo2', VB.ie3015(3, 13, 80), 7]] },
       { s: [['long', VB.lit(120, '2h'), 2], ['z2', VB.fm20(), 3], ['z2', VB.lit(90, '1h30'), 5], ['z2', VB.pyra60(), 6], ['vo2', VB.eb(3, 8, 1.05, 4, 82), 7]] },
     ] },
-  { id: 'base8', name: 'Grundlagen-Aufbau', weeks: 8, color: '#a3ad6f', per: '3 Einheiten pro Woche · 3–6 h',
+  { id: 'base8', cat: 'grundlage', name: 'Grundlagen-Aufbau', weeks: 8, color: '#a3ad6f', per: '3 Einheiten pro Woche · 3–6 h',
     desc: 'Das Ausdauer-Fundament: fast alles locker, ein Sweet-Spot-Training pro Woche und ein Longride, der von 1:30 auf 3 h wächst. Ideal für den Winter oder den Wiedereinstieg.',
     weeksDef: [
       { s: [['z2', PG.z2(60)], ['thr', PG.ss(3, 8, .85)], ['long', PG.long(90)]] },
@@ -3310,7 +3312,7 @@ const PLANS = [
       { s: [['z2', PG.z2(90)], ['thr', PG.ss(3, 15, .92)], ['long', PG.long(180, 15)]] },
       { note: 'Entlastung + Test', easy: true, s: [['z2', PG.z2(45)], ['rec', PG.rec(30)], ['test', PG.test()]] },
     ] },
-  { id: 'short6', name: 'Fit mit wenig Zeit', weeks: 6, color: '#f7ffd2', per: '3 Einheiten pro Woche · unter 3,5 h',
+  { id: 'short6', cat: 'zeit', name: 'Fit mit wenig Zeit', weeks: 6, color: '#f7ffd2', per: '3 Einheiten pro Woche · unter 3,5 h',
     desc: 'Für volle Wochen: je ein Schwellen-, ein VO2max- und ein längeres Grundlagentraining, alles unter 75 Minuten. Bei wenig Zeit bringen Intervalle am meisten.',
     weeksDef: [
       { note: 'Einstieg + Test', s: [['test', PG.test()], ['thr', PG.ss(3, 10, .88)], ['long', PG.z2(60)]] },
@@ -3394,15 +3396,19 @@ function planWeeksHtml(P, prog) {
     const wo = workoutById(id), dn = prog && plan.done[w + '-' + i], nx = n && n.w === w && n.i === i, slot = P.slots[w][i];
     return `<button class="pSess${dn ? ' done' : ''}${nx ? ' next' : ''}" data-sess="${w}-${i}" data-id="${esc(id)}" style="--cc:${SLOT_COLOR[slot]}" title="${esc(wo?.desc || '')}"><em>${dn ? '✓ ' : ''}${P.days[w][i] ? 'Tag ' + P.days[w][i] + ' · ' : ''}${SLOT[slot]}</em><b>${esc(wo?.name || id)}</b><small>${wo ? fmtT(woTotal(wo)) : ''}</small>${!prog && wo && !wo.off ? `<span class="psvg">${woSvg(wo)}</span>` : ''}</button>`; }).join('')}</div></div>`).join('');
 }
+const PLAN_CATS = [['grundlage', 'Grundlage', 'Ausdauer aufbauen, viel locker'], ['leistung', 'Leistung', 'FTP und VO2max steigern'], ['rennen', 'Rennen & Events', 'gezielt auf einen Termin hin'], ['zeit', 'Wenig Zeit', 'unter 3,5 h pro Woche']];
 function startPlan(id) { plan = { v: 2, id, start: new Date().toISOString().slice(0, 10), done: {} }; savePlan(); settings.woCat = 'Plan'; renderPlanBanner(); fillSelects(); openPlan(); toast('Plan gestartet – los geht’s mit der ersten Einheit.', 4000); }
 function openPlan(mode) { // mode: undefined = aktiver Plan bzw. Übersicht, 'list' = Übersicht, sonst Plan-ID = Vorschau
   if (typeof mode !== 'string') mode = undefined; // auch als Klick-Handler nutzbar
   const d = $('#planDlg'), body = $('#planBody'), active = planDef();
   const P = mode === 'list' ? null : mode ? PLANS.find(p => p.id === mode) : active;
   if (!P) {
+    const pc = PLAN_CATS.some(c => c[0] === settings.planCat) ? settings.planCat : active?.cat || 'leistung', cdef = PLAN_CATS.find(c => c[0] === pc);
     body.innerHTML = '<p class="sub" style="margin:4px 0 14px">Kurbeln merkt sich, was du geschafft hast, und schlägt dir immer die nächste Einheit vor. Die Watt passen sich automatisch an deine FTP an.</p>' +
-      PLANS.map(p => `<div class="planCard" style="--pc:${p.color}"><div class="pcHead"><div><b>${esc(p.name)}${active && active.id === p.id ? ' · läuft gerade' : ''}</b><span>${p.weeks} Wochen · ${esc(p.per)}</span></div></div>
-        <p>${esc(p.desc)}</p>${weekBars(p)}<div class="pcBtns"><button class="primary" data-plan-start="${p.id}">${active ? 'Stattdessen starten' : 'Plan starten'}</button><button data-plan-view="${p.id}">Plan ansehen</button></div></div>`).join('') + scienceHtml();
+      `<div class="ptabs plTabs">${PLAN_CATS.map(([k, l]) => `<button class="${k === pc ? 'on' : ''}" data-pcat="${k}">${l} <small>${PLANS.filter(p => p.cat === k).length}</small></button>`).join('')}</div><p class="sub plCatSub">${esc(cdef[2])}</p>` +
+      `<div class="plGrid">${PLANS.filter(p => p.cat === pc).map(p => `<div class="planCard" style="--pc:${p.color}"><div class="pcHead"><div><b>${esc(p.name)}${active && active.id === p.id ? ' · läuft gerade' : ''}</b><span>${p.weeks} Wochen · ${esc(p.per)}</span></div></div>
+        <p>${esc(p.desc)}</p>${weekBars(p)}<div class="pcBtns"><button class="primary" data-plan-start="${p.id}">${active ? 'Stattdessen starten' : 'Plan starten'}</button><button data-plan-view="${p.id}">Plan ansehen</button></div></div>`).join('')}</div>` + scienceHtml();
+    body.querySelectorAll('[data-pcat]').forEach(x => x.onclick = () => { settings.planCat = x.dataset.pcat; saveSettings(); openPlan('list'); });
     body.querySelectorAll('[data-plan-start]').forEach(x => x.onclick = () => startPlan(x.dataset.planStart));
     body.querySelectorAll('[data-plan-view]').forEach(x => x.onclick = () => { openPlan(x.dataset.planView); $('#planDlg .card').scrollTop = 0; });
   } else if (P !== active) { // Vorschau
