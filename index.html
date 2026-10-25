@@ -2486,13 +2486,26 @@ function svInfoUpd() {
   $('#svUse').textContent = t + ' (Google-Gratiskontingent: 5.000)'; $('#svInfo').textContent = t;
 }
 const svMsg = t => { $('#svMsg').textContent = t; $('#svMsg').style.display = t ? 'flex' : 'none'; };
+// Google schreibt den genauen Grund nur in die Konsole (z. B. „ApiNotActivatedMapError“) – hier mitlesen und auf Deutsch erklären
+const SV_ERR = {
+  ApiNotActivatedMapError: 'Die „Maps JavaScript API“ ist in deinem Google-Projekt noch nicht aktiviert. Google Cloud Console → APIs & Dienste → Bibliothek → „Maps JavaScript API“ → Aktivieren.',
+  BillingNotEnabledMapError: 'Für dein Google-Projekt ist kein Rechnungskonto verknüpft. Google Cloud Console → Abrechnung → Rechnungskonto verknüpfen (bleibt im Gratiskontingent).',
+  RefererNotAllowedMapError: 'Der Schlüssel ist für diese Adresse gesperrt. Unter Anmeldedaten → Schlüssel → Websites muss stehen: ',
+  ApiTargetBlockedMapError: 'Der Schlüssel ist auf andere APIs beschränkt. Unter Anmeldedaten → Schlüssel → API-Einschränkungen „Maps JavaScript API“ auswählen und speichern.',
+  InvalidKeyMapError: 'Der Schlüssel ist ungültig – bitte nochmal vollständig kopieren (beginnt mit „AIza“).',
+  MissingKeyMapError: 'Es ist kein Schlüssel eingetragen.',
+  ExpiredKeyMapError: 'Der Schlüssel ist abgelaufen oder gelöscht – bitte einen neuen erstellen.',
+  DeletedApiProjectMapError: 'Das Google-Projekt zum Schlüssel wurde gelöscht – bitte einen neuen Schlüssel erstellen.',
+};
+const svErrText = c => 'Street View geht nicht: ' + (SV_ERR[c] || c) + (c === 'RefererNotAllowedMapError' ? (location.protocol === 'file:' ? '– bei lokal geöffneter Datei geht das nicht, Einschränkung entfernen oder die Online-Version nutzen.' : location.origin + '/*') : '') + ' Änderungen bei Google brauchen bis zu 5 Minuten, danach Kurbel neu laden.';
+(() => { const ce = console.error.bind(console); console.error = (...a) => { const m = String(a[0] || '').match(/([A-Z][A-Za-z]+MapError)/); if (m) { sv.errCode = m[1]; if (sv.authFailed) svMsg(svErrText(m[1])); } ce(...a); }; })();
 function loadGoogle() {
   if (window.google?.maps?.importLibrary) return Promise.resolve();
   if (sv.loading) return sv.loading;
   if (!settings.gKey) return Promise.reject(new Error('Kein Google-API-Schlüssel eingetragen – siehe „Connections → Google Street View“.'));
   sv.loading = new Promise((res, rej) => {
     window.__kurbelGm = () => res();
-    window.gm_authFailure = () => { sv.authFailed = true; svMsg('Google hat den Schlüssel abgelehnt. Prüfe in der Google Cloud Console: 1) „Maps JavaScript API“ aktiviert? 2) Rechnungskonto verknüpft? 3) Bei „Websites“-Einschränkung muss ' + (location.protocol === 'file:' ? 'die Einschränkung entfernt werden – lokal geöffnete Dateien haben keine Web-Adresse' : location.origin + '/* eingetragen sein') + '. Änderungen bei Google brauchen bis zu 5 Minuten, danach Kurbel neu laden.'); toast('Street View: API-Schlüssel wurde abgelehnt', 6000); };
+    window.gm_authFailure = () => { sv.authFailed = true; $('#svPano').style.visibility = 'hidden'; $('#svMsg').style.background = '#111'; if (sv.errCode) return svMsg(svErrText(sv.errCode)); svMsg('Google hat den Schlüssel abgelehnt. Prüfe in der Google Cloud Console: 1) „Maps JavaScript API“ aktiviert? 2) Rechnungskonto verknüpft? 3) Bei „Websites“-Einschränkung muss ' + (location.protocol === 'file:' ? 'die Einschränkung entfernt werden – lokal geöffnete Dateien haben keine Web-Adresse' : location.origin + '/* eingetragen sein') + '. Änderungen bei Google brauchen bis zu 5 Minuten, danach Kurbel neu laden.'); toast('Street View: API-Schlüssel wurde abgelehnt', 6000); };
     const sc = document.createElement('script');
     sc.src = 'https://maps.googleapis.com/maps/api/js?key=' + encodeURIComponent(settings.gKey) + '&v=weekly&language=de&region=DE&loading=async&callback=__kurbelGm';
     sc.async = true; sc.onerror = () => { sv.loading = null; rej(new Error('Google Maps konnte nicht geladen werden (Internet?)')); };
