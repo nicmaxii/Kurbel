@@ -28,13 +28,13 @@ Sie läuft in Chrome auf dem MacBook und wird über GitHub Pages veröffentlicht
 | Bluetooth | `BleTrainer` (FTMS 0x1826; Fallback Tacx FE-C `6e40fec1…`, Wahoo `a026e005…`), `PowerMeter` (CPS 0x1818, Nullabgleich 0x2A66 Opcode 0x0C), `connectHR`, `DemoTrainer`, `DemoPowerMeter` |
 | Kalibrieren | `trainer.spinDown` (FTMS 0x13 + Status 0x2ADA; FE-C Seite 1/2), `calTrainer`, `calPM`, Dialog `#calDlg` |
 | Fahrt | `ride`, `startRide` (Zeit startet erst bei ersten Watt), `tick`, `physics`, `controlTrainer` (ERG/SIM), PowerMatch (optional, Standard aus seit `pmV2`: Regelkreis Ziel vs. Powermeter, `live.pmOffset`, `checkPmDev`). Standard: Trainer steuert, Powermeter läuft mit (`pmHist`, `pmFresh`, Sample-Index 7, `pmStats`/`pmNote` → Zusammenfassung + Strava-Beschreibung) |
-| Fahrt-Anzeige | `updateHUD`; oben Mitte `#wbox` (Ziel, „Intervall noch“ groß, aktuelle Watt + Powermeter), Steigung `#grade` rechts; Vollbild `#btnFull` |
+| Fahrt-Anzeige | `updateHUD`; oben Mitte `#wbox` (Ziel, Intervall-Restzeit groß ohne Beschriftung, aktuelle Watt + Powermeter; große Watt-Kachel links `#hPbox` dann ausgeblendet), Steigung `#grade` rechts; Vollbild `#btnFull` |
 | Export | `rideRecord` (inkl. `routeId`, `woId`, `tgt`), `buildFIT` (mit GPS-Koordinaten, sub_sport 58 = virtuell), `buildTCX`, Garmin-Trick (manufacturer 1, product 3121) |
 | Strava | OAuth `#sAuth` (öffnet neuen Tab; gehostet kommt Strava auf die Seite zurück, Rückkehr-Handler „Rückkehr von Strava“ liest `?state=kurbel&code=`; Datei: Adresse einfügen), `stravaUpload` (Duplikat → neue Kennung), immer VirtualRide wenn GPS |
 | Verlauf | IndexedDB `kurbel` v2 (`kv`, `rides`), `saveRideToHistory`, `openHistory`, Backup/Restore |
 | Dashboard | `openDash`, `ftpEstimate` (Test < 6 Wochen → hoch; sonst CP-Modell aus frei gefahrenen Abschnitten, ERG zählt nicht), `pmc` (CTL 42 / ATL 7), `lineChart`, `barChart`; Palette `#2563eb` / `#e8400f` (validiert) |
 | Setup-Menü | `fillSelects`, `renderRouteCards`, `renderWoCards`, `woCats`, `pickWorkout`, `renderPlanBanner` |
-| Karte | Leaflet in `#mapBox`; Fahrtrichtung oben über `mapRot`/`sizeMapRot` (Container auf Diagonale vergrößert und gedreht, Steuerelemente aus dem Container herausgezogen), Knopf `#btnHeadUp`;  `TILES` (Esri Straße/Satellit, CyclOSM, OpenTopoMap – OSM und CARTO blockieren lokal geöffnete Dateien) |
+| Karte | Leaflet in `#mapBox`; Fahrtrichtung oben + leicht schräg (`TILT`, perspective + rotateX) über `mapRot`/`sizeMapRot` (Container vergrößert, Fahrer bei 62 % Höhe, Steuerelemente aus dem Container herausgezogen), Knopf `#btnHeadUp`;  `TILES` (Esri Straße/Satellit, CyclOSM, OpenTopoMap – OSM und CARTO blockieren lokal geöffnete Dateien) |
 | Startseite | `KurbelLanding` (three.js-Kurbel), Glue mit `enter(intent)` |
 
 ## Testen

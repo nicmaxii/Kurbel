@@ -1188,7 +1188,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <div id="mapBox" class="leaflet-container"><div id="map"></div></div>
   <div id="noMap">Diese Strecke hat keine Kartendaten (alter Import ohne Koordinaten).<br>Bitte die GPX-Datei einfach neu importieren.</div>
   <div class="hud">
-    <div class="m big"><div class="l" id="hPl">Leistung (3s)</div><div class="v"><span id="hP">0</span><span class="u">W</span></div></div>
+    <div class="m big" id="hPbox"><div class="l" id="hPl">Leistung (3s)</div><div class="v"><span id="hP">0</span><span class="u">W</span></div></div>
     <div class="row2">
       <div class="m"><div class="l">Trittfrequenz</div><div class="v"><span id="hC">0</span><span class="u">rpm</span></div></div>
       <div class="m"><div class="l">Puls</div><div class="v"><span id="hH">–</span><span class="u">bpm</span></div></div>
@@ -1203,10 +1203,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
     </div>
   </div>
   <div class="m" id="wbox" style="display:none">
-    <div class="l" id="wName">Workout</div>
     <div class="wrow">
       <div class="wc"><div class="wl">Ziel</div><div class="tgt"><span id="wTgt">0</span><span class="u">W</span></div></div>
-      <div class="wc wmain"><div class="wl">Intervall noch</div><div class="rem" id="wRem">0:00</div></div>
+      <div class="wc wmain"><div class="rem" id="wRem">0:00</div></div>
       <div class="wc"><div class="wl" id="wNowL">Leistung</div><div class="tgt"><span id="wNow">0</span><span class="u">W</span></div><div class="wpm" id="wPm"></div></div>
     </div>
     <div class="bar"><div id="wBar"></div></div>
@@ -2322,11 +2321,11 @@ function updateHUD() {
   // Workout-Box
   const wo = (ride.state === 'running' || ride.state === 'paused') ? ride.workout : null;
   const box = $('#wbox');
+  $('#hPbox').style.display = wo ? 'none' : '';
   if (!wo) { box.style.display = 'none'; return; }
   box.style.display = '';
   $('#wNow').textContent = Math.round(p3); $('#wNowL').textContent = pm && !pmActive() ? 'Trainer' : 'Leistung';
   $('#wPm').textContent = pm && devState.pm === 'on' && !pmActive() ? 'Powermeter ' + (pW ?? '–') + ' W' : '';
-  $('#wName').textContent = wo.name + (settings.erg ? ' · ERG' : ' · Sim');
   if (wo.manual) {
     $('#wTgt').textContent = settings.manualW; $('#wBar').style.width = '0';
     $('#wRem').textContent = '∞'; $('#wTot').textContent = '–'; $('#wNext').textContent = '↑/↓ ändert den Wert um 5 W'; $('#wBias').textContent = '';
@@ -2439,10 +2438,14 @@ function drawRouteOnMap(force) {
 }
 function zoomToRoute() { if (!map || !route.lat) return; const b = L.latLngBounds([]); for (let i = 0; i < route.lat.length; i += 10) b.extend([route.lat[i], route.lon[i]]); map.fitBounds(b, { padding: [60, 60] }); }
 // Karte in Fahrtrichtung: der Karten-Container wird größer als sichtbar (Diagonale) und um die Mitte gedreht
-const mapRot = { on: false, a: 0 };
+const mapRot = { on: false, a: 0 }, TILT = { deg: 42, p: 1400, y: .62 };
 function sizeMapRot(on) {
   const m = $('#map'), b = $('#mapBox');
-  if (on) { const w = b.clientWidth, h = b.clientHeight, D = Math.ceil(Math.hypot(w, h)); Object.assign(m.style, { inset: 'auto', left: (w - D) / 2 + 'px', top: (h - D) / 2 + 'px', width: D + 'px', height: D + 'px' }); }
+  if (on) { // leicht schräg von hinten: Fahrer bei ~62 % der Höhe, Container groß genug, dass auch der ferne Rand oben gefüllt ist
+    const w = b.clientWidth, h = b.clientHeight, cy = h * TILT.y, P = TILT.p, th = TILT.deg * Math.PI / 180;
+    const Y = cy * 1.12, rY = Y * P / (P * Math.cos(th) - Y * Math.sin(th)), sc = P / (P + rY * Math.sin(th));
+    const R = Math.min(2600, Math.max(Math.hypot(w / 2, h - cy), Math.hypot(rY, w / 2 / sc)) * 1.08), D = Math.ceil(2 * R);
+    Object.assign(m.style, { inset: 'auto', left: (w - D) / 2 + 'px', top: cy - D / 2 + 'px', width: D + 'px', height: D + 'px' }); }
   else { Object.assign(m.style, { inset: '', left: '', top: '', width: '', height: '', transform: '' }); m.style.removeProperty('--unrot'); mapRot.a = 0; }
   m.classList.toggle('rot', on); map.invalidateSize({ pan: false });
 }
@@ -2457,12 +2460,12 @@ function updateMap() {
   riderMarker.setLatLng(ll);
   const ang = Math.atan2((ah[1] - ll[1]) * Math.cos(ll[0] * Math.PI / 180), ah[0] - ll[0]) * 180 / Math.PI;
   const el = riderMarker.getElement()?.querySelector('.arr'); if (el) el.style.transform = 'rotate(' + ang.toFixed(0) + 'deg)';
-  const want = riding && follow && settings.headUp !== false;
+  const want = riding && follow;
   if (want !== mapRot.on) { mapRot.on = want; sizeMapRot(want); }
   if (want) {
     const a2 = latLonAt(route, d + 80), brg = Math.atan2((a2[1] - ll[1]) * Math.cos(ll[0] * Math.PI / 180), a2[0] - ll[0]) * 180 / Math.PI;
-    let diff = ((-brg - mapRot.a) % 360 + 540) % 360 - 180; mapRot.a += diff * 0.15;
-    $('#map').style.transform = 'rotate(' + mapRot.a.toFixed(1) + 'deg)'; $('#map').style.setProperty('--unrot', (-mapRot.a).toFixed(1) + 'deg');
+    const goal = settings.headUp !== false ? -brg : 0; let diff = ((goal - mapRot.a) % 360 + 540) % 360 - 180; mapRot.a += diff * 0.15;
+    $('#map').style.transform = `perspective(${TILT.p}px) rotateX(${TILT.deg}deg) rotate(${mapRot.a.toFixed(1)}deg)`; $('#map').style.setProperty('--unrot', (-mapRot.a).toFixed(1) + 'deg');
   }
   if (riding && follow) map.panTo(ll, { animate: false });
   if (riding && performance.now() - lastDoneUpd > 1000 && doneLine) {
