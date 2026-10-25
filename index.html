@@ -522,6 +522,8 @@ body:not(.riding) footer,body:not(.riding) #viewSeg,body:not(.riding) #btnPip{di
 .pSess.sel{outline:2px solid var(--acc);outline-offset:-2px}
 .pvInfo{background:var(--s1);border:1px solid var(--ln);border-radius:14px;padding:12px 16px;margin:4px 0 10px;color:var(--tx2);font-size:14px}.pvInfo b{color:var(--tx)}.pvInfo p{margin:6px 0 8px;color:var(--tx)}
 .pvSvg{height:56px}.pvSvg svg{width:100%;height:100%;display:block}
+#grpDiff{display:none!important}
+#biasLbl{display:inline-block;min-width:112px;text-align:center;white-space:nowrap;font-variant-numeric:tabular-nums}
 #ghostBox .gsub{font-size:12px;color:var(--tx2);font-variant-numeric:tabular-nums}
 button.primary,.planCard .primary,#calDlg button.primary,#dashDlg button.primary,#planDlg .actions button.primary{color:var(--onacc)!important}
 #mapBox .leaflet-control-attribution{background:rgba(12,12,13,.75)!important;color:var(--tx2)!important}#mapBox .leaflet-control-attribution a{color:var(--tx)!important}
@@ -1334,14 +1336,14 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <button id="btnPause">Pause</button>
     <button id="btnSkip" title="Intervall überspringen">Intervall überspringen</button>
     <div class="grp" id="grpBias"><button id="bDown">−</button><span id="biasLbl">Intensität</span><button id="bUp">+</button></div>
-    <div class="grp">Schwierigkeit <input type="range" id="rDiff" min="0" max="100" step="5"><span id="diffLbl"></span></div>
+    <div class="grp" id="grpDiff" hidden>Schwierigkeit <input type="range" id="rDiff" min="0" max="100" step="5"><span id="diffLbl"></span></div>
     <button class="danger" id="btnStop">■ Beenden</button>
   </div>
 
   <!-- Setup -->
   <div class="overlay" id="setup">
     <div class="card menu">
-      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 3.0</span></div>
+      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 3.1</span></div>
       <div class="warnbox" id="noBt" style="display:none">Bluetooth geht nur in <b>Google Chrome</b> oder Edge. Die Demo funktioniert trotzdem.</div>
       <div class="warnbox" id="recoverBox" style="display:none">Nicht gespeicherte Fahrt vom <span id="recoverDate"></span> gefunden. <button id="btnRecover">Ansehen</button></div>
       <div id="planBanner"></div>
