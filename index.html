@@ -2501,7 +2501,7 @@ const SV_ERR = {
   DeletedApiProjectMapError: 'Das Google-Projekt zum Schlüssel wurde gelöscht – bitte einen neuen Schlüssel erstellen.',
 };
 const svErrText = c => 'Street View geht nicht: ' + (SV_ERR[c] || c) + (c === 'RefererNotAllowedMapError' ? (location.protocol === 'file:' ? '– bei lokal geöffneter Datei geht das nicht, Einschränkung entfernen oder die Online-Version nutzen.' : location.origin + '/*') : '') + ' Änderungen bei Google brauchen bis zu 5 Minuten, danach Kurbel neu laden.';
-(() => { const ce = console.error.bind(console); console.error = (...a) => { const m = String(a[0] || '').match(/([A-Z][A-Za-z]+MapError)/); if (m) { sv.errCode = m[1]; if (sv.authFailed) svMsg(svErrText(m[1])); } ce(...a); }; })();
+['error', 'warn'].forEach(k => { const ce = console[k].bind(console); console[k] = (...a) => { const m = a.map(String).join(' ').match(/([A-Z][A-Za-z]+MapError)/); if (m && !sv.errCode) { sv.errCode = m[1]; if (sv.authFailed) svMsg(svErrText(m[1])); } ce(...a); }; });
 function loadGoogle() {
   if (window.google?.maps?.importLibrary) return Promise.resolve();
   if (sv.loading) return sv.loading;
@@ -2522,6 +2522,7 @@ async function svEnsure() {
   if (!sv.pano) {
     sv.pano = new sv.lib.StreetViewPanorama($('#svPano'), { disableDefaultUI: true, clickToGo: false, linksControl: false, showRoadLabels: false, motionTracking: false, motionTrackingControl: false, scrollwheel: false, addressControl: false, visible: true });
     sv.svc = new sv.lib.StreetViewService();
+    sv.pano.addListener('status_changed', () => { const st = sv.pano.getStatus(); if (st && st !== 'OK' && !sv.authFailed) svMsg('Street View: Google liefert kein Bild (' + st + ').'); });
   }
 }
 const bearingDeg = (la1, lo1, la2, lo2) => brgD({ lat: la1, lon: lo1 }, { lat: la2, lon: lo2 }) * 180 / Math.PI;
@@ -2536,6 +2537,7 @@ async function svUpdate(force) {
     await svEnsure();
     const ll = latLonAt(route, d);
     const res = await sv.svc.getPanorama({ location: { lat: ll[0], lng: ll[1] }, radius: 60, source: sv.lib.StreetViewSource.OUTDOOR, preference: sv.lib.StreetViewPreference.NEAREST });
+    if (sv.authFailed) return; // Schlüssel abgelehnt – Fehlermeldung stehen lassen
     const loc = res.data.location;
     if (loc.pano !== sv.lastPano) {
       sv.lastPano = loc.pano;
