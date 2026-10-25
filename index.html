@@ -1207,7 +1207,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 <body>
 <div id="landing">
   <canvas id="ltrail" aria-hidden="true"></canvas><canvas id="lcv"></canvas>
-  <nav class="lnav"><span class="brand">kurbeln</span><a data-go="map">Fahren</a><a data-go="data">Werte</a><a data-go="workouts">Workouts</a><a data-go="routes">Strecken</a><a data-go="video">Video</a><a data-go="history">Meine Fahrten</a><a class="cta" data-go="map">Losfahren</a></nav>
+  <nav class="lnav"><span class="brand">kurbeln</span><a data-go="dash">Dashboard</a><a data-go="plan">Trainingsplan</a><a data-go="history">Meine Fahrten</a><a data-go="map">Kurbeln</a><a class="cta" data-go="map">Losfahren</a></nav>
   <div class="lgrain"></div><div class="lhero"><h1>kurbeln</h1>
     <div class="lbtns"><button class="b1" data-go="map">Losfahren</button><button class="b2" data-go="demo">Demo ansehen ›</button></div></div>
   <div class="lhint">Scrollen oder heranzoomen, um einzutauchen<span>⌄</span></div>
@@ -1333,7 +1333,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <!-- Setup -->
   <div class="overlay" id="setup">
     <div class="card menu">
-      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 2.3</span></div>
+      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 2.4</span></div>
       <div class="warnbox" id="noBt" style="display:none">Bluetooth geht nur in <b>Google Chrome</b> oder Edge. Die Demo funktioniert trotzdem.</div>
       <div class="warnbox" id="recoverBox" style="display:none">Nicht gespeicherte Fahrt vom <span id="recoverDate"></span> gefunden. <button id="btnRecover">Ansehen</button></div>
       <div id="planBanner"></div>
@@ -4335,6 +4335,8 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.g
     if (map) setTimeout(() => map.invalidateSize(), 50);
     if (intent === 'workouts' || intent === 'routes') { setView('map'); $('#setup').style.display = 'flex'; setTimeout(() => (intent === 'workouts' ? $('#favRow') : $('#selRoute')).scrollIntoView({ behavior: 'smooth', block: 'center' }), 60); }
     if (intent === 'history') { setView('map'); $('#setup').style.display = 'none'; openHistory(); }
+    if (intent === 'dash') { setView('map'); $('#setup').style.display = 'none'; openDash(); }
+    if (intent === 'plan') { setView('map'); $('#setup').style.display = 'none'; openPlan(); }
     if (intent === 'demo') { setView('map'); if (!trainer) $('#btnDemo').click(); if (ride.state !== 'running' && ride.state !== 'paused') startRide(); }
     else if (!LS.get('kurbel.tour', 0)) setTimeout(startTour, 400);
   }
