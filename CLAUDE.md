@@ -21,7 +21,7 @@ Sie läuft in Chrome auf dem MacBook und wird über GitHub Pages veröffentlicht
 | Bereich | Wichtige Namen |
 |---|---|
 | Einstellungen | `settings` (localStorage `kurbel.settings`), `saveSettings`, `LS` |
-| Strecken | `KA_DATA`/`KA_NAMES` (4 komoot-Touren Karlsruhe, Hin-und-zurück-Stücke herausgeschnitten), `PRO_DATA`/`PRO_META`/`PRO_COBBLES` (Paris–Roubaix mit 30 Pavé-Sektoren, Alpe d'Huez, Ventoux, Tourmalet, Galibier), `routeFromPoints`, `parseGPX`, `eleAt`, `gradeAt`, `latLonAt`, `cobbleAt` |
+| Strecken | `KA_DATA`/`KA_NAMES` (7 komoot-Touren Karlsruhe inkl. „Linksrheinisch mit Volldampf“, „Eis in Plittersdorf“, „Pfalz“; Hin-und-zurück-Stücke herausgeschnitten), `PRO_DATA`/`PRO_META`/`PRO_COBBLES` (Paris–Roubaix mit 30 Pavé-Sektoren, Alpe d'Huez, Ventoux, Tourmalet, Galibier), `routeFromPoints`, `parseGPX`, `eleAt`, `gradeAt`, `latLonAt`, `cobbleAt` |
 | Workouts | `W(dur,p0,p1)`, `reps`, `FAV_WORKOUTS`, `BUILTIN_WORKOUTS` (Kategorien `WO_CATS`), `parseZWO`/`parseERG`, Ordner-Sync `scanFolder` (Unterordner = Kategorie), Editor `openEditor` |
 | Trainingspläne | `PG` (Generatoren), `PLANS` (ftp12, base8, short6; `weeksDef` mit Slots thr/z2/vo2/long/test/rec), `PLAN_WORKOUTS`, `PLAN_SCIENCE` (Quellen), `plan` (localStorage `kurbel.plan`, v2), `planNext`, `planMarkFromRide`, `openPlan` |
 | Tagesform | `DF`, `dayBias()`, `renderDayForm`, Vorschlag aus TSB `formSuggest` |
@@ -31,6 +31,7 @@ Sie läuft in Chrome auf dem MacBook und wird über GitHub Pages veröffentlicht
 | Fahrt-Anzeige | `updateHUD`; oben Mitte `#wbox` (Ziel, Intervall-Restzeit groß ohne Beschriftung, aktuelle Watt + Powermeter; große Watt-Kachel links `#hPbox` dann ausgeblendet), Steigung `#grade` rechts; Vollbild `#btnFull` |
 | Export | `rideRecord` (inkl. `routeId`, `woId`, `tgt`), `buildFIT` (mit GPS-Koordinaten, sub_sport 58 = virtuell), `buildTCX`, Garmin-Trick (manufacturer 1, product 3121) |
 | Strava | OAuth `#sAuth` (öffnet neuen Tab; gehostet kommt Strava auf die Seite zurück, Rückkehr-Handler „Rückkehr von Strava“ liest `?state=kurbel&code=`; Datei: Adresse einfügen), `stravaUpload` (Duplikat → neue Kennung), immer VirtualRide wenn GPS |
+| Geist | `ghost`, `loadGhost` (schnellste frühere Fahrt mit gleicher `routeId`, Samples-Index = Sekunde), `ghostGap`, `updateGhostHUD`, Kachel `#ghostBox`, Schalter `#cGhost` (`settings.ghost`) |
 | Verlauf | IndexedDB `kurbel` v2 (`kv`, `rides`), `saveRideToHistory`, `openHistory`, Backup/Restore |
 | Dashboard | `openDash`, `ftpEstimate` (Test < 6 Wochen → hoch; sonst CP-Modell aus frei gefahrenen Abschnitten, ERG zählt nicht), `pmc` (CTL 42 / ATL 7), `lineChart`, `barChart`; Palette `#2563eb` / `#e8400f` (validiert) |
 | Setup-Menü | `fillSelects`, `renderRouteCards`, `renderWoCards`, `woCats`, `pickWorkout`, `renderPlanBanner` |
