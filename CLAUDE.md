@@ -10,7 +10,7 @@ Sie läuft in Chrome auf dem MacBook und wird über GitHub Pages veröffentlicht
   Änderungen immer gezielt per Suchen/Ersetzen an eindeutigen Stellen.
 - In der three.js-Zeile wurde das erste `console.warn` durch `void 0,` ersetzt – nicht „reparieren“.
 - Nach jeder Änderung: Seite in Playwright laden und auf `pageerror` prüfen (siehe Tests), dann committen und pushen.
-- Design: Apple-artig weiß, Akzent ruhiges Blau `#2563eb` (Hover `#1d4ed8`, im dunklen Fahrt-Design `#4c8dff`), flache Buttons ohne 3D-Kante, Schrift Nunito (Google Fonts) im Menü, Hauptüberschrift in Systemschrift.
+- Design: Apple-artig weiß, Akzent ruhiges Blau `#2563eb` (Hover `#1d4ed8`, im dunklen Fahrt-Design `#4c8dff`), flache Buttons ohne 3D-Kante, Systemschrift (SF) wie auf der Startseite, Gewichte max. 600–700, dünne 1-px-Rahmen statt Schatten (Block „Ruhiger Apple-Look“ am Ende des Menü-CSS).
   **Wenige Emojis**, klare Buttons, farbige Punkte statt Icons.
 
 ## Aufbau von index.html (Suchbegriffe)

@@ -379,6 +379,38 @@ details.sec.more>summary{color:var(--text);font-weight:600;font-size:17px}
 .pSess.done{background:#ecfdf3;border-color:#bbf7d0;border-left-color:#16a34a}.pSess.done span{color:#16a34a;font-weight:900}
 .pSess.next{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
 @media (max-width:640px){.pwS{grid-template-columns:repeat(2,1fr)}#setup .mhead h2{font-size:27px}}
+/* Ruhiger Apple-Look fürs Menü (überschreibt die verspielten Stile oben) */
+#setup .card.menu,#planDlg .card.menu,#calDlg .card,#dashDlg .card,.dtip{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;color:#1d1d1f}
+#setup .card.menu,#planDlg .card.menu{border-radius:22px;box-shadow:0 24px 60px rgba(0,0,0,.14)}
+#setup .mhead h2,#planDlg .mhead h2,#calDlg h2,#dashDlg h2{font-size:32px;font-weight:700;letter-spacing:-.025em}
+#setup .sec{background:#f5f5f7;border-radius:18px}
+#setup .sec .sh h3{font-size:19px!important;font-weight:600;letter-spacing:-.015em!important}
+#setup .sec .sh .step{width:22px;height:22px;font-size:12px;font-weight:600}
+#setup #btnStart{font-size:17px;font-weight:600;padding:12px 36px;box-shadow:none}
+#setup .ptabs button,.ptabs button{font-weight:500;box-shadow:none}
+.rcard,#setup .rcard{border:1px solid #e5e5ea!important;border-radius:16px!important;box-shadow:none;transition:border-color .15s,box-shadow .15s}
+.rcard:hover,.wcard:hover,.ccats button:hover{transform:none}
+.rcard:hover{box-shadow:0 4px 14px rgba(0,0,0,.06)}
+.rcard.on,#setup .rcard.on{border-color:#2563eb!important;box-shadow:0 0 0 1px #2563eb}
+.rcard.on:after{width:20px;height:20px;font-size:11px;font-weight:600}
+.rcard.add,#setup .rcard.add{border:1px dashed #c7c7cc!important}
+.rcard.add .addIcon{font-weight:300}
+.rname{font-weight:600}.rstats{gap:6px;font-size:12.5px;white-space:nowrap}.rstats b{font-weight:600}
+.tag{font-weight:600}
+.ccats button,#setup .ccats button{font-weight:500;border-radius:999px!important;padding:6px 12px!important;box-shadow:inset 0 0 0 1px #e5e5ea}
+.ccats button.on,#setup .ccats button.on{background:#1d1d1f!important;color:#fff;box-shadow:none}
+.wcard,#setup .wcard{border:1px solid #e5e5ea!important;border-top:3px solid var(--cc,#ddd)!important;border-radius:14px!important;box-shadow:none}
+.wcard.on,#setup .wcard.on{border-color:#2563eb!important;box-shadow:0 0 0 1px #2563eb}
+.wcard.free,#setup .wcard.free{border-top-color:#1d1d1f!important}
+.wname{font-weight:600}.wplan{font-weight:600}
+.wtools button{font-weight:500}
+.planBanner{background:#f5f5f7;border:0;border-radius:18px}
+.pbText b,.pcHead b{font-weight:600}.pbBtn,.planCard .primary,#calDlg button.primary,#dashDlg button.primary,#planDlg .actions button.primary,.dBtn{font-weight:600!important}
+.pbLink{font-weight:500!important}
+.planCard{border-radius:18px;border-left-width:4px}
+.pwL{font-weight:600}.pSess b{font-weight:600}.pSess em{font-weight:600}.science summary{font-weight:600}
+#setup .dfSeg button b{font-weight:600}
+.dTile,.dCard{border-radius:16px;background:#f5f5f7}.dTile b{font-weight:600}.dTile small,.dLeg{font-weight:500}.dCard h3{font-weight:600}.calBig{font-weight:600}
 </style>
 <style>/* Leaflet 1.9.4 (BSD-2-Clause) */
 /* required styles */
