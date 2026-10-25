@@ -510,7 +510,6 @@ body,#landing,#setup .card.menu,#planDlg .card.menu,#calDlg .card,#dashDlg .card
 #ghostBox .gsub{font-size:12px;color:var(--tx2);font-variant-numeric:tabular-nums}
 button.primary,.planCard .primary,#calDlg button.primary,#dashDlg button.primary,#planDlg .actions button.primary{color:var(--onacc)!important}
 #mapBox .leaflet-control-attribution{background:rgba(12,12,13,.75)!important;color:var(--tx2)!important}#mapBox .leaflet-control-attribution a{color:var(--tx)!important}
-#sAuth,#sClip{background:var(--acc)!important;border-color:var(--acc)!important;color:var(--onacc)!important;font-weight:600}
 
 .dot.on{background:var(--acc)!important}.dot.wait{background:var(--tx2)!important}
 .sw input:checked{background:var(--acc)!important}
@@ -520,7 +519,6 @@ footer .cap{display:none}
 #landing .lgrain{position:absolute;inset:-50%;z-index:1;opacity:.2;mix-blend-mode:screen;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:lgr .5s steps(2) infinite}
 @keyframes lgr{50%{transform:translate(-3%,2%)}}
 @media (prefers-reduced-motion:reduce){#landing .lgrain{animation:none}}
-#map.rot .leaflet-tile{width:257px!important;height:257px!important}
 input[type=range]{accent-color:var(--acc)}
 .leaflet-bar a,.leaflet-bar a:hover{background:var(--s1)!important;color:var(--tx)!important;border-color:var(--ln)!important}
 .leaflet-container .leaflet-control-attribution{background:rgba(12,12,13,.7);color:var(--tx2)}
@@ -1327,7 +1325,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <!-- Setup -->
   <div class="overlay" id="setup">
     <div class="card menu">
-      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 1.8</span></div>
+      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 1.9</span></div>
       <div class="warnbox" id="noBt" style="display:none">Bluetooth geht nur in <b>Google Chrome</b> oder Edge. Die Demo funktioniert trotzdem.</div>
       <div class="warnbox" id="recoverBox" style="display:none">Nicht gespeicherte Fahrt vom <span id="recoverDate"></span> gefunden. <button id="btnRecover">Ansehen</button></div>
       <div id="planBanner"></div>
@@ -1519,7 +1517,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <button id="btnTcx">TCX speichern</button>
         <button id="btnFit">FIT speichern</button>
         <button id="btnGarmin" title="FIT-Datei, für die Garmin Connect Belastung, Trainingseffekt und Erholungszeit berechnet">Für Garmin speichern</button>
-        <button class="primary" id="btnStravaUp" style="background:#fc4c02;border-color:#fc4c02">Zu Strava hochladen</button>
+        <button class="primary" id="btnStravaUp">Zu Strava hochladen</button>
         <button id="btnClose">Schließen</button>
       </div>
       <div class="hint" style="margin-top:10px">Die .fit-Datei funktioniert auch mit Garmin Connect, intervals.icu und TrainingPeaks.</div>
@@ -1570,7 +1568,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <div><label>Client Secret</label><input type="password" id="sSec" autocomplete="off"></div>
       </div>
       <h3>2 · Zugriff erlauben</h3>
-      <div class="inline"><button class="primary" id="sAuth" style="background:#fc4c02;border-color:#fc4c02">Bei Strava anmelden &amp; erlauben</button></div>
+      <div class="inline"><button class="primary" id="sAuth">Bei Strava anmelden &amp; erlauben</button></div>
       <div id="sPasteBox" class="sec" style="margin-top:14px">
         <div class="sh"><h3>3 · Adresse zurückholen</h3><span class="i" data-tip="Strava schickt dich nach dem Erlauben zu „localhost“. Weil Kurbeln als Datei läuft, zeigt Chrome dort „localhost refused to connect“ – das ist richtig so. In der Adresse dieser Seite steckt der Zugangscode, den Kurbeln braucht. Er gilt nur wenige Minuten und nur einmal.">i</span></div>
         <ol class="steps" style="margin-top:0">
@@ -1578,7 +1576,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <li>Dort in die Adressleiste klicken (<kbd>⌘</kbd><kbd>L</kbd>) und kopieren (<kbd>⌘</kbd><kbd>C</kbd>).</li>
           <li>Zurück zu Kurbeln und hier einfügen – Kurbeln verbindet automatisch.</li>
         </ol>
-        <div class="inline" style="margin-top:10px"><button class="primary" id="sClip" style="background:#fc4c02;border-color:#fc4c02">Aus Zwischenablage einfügen</button></div>
+        <div class="inline" style="margin-top:10px"><button class="primary" id="sClip">Aus Zwischenablage einfügen</button></div>
         <div class="inline" style="margin-top:8px"><div style="flex:1"><input type="text" id="sPaste" placeholder="oder hier einfügen: http://localhost/kurbel?state=kurbel&code=…"></div><button id="sPasteGo">Verbinden</button></div>
       </div>
       <label class="check"><input type="checkbox" id="sVirtual"> Als „Virtuelle Radfahrt“ markieren <span class="sub">(Fahrten mit Karte immer – damit Strava keine echten Segmente wertet)</span></label>
