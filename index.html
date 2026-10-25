@@ -379,6 +379,7 @@ details.sec.more>summary{color:var(--text);font-weight:600;font-size:17px}
 .pSess.done{background:#ecfdf3;border-color:#bbf7d0;border-left-color:#16a34a}.pSess.done span{color:#16a34a;font-weight:900}
 .pSess.next{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
 @media (max-width:640px){.pwS{grid-template-columns:repeat(2,1fr)}#setup .mhead h2{font-size:27px}}
+#btnPip{display:inline-flex;align-items:center;justify-content:center;padding:6px 10px}#btnPip svg{display:block}
 /* Ruhiger Apple-Look fürs Menü (überschreibt die verspielten Stile oben) */
 #setup .card.menu,#planDlg .card.menu,#calDlg .card,#dashDlg .card,.dtip{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;color:#1d1d1f}
 #setup .card.menu,#planDlg .card.menu{border-radius:22px;box-shadow:0 24px 60px rgba(0,0,0,.14)}
@@ -1100,7 +1101,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 <header>
   <button id="btnHome" class="brand" title="Zur Startseite">Kurbel</button>
   <div class="seg" id="viewSeg"><button data-view="map">Karte</button><button data-view="data">Werte</button><button data-view="video">Video</button></div>
-  <button id="btnPip" title="Kleines Werte-Fenster, das über anderen Fenstern schwebt – z. B. über YouTube oder Netflix in einem anderen Fenster">⧉ Werte-Fenster</button>
+  <button id="btnPip" title="Kleines Werte-Fenster, das über anderen Fenstern schwebt – z. B. über YouTube oder Netflix in einem anderen Fenster" aria-label="Werte-Fenster"><svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x=".75" y=".75" width="16.5" height="12.5" rx="2.5"/><rect x="9" y="7" width="6" height="4.2" rx="1" fill="currentColor" stroke="none"/></svg></button>
   <div class="dd" id="connDD">
     <button id="btnConn" aria-haspopup="true" aria-expanded="false"><span id="connDots"></span>Connections <span class="caret">▾</span></button>
     <div class="ddp" id="connPanel" role="menu">
@@ -1112,7 +1113,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="crow"><button id="btnCal" class="calBtn">Trainer &amp; Powermeter kalibrieren</button></div>
       <div class="ddh">Dienste</div>
       <div class="crow"><span class="dot" id="dStrava"></span><div class="ct"><b>Strava</b><span id="sStrava">Nicht verbunden</span></div><span class="i" data-tip="Fahrten nach dem Training per Klick zu Strava hochladen – auf Wunsch automatisch.">i</span><button id="btnConnStrava">Einrichten</button></div>
-      <div class="crow"><span class="dot" id="dGarmin"></span><div class="ct"><b>Garmin</b><span id="sGarmin">Export nach der Fahrt</span></div><span class="i" data-tip="Garmin erlaubt keine direkte Verbindung. Nach der Fahrt „⌚ Für Garmin speichern“ und bei Garmin Connect importieren – dann rechnet Garmin Belastung und Erholungszeit.">i</span><button id="btnConnGarmin">Anleitung</button></div>
+      <div class="crow"><span class="dot" id="dGarmin"></span><div class="ct"><b>Garmin</b><span id="sGarmin">Export nach der Fahrt</span></div><span class="i" data-tip="Garmin erlaubt keine direkte Verbindung. Nach der Fahrt „Für Garmin speichern“ und bei Garmin Connect importieren – dann rechnet Garmin Belastung und Erholungszeit.">i</span><button id="btnConnGarmin">Anleitung</button></div>
       <div class="crow"><span class="dot" id="dSV"></span><div class="ct"><b>Google Street View</b><span id="sSV">Aus</span></div><span class="i" data-tip="Zeigt neben der Karte das echte Straßenbild in Fahrtrichtung. Braucht einen eigenen Google-Schlüssel.">i</span><button id="btnConnSV">Einrichten</button></div>
     </div>
   </div>
@@ -1138,7 +1139,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="m"><div class="l">Ø Leistung</div><div class="v"><span id="hAP">0</span><span class="u">W</span></div></div>
     </div>
   </div>
-  <div class="m" id="grade"><div class="l">Steigung</div><div class="v"><span id="hG">0.0</span><span class="u">%</span></div><div class="cob" id="hCob">🪨 Pavé</div></div>
+  <div class="m" id="grade"><div class="l">Steigung</div><div class="v"><span id="hG">0.0</span><span class="u">%</span></div><div class="cob" id="hCob">Pavé</div></div>
   <div class="hud right">
     <div class="row2">
       <div class="m"><div class="l">Zeit</div><div class="v" id="hT">0:00</div></div>
@@ -1159,7 +1160,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </div>
   <div id="sv"><div id="svPano"></div><div id="svMsg">Street View wird geladen …</div><div id="svInfo"></div></div>
   <div id="mapTools">
-    <button id="btnSV" title="Google Street View neben der Karte ein-/ausblenden">👁 Street View</button>
+    <button id="btnSV" title="Google Street View neben der Karte ein-/ausblenden">Street View</button>
     <button id="btnFollow" style="display:none">◎ Karte folgen</button>
     <button id="btnZoomRoute">⤢ Ganze Strecke</button>
   </div>
@@ -1188,15 +1189,15 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <h3>Videodatei vom Mac</h3>
       <button id="vidFileBtn">Videodatei wählen (.mp4, .mov, .webm)</button>
       <div id="vidRecentBox" style="display:none"><h3>Zuletzt geschaut</h3><div id="vidRecent"></div></div>
-      <div class="hint" style="margin-top:14px">Zeigt YouTube statt des Videos einen Fehler (z. B. „Fehler 153“)? Dann blockt YouTube die Einbettung in lokal geöffnete Dateien. Nimm „↗ Auf YouTube öffnen“ und dazu das <b>⧉ Werte-Fenster</b> – das schwebt über dem Video. Das klappt auch mit Netflix, Disney+ &amp; Co.</div>
+      <div class="hint" style="margin-top:14px">Zeigt YouTube statt des Videos einen Fehler (z. B. „Fehler 153“)? Dann blockt YouTube die Einbettung in lokal geöffnete Dateien. Nimm „Auf YouTube öffnen“ und dazu das <b>Werte-Fenster</b> (Symbol oben neben „Video“) – das schwebt über dem Video. Das klappt auch mit Netflix, Disney+ &amp; Co.</div>
     </div></div>
-    <div id="vidBar"><button id="vidChange">⏏ Anderes Video</button><button id="vidExt">↗ Auf YouTube öffnen</button><button id="vidHud">Werte aus</button></div>
+    <div id="vidBar"><button id="vidChange">Anderes Video</button><button id="vidExt">Auf YouTube öffnen</button><button id="vidHud">Werte aus</button></div>
   </div>
   <input type="file" id="fVid" accept="video/*" hidden>
   <div id="toast"></div>
   <div id="controls">
-    <button id="btnPause">⏸ Pause</button>
-    <button id="btnSkip" title="Intervall überspringen">⏭ Intervall</button>
+    <button id="btnPause">Pause</button>
+    <button id="btnSkip" title="Intervall überspringen">Intervall überspringen</button>
     <div class="grp" id="grpBias"><button id="bDown">−</button><span id="biasLbl">Intensität</span><button id="bUp">+</button></div>
     <div class="grp">Schwierigkeit <input type="range" id="rDiff" min="0" max="100" step="5"><span id="diffLbl"></span></div>
     <button class="danger" id="btnStop">■ Beenden</button>
@@ -1217,20 +1218,20 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <div class="inline" style="display:none">
           <div style="flex:1"><select id="selRoute"></select></div>
           <button id="btnGpx" title="GPX-Datei importieren">＋ GPX</button>
-          <button id="btnDelRoute" title="Importierte Strecke entfernen">🗑</button>
+          <button id="btnDelRoute" title="Importierte Strecke entfernen">Entfernen</button>
         </div>
         <div class="sub" id="routeInfo"></div>
       </section>
 
       <section class="sec">
-        <div class="sh"><span class="step">2</span><h3>Workout</h3><span class="i" data-tip="Wähle ein Workout oder fahr frei. Die Prozentwerte beziehen sich auf deine FTP. Mit ✎ bearbeiten, mit ＋ ein eigenes bauen.">i</span></div>
+        <div class="sh"><span class="step">2</span><h3>Workout</h3><span class="i" data-tip="Wähle ein Workout oder fahr frei. Die Prozentwerte beziehen sich auf deine FTP. Mit „Bearbeiten“ ändern oder ein eigenes bauen.">i</span></div>
         <div id="catRow" class="ccats"></div>
         <div id="favRow" class="wgrid"></div>
         <div class="inline wtools">
           <div style="display:none"><select id="selWorkout"></select></div>
-          <button id="btnEdit" title="Bearbeiten (eingebaute werden als Kopie gespeichert)">✎ Bearbeiten</button>
+          <button id="btnEdit" title="Bearbeiten (eingebaute werden als Kopie gespeichert)">Bearbeiten</button>
           <button id="btnNewWo" title="Neues Workout">＋ Eigenes Workout bauen</button>
-          <button id="btnDelWo" title="Workout entfernen">🗑 Entfernen</button>
+          <button id="btnDelWo" title="Workout entfernen">Entfernen</button>
         </div>
         <div class="inline" id="manualRow" style="margin-top:10px;display:none">
           <div style="width:180px"><label>Fester Wattwert</label><input type="number" id="iManual" min="30" max="1500" step="5"></div>
@@ -1245,7 +1246,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <details class="more"><summary>Eigene Workouts: Dateien &amp; Ordner</summary>
           <div class="inline" style="margin-top:10px;flex-wrap:wrap">
             <button id="btnWo">Dateien hochladen</button>
-            <button id="btnDir">📁 Ordner verbinden</button>
+            <button id="btnDir">Ordner verbinden</button>
             <button id="btnDirReload" style="display:none">Ordner neu laden</button>
             <span class="i" data-tip="Mehrere Dateien auf einmal: beim Hochladen mehrere markieren oder einfach ins Fenster ziehen. Ordner: Kurbel liest ihn bei jedem Start neu ein – Unterordner (z. B. „Schwelle“) werden zu Kategorien. Unterstützt .zwo, .erg, .mrc (z. B. von whatsonzwift.com).">i</span>
           </div>
@@ -1355,7 +1356,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="mhead"><h2>Garmin</h2></div>
       <section class="sec">
         <div class="sh"><h3>Export nach der Fahrt</h3><span class="i" data-tip="Inoffizieller Trick: Kurbel kennzeichnet die Datei als Garmin-Aufzeichnung, damit Garmin Belastung und Erholungszeit berechnet. Ohne Puls rechnet Garmin nichts.">i</span></div>
-        <ol class="steps"><li>In der Zusammenfassung „⌚ Für Garmin speichern“.</li><li>Auf <a href="https://connect.garmin.com/modern/import-data" target="_blank">Garmin Connect → Daten importieren</a> hochladen.</li><li>Uhr zweimal synchronisieren.</li></ol>
+        <ol class="steps"><li>In der Zusammenfassung „Für Garmin speichern“.</li><li>Auf <a href="https://connect.garmin.com/modern/import-data" target="_blank">Garmin Connect → Daten importieren</a> hochladen.</li><li>Uhr zweimal synchronisieren.</li></ol>
       </section>
       <section class="sec">
         <div class="sh"><h3>Oder auf der Uhr mitzeichnen</h3><span class="i" data-tip="Offizieller Weg: Die Uhr rechnet selbst. Dann aus Kurbel nichts hochladen, sonst ist die Fahrt doppelt.">i</span></div>
@@ -1392,10 +1393,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="hint" id="sumFtp" style="margin-top:8px"></div>
       <div id="stravaMsg"></div>
       <div class="actions">
-        <button id="btnStravaCfg" title="Strava-Verbindung einrichten">⚙ Strava</button>
+        <button id="btnStravaCfg" title="Strava-Verbindung einrichten">Strava</button>
         <button id="btnTcx">TCX speichern</button>
         <button id="btnFit">FIT speichern</button>
-        <button id="btnGarmin" title="FIT-Datei, für die Garmin Connect Belastung, Trainingseffekt und Erholungszeit berechnet">⌚ Für Garmin speichern</button>
+        <button id="btnGarmin" title="FIT-Datei, für die Garmin Connect Belastung, Trainingseffekt und Erholungszeit berechnet">Für Garmin speichern</button>
         <button class="primary" id="btnStravaUp" style="background:#fc4c02;border-color:#fc4c02">Zu Strava hochladen</button>
         <button id="btnClose">Schließen</button>
       </div>
@@ -1455,7 +1456,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <li>Dort in die Adressleiste klicken (<kbd>⌘</kbd><kbd>L</kbd>) und kopieren (<kbd>⌘</kbd><kbd>C</kbd>).</li>
           <li>Zurück zu Kurbel und hier einfügen – Kurbel verbindet automatisch.</li>
         </ol>
-        <div class="inline" style="margin-top:10px"><button class="primary" id="sClip" style="background:#fc4c02;border-color:#fc4c02">📋 Aus Zwischenablage einfügen</button></div>
+        <div class="inline" style="margin-top:10px"><button class="primary" id="sClip" style="background:#fc4c02;border-color:#fc4c02">Aus Zwischenablage einfügen</button></div>
         <div class="inline" style="margin-top:8px"><div style="flex:1"><input type="text" id="sPaste" placeholder="oder hier einfügen: http://localhost/kurbel?state=kurbel&code=…"></div><button id="sPasteGo">Verbinden</button></div>
       </div>
       <label class="check"><input type="checkbox" id="sVirtual"> Als „Virtuelle Radfahrt“ markieren <span class="sub">(Fahrten mit Karte immer – damit Strava keine echten Segmente wertet)</span></label>
@@ -1627,7 +1628,7 @@ function makeProRoutes() {
     const m = PRO_META[k];
     try {
       const r = routeFromPoints(decodeKA(PRO_DATA[k]), { id: 'pro_' + k, name: m.name, appendKm: true, loop: m.loop, desc: m.desc, smooth: k === 'roubaix' ? 3 : 20, median: k === 'roubaix' ? 0 : 3, poiPool: m.pois, summit: m.summit || false });
-      if (k === 'roubaix') { r.cobbles = PRO_COBBLES.map(([a, b, name]) => ({ a, b, name })); r.pois = r.pois.concat(r.cobbles.map(c => ({ d: c.a, name: '🪨 ' + c.name }))).sort((x, y) => x.d - y.d); }
+      if (k === 'roubaix') { r.cobbles = PRO_COBBLES.map(([a, b, name]) => ({ a, b, name })); r.pois = r.pois.concat(r.cobbles.map(c => ({ d: c.a, name: 'Pavé: ' + c.name }))).sort((x, y) => x.d - y.d); }
       out.push(r);
     } catch (e) { console.warn(k, e); }
   }
@@ -1793,7 +1794,7 @@ function checkPmDev() {
   if (!fresh || tA < 80 || !settings.powerMatch) { live.devSince = 0; return; }
   const r = pA / tA;
   if (Math.abs(1 - r) > 0.25) { live.devSince ||= now; if (now - live.devSince > 8000 && !live.pmDev) { live.pmDev = true; live.pmOffset = 0; ride.lastSent = {}; controlTrainer(true);
-      toast('⚠ Powermeter ' + Math.round(pA) + ' W, Trainer ' + Math.round(tA) + ' W – das passt nicht zusammen. PowerMatch-Korrektur pausiert. Pedale kalibrieren (Nullabgleich in der Hersteller-App), Batterie prüfen und nachsehen, ob wirklich das Powermeter verbunden ist.', 12000); } }
+      toast('Powermeter ' + Math.round(pA) + ' W, Trainer ' + Math.round(tA) + ' W – das passt nicht zusammen. PowerMatch-Korrektur pausiert. Pedale kalibrieren (Nullabgleich in der Hersteller-App), Batterie prüfen und nachsehen, ob wirklich das Powermeter verbunden ist.', 12000); } }
   else if (Math.abs(1 - r) < 0.15) { live.devSince = 0; live.pmDev = false; }
 }
 function onTrainerData(r) {
@@ -1926,7 +1927,7 @@ class BleTrainer {
     }
     const lbl = { ftms: 'FTMS', fec: 'Tacx FE-C', wahoo: 'Wahoo' }[this.ctrl];
     setStatus('trainer', this.controllable ? 'on' : 'wait', this.name + (this.controllable ? ' · Steuerung ✓ (' + lbl + ')' : ' · nur Daten – keine Steuerung'));
-    if (!this.controllable) toast('⚠ ' + this.name + ': Kurbel darf den Widerstand nicht steuern (' + (this.why || 'unbekannt') + '). Zwift, Garmin-Uhr/Edge oder Hersteller-App trennen und neu verbinden.', 9000);
+    if (!this.controllable) toast(''+this.name + ': Kurbel darf den Widerstand nicht steuern (' + (this.why || 'unbekannt') + '). Zwift, Garmin-Uhr/Edge oder Hersteller-App trennen und neu verbinden.', 9000);
     this.retries = 0;
   }
   async onDisconnect() {
@@ -1982,7 +1983,7 @@ class BleTrainer {
     if (!this.controllable) return;
     let r = await this.cpRequest(bytes);
     if (r === 5 || (r === -1 && !this.silent)) { await this.cpRequest([0x00]); await this.cpRequest([0x07]); r = await this.cpRequest(bytes); if (r === -1) this.silent = true; }
-    if (r !== 1 && r !== -1 && !this.warned[r]) { this.warned[r] = 1; toast('⚠ Trainer lehnt den Befehl ab: ' + (FTMS_ERR[r] || 'Code ' + r), 7000); }
+    if (r !== 1 && r !== -1 && !this.warned[r]) { this.warned[r] = 1; toast('Trainer lehnt den Befehl ab: ' + (FTMS_ERR[r] || 'Code ' + r), 7000); }
     if (r === 1) this.warned = {};
     $('#sTrainer').textContent = this.name + (r === 1 ? ' · Steuerung ✓ (FTMS)' : (r === -1 ? ' · Steuerung gesendet (ohne Bestätigung)' : ' · Steuerung ✗ ' + (FTMS_ERR[r] || 'Code ' + r)));
     return r;
@@ -2101,18 +2102,18 @@ function startRide() {
   Object.assign(ride, { state: 'running', started: false, elapsed: 0, distance: 0, v: 0, heading: 0, samples: [], lastSec: -1, bias: dayBias(), wSkip: 0, lastSent: {}, startTs: Date.now(), route, workout: workoutById(settings.workoutId), woDone: false, finished: false, textIdx: 0, poiIdx: 0, lap: 0, lastSave: 0, beeped: -1, tgt: [] });
   stopArmed = 0;
   $('#setup').style.display = 'none'; $('#controls').style.display = 'flex';
-  $('#btnPause').textContent = '⏸ Pause';
+  $('#btnPause').textContent = 'Pause';
   updateControls();
   requestWake();
   ensureAudio();
   follow = true; $('#btnFollow').style.display = 'none'; drawRouteOnMap(true); sv.lastD = -1e9; if (settings.svOn) svUpdate(true); if (map && route.lat) { map.invalidateSize(); map.setView(latLonAt(route, 0), 16, { animate: false }); }
   controlTrainer(true);
   const warn = [ride.workout && !ride.workout.manual && !settings.erg ? 'ERG ist aus – das Workout steuert den Trainer nicht' : '', pm && !settings.powerMatch ? 'PowerMatch ist aus – der Powermeter wird ignoriert' : ''].filter(Boolean);
-  toast(warn.length ? '⚠ ' + warn.join(' · ') + ' (Menü → Profil).' : 'Bereit – die Zeit startet, sobald du in die Pedale trittst.', warn.length ? 9000 : 6000);
+  toast(warn.length ? ''+warn.join(' · ') + ' (Menü → Profil).' : 'Bereit – die Zeit startet, sobald du in die Pedale trittst.', warn.length ? 9000 : 6000);
 }
 function pauseRide() {
-  if (ride.state === 'running') { ride.state = 'paused'; $('#btnPause').textContent = '▶ Weiter'; toast('Pausiert'); vidControl(false); }
-  else if (ride.state === 'paused') { ride.state = 'running'; $('#btnPause').textContent = '⏸ Pause'; lastTick = performance.now(); vidControl(true); }
+  if (ride.state === 'running') { ride.state = 'paused'; $('#btnPause').textContent = 'Weiter'; toast('Pausiert'); vidControl(false); }
+  else if (ride.state === 'paused') { ride.state = 'running'; $('#btnPause').textContent = 'Pause'; lastTick = performance.now(); vidControl(true); }
 }
 function stopRide() {
   if (ride.state !== 'running' && ride.state !== 'paused') return;
@@ -2186,7 +2187,7 @@ function tick() {
   if (ride.state === 'running' && ride.started) {
     ride.elapsed += dt;
     physics(dt, live.power, gradeAt(route, ride.distance));
-    { const c = cobbleAt(route, ride.distance); if (c && ride.lastCob !== c) { toast('🪨 Pavé' + (c.name ? ': ' + c.name : '') + ' · ' + ((c.b - c.a) / 1000).toFixed(1) + ' km', 4500); controlTrainer(true); } else if (!c && ride.lastCob) controlTrainer(true); ride.lastCob = c; }
+    { const c = cobbleAt(route, ride.distance); if (c && ride.lastCob !== c) { toast('Pavé' + (c.name ? ': ' + c.name : '') + ' · ' + ((c.b - c.a) / 1000).toFixed(1) + ' km', 4500); controlTrainer(true); } else if (!c && ride.lastCob) controlTrainer(true); ride.lastCob = c; }
     ride.heading += curveAt(route, ride.distance) * ride.v * dt;
     // PowerMatch: Abweichung Trainer ↔ Powermeter langsam lernen (≈20 s), damit der Powermeter das ERG-Ziel trifft
     // Regelkreis direkt auf den Powermeter: Ziel − Powermeter (3-s-Mittel) wird aufintegriert und dem Trainer als Korrektur mitgegeben.
@@ -2198,12 +2199,12 @@ function tick() {
         if (pAvg > 30 && !live.pmDev) live.pmOffset = clamp(live.pmOffset + (tgt - pAvg) * dt / 5, -lim, lim);
       } }
     const pois = route.pois || [];
-    while (ride.poiIdx < pois.length && pois[ride.poiIdx].d <= (route.loop ? ride.distance % route.len : ride.distance)) { if (ride.distance - pois[ride.poiIdx].d < 200 || route.loop) toast('📍 ' + pois[ride.poiIdx].name, 3500); ride.poiIdx++; }
-    if (route.loop && Math.floor(ride.distance / route.len) !== ride.lap) { ride.lap = Math.floor(ride.distance / route.len); ride.poiIdx = 0; if (ride.lap > 0) toast('🔁 Runde ' + (ride.lap + 1)); }
+    while (ride.poiIdx < pois.length && pois[ride.poiIdx].d <= (route.loop ? ride.distance % route.len : ride.distance)) { if (ride.distance - pois[ride.poiIdx].d < 200 || route.loop) toast(pois[ride.poiIdx].name, 3500); ride.poiIdx++; }
+    if (route.loop && Math.floor(ride.distance / route.len) !== ride.lap) { ride.lap = Math.floor(ride.distance / route.len); ride.poiIdx = 0; if (ride.lap > 0) toast('Runde ' + (ride.lap + 1)); }
     const wo = ride.workout;
     if (wo && !wo.manual && !ride.woDone) {
       const t = ride.elapsed + ride.wSkip;
-      if (t >= woTotal(wo)) { ride.woDone = true; toast('🎉 Workout geschafft! Freie Fahrt geht weiter.'); beep(880, .25); controlTrainer(true); }
+      if (t >= woTotal(wo)) { ride.woDone = true; toast('Workout geschafft! Freie Fahrt geht weiter.'); beep(880, .25); controlTrainer(true); }
       else {
         const tx = wo.texts || []; while (ride.textIdx < tx.length && tx[ride.textIdx].t <= t) { if (tx[ride.textIdx].t > t - 3) toast(tx[ride.textIdx].msg, 5000); ride.textIdx++; }
         const sa = segAt(wo, t);
@@ -2211,7 +2212,7 @@ function tick() {
         else ride.beeped = -1;
       }
     }
-    if (!route.loop && !ride.finished && ride.distance >= route.len) { ride.finished = true; toast('🏁 Ziel erreicht! Du kannst weiterfahren oder beenden.', 5000); }
+    if (!route.loop && !ride.finished && ride.distance >= route.len) { ride.finished = true; toast('Ziel erreicht! Du kannst weiterfahren oder beenden.', 5000); }
     const sec = Math.floor(ride.elapsed);
     if (sec > ride.lastSec && settings.svOn) svUpdate();
     if (sec > ride.lastSec) { ride.lastSec = sec; recordSample(); controlTrainer(); }
@@ -2227,7 +2228,7 @@ function updateHUD() {
   $('#hP').textContent = Math.round(p3);
   const tW = Date.now() - live.trainerLast < 2000 ? Math.round(avgHist(trainerHist)) : null;
   if (pm && devState.pm === 'on') $('#sPM').textContent = pm.name + (Date.now() - live.pmLast < 3000 ? ' · ' + Math.round(live.pmRaw ?? live.power) + ' W' : ' · keine Daten');
-  $('#hPl').textContent = pmActive() ? 'Leistung (3s) · Powermeter' + (tW != null ? ' · Trainer misst ' + tW + ' W' : '') + (live.pmDev ? ' ⚠' : settings.erg && ride.lastSent?.mode === 'erg' ? ' · Korrektur ' + (live.pmOffset >= 0 ? '+' : '') + Math.round(live.pmOffset) + ' W' : '')
+  $('#hPl').textContent = pmActive() ? 'Leistung (3s) · Powermeter' + (tW != null ? ' · Trainer misst ' + tW + ' W' : '') + (live.pmDev ? ' !' : settings.erg && ride.lastSent?.mode === 'erg' ? ' · Korrektur ' + (live.pmOffset >= 0 ? '+' : '') + Math.round(live.pmOffset) + ' W' : '')
     : pm && !settings.powerMatch ? 'Leistung (3s) · Trainer (PowerMatch aus)' : pm && devState.pm === 'on' ? 'Leistung (3s) · Trainer – Powermeter sendet nichts' : 'Leistung (3s)';
   $('#hC').textContent = Math.round(live.cadence);
   $('#hH').textContent = Date.now() - live.lastHr < 5000 ? Math.round(live.hr) : '–';
@@ -2352,7 +2353,7 @@ function drawRouteOnMap(force) {
   });
   const s0 = [r.lat[0], r.lon[0]], s1 = [r.lat[n - 1], r.lon[n - 1]];
   L.circleMarker(s0, { radius: 7, color: '#fff', weight: 3, fillColor: '#2f9e44', fillOpacity: 1 }).bindTooltip('Start', { direction: 'right', className: 'poi-tip' }).addTo(routeGroup);
-  if (!r.loop) L.circleMarker(s1, { radius: 7, color: '#fff', weight: 3, fillColor: '#1b1f24', fillOpacity: 1 }).bindTooltip('🏁 Ziel', { permanent: true, direction: 'right', className: 'poi-tip keep' }).addTo(routeGroup);
+  if (!r.loop) L.circleMarker(s1, { radius: 7, color: '#fff', weight: 3, fillColor: '#1b1f24', fillOpacity: 1 }).bindTooltip('Ziel', { permanent: true, direction: 'right', className: 'poi-tip keep' }).addTo(routeGroup);
   riderMarker = L.marker(s0, { icon: L.divIcon({ className: '', html: '<div class="rider"><div class="arr"></div><div class="dot"></div></div>', iconSize: [30, 30], iconAnchor: [15, 15] }), interactive: false, zIndexOffset: 1000 }).addTo(routeGroup);
   zoomToRoute();
 }
@@ -2439,7 +2440,7 @@ async function svUpdate(force) {
 function setSV(on) {
   settings.svOn = on; saveSettings(); $('#cSV').checked = on;
   $('#stage').classList.toggle('svOn', on);
-  $('#btnSV').textContent = on ? '✕ Street View' : '👁 Street View';
+  $('#btnSV').textContent = on ? 'Street View aus' : 'Street View';
   if (map) setTimeout(() => { map.invalidateSize(); if ((ride.state === 'running' || ride.state === 'paused') && follow && route.lat) map.panTo(latLonAt(route, ride.distance), { animate: false }); }, 50);
   if (on) {
     if (!settings.gKey) { svMsg('Bitte zuerst unter „Connections → Google Street View“ einen Schlüssel eintragen.'); return; }
@@ -2589,7 +2590,7 @@ $('#ytUrl').addEventListener('keydown', e => { if (e.key === 'Enter') $('#ytGo')
 $('#vidFileBtn').onclick = () => { $('#fVid').value = ''; $('#fVid').click(); };
 $('#fVid').onchange = e => { const f = e.target.files[0]; if (f) playFile(f); };
 $('#vidChange').onclick = () => { vidClear(); vidShown(false); };
-$('#vidExt').onclick = () => { if (vidCur?.kind === 'yt') { window.open(ytWatchUrl(vidCur.y), '_blank'); vidClear(); vidShown(false); toast('Tipp: „⧉ Werte-Fenster“ öffnen – es schwebt über dem Video.', 6000); } };
+$('#vidExt').onclick = () => { if (vidCur?.kind === 'yt') { window.open(ytWatchUrl(vidCur.y), '_blank'); vidClear(); vidShown(false); toast('Tipp: Werte-Fenster (Symbol oben neben „Video“) öffnen – es schwebt über dem Video.', 6000); } };
 
 // ---------- Schwebendes Werte-Fenster (Bild-im-Bild) ----------
 let pipWin = null;
@@ -2603,7 +2604,7 @@ const PIP_HTML = `<style>
 </style>
 <div><div class="p"><span class="pv" id="pP">0</span><span class="u">W</span><div class="t"><div class="tv" id="pT">–</div><div class="ts" id="pTs">Freie Fahrt</div></div></div><div class="bar"><div id="pBar"></div></div></div>
 <div class="g"><div class="c"><div class="l">rpm</div><div class="v" id="pC">0</div></div><div class="c"><div class="l">Puls</div><div class="v" id="pH">–</div></div><div class="c"><div class="l">Zeit</div><div class="v" id="pZ">0:00</div></div><div class="c"><div class="l">km/h</div><div class="v" id="pS">0</div></div></div>
-<div class="b"><button id="pDown">−</button><button id="pPause">⏸</button><button id="pUp">+</button></div>`;
+<div class="b"><button id="pDown">−</button><button id="pPause">❚❚</button><button id="pUp">+</button></div>`;
 async function openPip() {
   if (pipWin && !pipWin.closed) { try { pipWin.focus(); } catch (e) {} return; }
   let viaPip = false;
@@ -2629,7 +2630,7 @@ function updPip(v) {
   const sa = v.wo && !v.wo.manual && !ride.woDone ? segAt(v.wo, ride.elapsed + ride.wSkip) : null;
   $$('pBar').style.width = sa ? (sa.tIn / sa.s.dur * 100) + '%' : '0';
   $$('pC').textContent = Math.round(v.cad); $$('pH').textContent = v.hr ?? '–'; $$('pZ').textContent = fmtT(v.t); $$('pS').textContent = v.v.toFixed(0);
-  $$('pPause').textContent = ride.state === 'paused' ? '▶' : '⏸';
+  $$('pPause').textContent = ride.state === 'paused' ? '▶︎' : '❚❚';
   const r = v.tgt ? (v.p3 - v.tgt) / v.tgt : 0; $$('pP').style.color = !v.tgt ? '#e6edf3' : Math.abs(r) < .05 ? '#7ee787' : r > 0 ? '#ffa657' : '#79c0ff';
 }
 $('#btnPip').onclick = openPip;
@@ -2672,11 +2673,11 @@ async function openHistory() {
     return `<div class="hrow"><div><div class="t">${d.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit', year: '2-digit' })}</div><div class="s">${d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} Uhr</div></div>
       <div><div class="t">${esc(shortRoute(r.routeName))}</div><div class="s">${esc(r.workoutName || 'Freie Fahrt')}${r.stravaId ? ` · <a href="https://www.strava.com/activities/${r.stravaId}" target="_blank">auf Strava</a>` : ''}</div></div>
       <div class="n">${fmtT(s.timer || 0)}</div><div class="n">${((s.dist || 0) / 1000).toFixed(1)} km</div><div class="n">${Math.round(s.avgP || 0)} W</div><div class="n">${Math.round(s.tss || 0)} TSS</div>
-      <div class="b"><button data-open="${r.id}">Ansehen</button><button data-del="${r.id}" title="Löschen">🗑</button></div></div>`;
+      <div class="b"><button data-open="${r.id}">Ansehen</button><button data-del="${r.id}" title="Löschen">Löschen</button></div></div>`;
   }).join('');
   $('#histList').querySelectorAll('[data-open]').forEach(b => b.onclick = async () => { const r = await idb.getRide(+b.dataset.open); if (r) { $('#history').style.display = 'none'; $('#setup').style.display = 'none'; showSummary(r); } });
   $('#histList').querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
-    if (b.dataset.armed !== '1') { b.dataset.armed = '1'; b.textContent = 'Sicher?'; setTimeout(() => { b.dataset.armed = ''; b.textContent = '🗑'; }, 3000); return; }
+    if (b.dataset.armed !== '1') { b.dataset.armed = '1'; b.textContent = 'Sicher?'; setTimeout(() => { b.dataset.armed = ''; b.textContent = 'Löschen'; }, 3000); return; }
     await idb.delRide(+b.dataset.del); openHistory();
   });
 }
@@ -3460,9 +3461,9 @@ async function scanFolder() {
   }
   await walk(dirHandle, '', 0);
   wos.sort((a, b) => a.name.localeCompare(b.name)); folderWorkouts = wos; folderRoutes = rts; dirSession = false;
-  $('#dirInfo').textContent = `📁 „${dirHandle.name}“: ${wos.length} Workouts, ${rts.length} Strecken${bad ? ', ' + bad + ' Datei(en) nicht lesbar' : ''}`;
+  $('#dirInfo').textContent = `Ordner „${dirHandle.name}“: ${wos.length} Workouts, ${rts.length} Strecken${bad ? ', ' + bad + ' Datei(en) nicht lesbar' : ''}`;
   $('#btnDirReload').style.display = ''; $('#btnDirReload').textContent = 'Ordner neu laden';
-  $('#btnDir').textContent = '📁 Anderen Ordner wählen';
+  $('#btnDir').textContent = 'Anderen Ordner wählen';
   fillSelects(); refreshSetupInfo();
 }
 $('#btnDir').onclick = async () => {
@@ -3477,7 +3478,7 @@ $('#fDir').onchange = async e => { // Fallback ohne File System Access API: nur 
   const wos = [], rts = []; let bad = 0;
   for (const f of e.target.files) { if (!/\.(zwo|erg|mrc|gpx)$/i.test(f.name)) continue; try { addParsed(await readText(f), f.webkitRelativePath || f.name, wos, rts); } catch (err) { bad++; } }
   folderWorkouts = wos; folderRoutes = rts; dirHandle = null; dirSession = true;
-  $('#dirInfo').textContent = `📁 ${wos.length} Workouts, ${rts.length} Strecken geladen (nur für diese Sitzung)${bad ? ', ' + bad + ' nicht lesbar' : ''}`;
+  $('#dirInfo').textContent = `${wos.length} Workouts, ${rts.length} Strecken geladen (nur für diese Sitzung)${bad ? ', ' + bad + ' nicht lesbar' : ''}`;
   fillSelects(); refreshSetupInfo();
 };
 async function fileHandleByPath(path, create) {
@@ -3636,14 +3637,14 @@ async function doStravaUpload() {
   if (!summaryRide?.samples.length) return toast('Keine Daten');
   if (!strava.refresh) { openStrava(); return; }
   const m = $('#stravaMsg'), b = $('#btnStravaUp');
-  b.disabled = true; m.innerHTML = '<div class="hint" style="margin-top:10px">⏳ Lade zu Strava hoch …</div>';
+  b.disabled = true; m.innerHTML = '<div class="hint" style="margin-top:10px">Lade zu Strava hoch …</div>';
   try {
     let res, dup = '';
     try { res = await stravaUpload(summaryRide); }
     catch (e) { // Strava hält die Datei für ein Duplikat → mit neuer Datei-Kennung erneut hochladen
       if (!/duplicate/i.test(e.message)) throw e;
       dup = (e.message.match(/activities\/(\d+)/) || [])[1] || '';
-      m.innerHTML = '<div class="hint" style="margin-top:10px">⏳ Strava kennt diese Datei schon – lade sie als neue Aktivität hoch …</div>';
+      m.innerHTML = '<div class="hint" style="margin-top:10px">Strava kennt diese Datei schon – lade sie als neue Aktivität hoch …</div>';
       try { res = await stravaUpload(summaryRide, { uniq: 1 }); }
       catch (e2) { if (!/duplicate/i.test(e2.message)) throw e2; res = await stravaUpload(summaryRide, { uniq: 1, shift: 1 }); }
     }
@@ -3694,7 +3695,7 @@ $('#sClip').onclick = async () => {
   catch (e) { $('#sPaste').focus(); toast('Kein Zugriff auf die Zwischenablage – bitte mit ⌘V ins Feld einfügen.', 5000); }
 };
 $('#sPaste').addEventListener('paste', () => setTimeout(() => { if (/code=|error=/.test($('#sPaste').value)) stravaConnectFrom($('#sPaste').value); }, 50));
-window.addEventListener('focus', () => { if (stravaWaiting && $('#stravaDlg').style.display !== 'none') { $('#sPasteBox').scrollIntoView({ behavior: 'smooth', block: 'center' }); toast('Jetzt die Adresse aus dem localhost-Tab hier einfügen (📋-Button oder ⌘V).', 6000); } });
+window.addEventListener('focus', () => { if (stravaWaiting && $('#stravaDlg').style.display !== 'none') { $('#sPasteBox').scrollIntoView({ behavior: 'smooth', block: 'center' }); toast('Jetzt die Adresse aus dem localhost-Tab hier einfügen (Button „Aus Zwischenablage einfügen“ oder ⌘V).', 6000); } });
 $('#sAuth').onclick = () => {
   stravaReadForm();
   if (!/^\d+$/.test(strava.clientId) || strava.secret.length < 20) return toast('Bitte zuerst Client ID (Zahl) und Client Secret eintragen.', 4000);
@@ -3724,6 +3725,11 @@ $('#btnHR').onclick = async () => {
   try { await connectHR(); } catch (e) { if (e.name !== 'NotFoundError') toast('Pulsgurt: ' + e.message, 5000); setStatus('hr', '', 'Kein Pulsgurt'); }
 };
 $('#btnDemo').onclick = () => { trainer?.close(); trainer = new DemoTrainer(); setStatus('trainer', 'on', 'Demo-Trainer'); toast('Demo-Modus: simulierter Fahrer. Unter Connections startet „Powermeter“ jetzt einen Demo-Powermeter.', 4500); };
+// Oben in der Leiste: ein neues Fenster ersetzt das offene, statt sich darüberzulegen
+$('header').addEventListener('click', e => {
+  const b = e.target.closest('#btnDash,#btnPlan,#btnHist,#btnSetup'); if (!b || ride.state === 'running') return;
+  ['setup', 'dashDlg', 'planDlg', 'history', 'calDlg', 'svDlg', 'garminDlg', 'stravaDlg'].forEach(id => { const o = document.getElementById(id); if (o) o.style.display = 'none'; });
+}, true);
 $('#btnSetup').onclick = () => { if (ride.state === 'running' || ride.state === 'paused') { toast('Während der Fahrt nicht möglich – erst beenden.'); return; } $('#summary').style.display = 'none'; $('#setup').style.display = 'flex'; ride.state = 'idle'; ride.v = 0; refreshSetupInfo(); };
 $('#btnStart').onclick = startRide;
 $('#btnPause').onclick = pauseRide;
@@ -3735,7 +3741,7 @@ $('#btnGarmin').onclick = () => {
   if (!summaryRide?.samples.length) return toast('Keine Daten');
   const hr = summaryRide.samples.filter(s => s[3]).length / summaryRide.samples.length;
   download(fileBase(summaryRide) + '_garmin.fit', buildFIT(summaryRide, true), 'application/octet-stream'); markExported();
-  $('#stravaMsg').innerHTML = `<div class="${hr < .8 ? 'warnbox' : 'okbox'}">${hr < .8 ? '⚠ In dieser Fahrt fehlen Pulsdaten – ohne Puls berechnet Garmin keine Belastung. ' : ''}Jetzt auf <a href="https://connect.garmin.com/modern/import-data" target="_blank" style="color:inherit"><b>connect.garmin.com → Daten importieren</b></a> die Datei hochladen, danach die Uhr <b>zweimal</b> mit der Connect-App synchronisieren. Läuft bei dir „Garmin → Strava“, lade die Fahrt nicht zusätzlich aus Kurbel zu Strava hoch, sonst ist sie doppelt da.</div>`;
+  $('#stravaMsg').innerHTML = `<div class="${hr < .8 ? 'warnbox' : 'okbox'}">${hr < .8 ? 'In dieser Fahrt fehlen Pulsdaten – ohne Puls berechnet Garmin keine Belastung. ' : ''}Jetzt auf <a href="https://connect.garmin.com/modern/import-data" target="_blank" style="color:inherit"><b>connect.garmin.com → Daten importieren</b></a> die Datei hochladen, danach die Uhr <b>zweimal</b> mit der Connect-App synchronisieren. Läuft bei dir „Garmin → Strava“, lade die Fahrt nicht zusätzlich aus Kurbel zu Strava hoch, sonst ist sie doppelt da.</div>`;
 };
 $('#btnFit').onclick = () => { if (!summaryRide?.samples.length) return toast('Keine Daten'); download(fileBase(summaryRide) + '.fit', buildFIT(summaryRide), 'application/octet-stream'); markExported(); };
 $('#btnTcx').onclick = () => { if (!summaryRide?.samples.length) return toast('Keine Daten'); download(fileBase(summaryRide) + '.tcx', buildTCX(summaryRide), 'application/vnd.garmin.tcx+xml'); markExported(); };
@@ -3763,7 +3769,7 @@ stravaRenderState();
   try {
     const h = await idb.get('dir'); if (!h) return; dirHandle = h;
     if (await ensureDirPerm(false)) await scanFolder();
-    else { $('#btnDirReload').style.display = ''; $('#btnDirReload').textContent = '📁 Ordner „' + h.name + '“ laden'; $('#dirInfo').textContent = 'Chrome fragt einmal pro Sitzung nach Zugriff.'; }
+    else { $('#btnDirReload').style.display = ''; $('#btnDirReload').textContent = 'Ordner „' + h.name + '“ laden'; $('#dirInfo').textContent = 'Chrome fragt einmal pro Sitzung nach Zugriff.'; }
   } catch (e) { console.warn(e); }
 })();
 (async () => { // Rückkehr von Strava (wenn Kurbel über http://localhost läuft)

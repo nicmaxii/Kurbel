@@ -11,7 +11,8 @@ Sie läuft in Chrome auf dem MacBook und wird über GitHub Pages veröffentlicht
 - In der three.js-Zeile wurde das erste `console.warn` durch `void 0,` ersetzt – nicht „reparieren“.
 - Nach jeder Änderung: Seite in Playwright laden und auf `pageerror` prüfen (siehe Tests), dann committen und pushen.
 - Design: Apple-artig weiß, Akzent ruhiges Blau `#2563eb` (Hover `#1d4ed8`, im dunklen Fahrt-Design `#4c8dff`), flache Buttons ohne 3D-Kante, Systemschrift (SF) wie auf der Startseite, Gewichte max. 600–700, dünne 1-px-Rahmen statt Schatten (Block „Ruhiger Apple-Look“ am Ende des Menü-CSS).
-  **Wenige Emojis**, klare Buttons, farbige Punkte statt Icons.
+  **Keine Emojis** (auch nicht in Knöpfen oder Meldungen), klare Text-Buttons, farbige Punkte statt Icons; Werte-Fenster ist ein kleiner Symbol-Knopf (SVG) neben „Video“.
+- Oben in der Leiste ersetzt ein neues Fenster (Dashboard, Plan, Fahrten, Menü) das offene (Klick-Listener auf `header` vor `#btnSetup`).
 
 ## Aufbau von index.html (Suchbegriffe)
 
