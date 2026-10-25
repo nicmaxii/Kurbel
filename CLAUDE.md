@@ -39,6 +39,8 @@ Sie läuft in Chrome auf dem MacBook und wird über GitHub Pages veröffentlicht
 
 ## Testen
 
+- Kontrast: alle Texte/Knöpfe in allen Ansichten mindestens 4,5:1 (auch im Hover-Zustand). Text auf Lime immer `--onacc`.
+
 Playwright (Chromium) gegen die lokale Datei oder `python3 -m http.server`:
 - Startseite ausblenden: `KurbelLanding.running=false; document.getElementById('landing').style.display='none'`
 - Demo: `#btnConn` → `#btnDemo`, dann `#btnStart`; Fahrt simulieren mit Schleife über `tick()` (live.power setzen, `lastTick=performance.now()-250`).
