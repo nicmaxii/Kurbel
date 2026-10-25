@@ -503,9 +503,10 @@ body,#landing,#setup .card.menu,#planDlg .card.menu,#calDlg .card,#dashDlg .card
 .ddp{background:var(--s1)!important;border:1px solid var(--ln)}
 #wbox .bar{background:var(--ln)}
 #mapBox,#map{background:#1a1a1c!important}
-#map.tiles-dark .leaflet-tile-pane{filter:invert(1) grayscale(1) brightness(.72) contrast(1.18)} /* helle Straßenkarte → dunkle Graustufen im App-Design */
+#map.tiles-dark .leaflet-tile{filter:invert(1) grayscale(1) brightness(.72) contrast(1.18)} /* helle Straßenkarte → dunkle Graustufen im App-Design */
 #wbox .rem .u{font-size:16px;font-family:var(--uifont);letter-spacing:0}
 #tour .ring{outline:2px solid var(--acc);outline-offset:0}
+#setup .mhead .ver{font-size:11px;color:var(--tx2);margin-left:10px;font-family:var(--numfont)}
 #ghostBox .gsub{font-size:12px;color:var(--tx2);font-variant-numeric:tabular-nums}
 button.primary,.planCard .primary,#calDlg button.primary,#dashDlg button.primary,#planDlg .actions button.primary{color:var(--onacc)!important}
 #mapBox .leaflet-control-attribution{background:rgba(12,12,13,.75)!important;color:var(--tx2)!important}#mapBox .leaflet-control-attribution a{color:var(--tx)!important}
@@ -1326,7 +1327,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <!-- Setup -->
   <div class="overlay" id="setup">
     <div class="card menu">
-      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button></div>
+      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Stand 25.10. · 6</span></div>
       <div class="warnbox" id="noBt" style="display:none">Bluetooth geht nur in <b>Google Chrome</b> oder Edge. Die Demo funktioniert trotzdem.</div>
       <div class="warnbox" id="recoverBox" style="display:none">Nicht gespeicherte Fahrt vom <span id="recoverDate"></span> gefunden. <button id="btnRecover">Ansehen</button></div>
       <div id="planBanner"></div>

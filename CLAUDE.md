@@ -40,6 +40,7 @@ Sie läuft in Chrome auf dem MacBook und wird über GitHub Pages veröffentlicht
 
 ## Testen
 
+- Versionsanzeige im Menü neben „Einführung“ (`.ver`, „Stand TT.MM. · N“) bei jeder Veröffentlichung hochzählen – hilft bei Cache-Problemen.
 - Kontrast: alle Texte/Knöpfe in allen Ansichten mindestens 4,5:1 (auch im Hover-Zustand). Text auf Lime immer `--onacc`.
 
 Playwright (Chromium) gegen die lokale Datei oder `python3 -m http.server`:
