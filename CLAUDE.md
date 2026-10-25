@@ -12,6 +12,8 @@ Sie läuft in Chrome auf dem MacBook und wird über GitHub Pages veröffentlicht
 - Nach jeder Änderung: Seite in Playwright laden und auf `pageerror` prüfen (siehe Tests), dann committen und pushen.
 - Design: Apple-artig weiß, Akzent ruhiges Blau `#2563eb` (Hover `#1d4ed8`, im dunklen Fahrt-Design `#4c8dff`), flache Buttons ohne 3D-Kante, Systemschrift (SF) wie auf der Startseite, Gewichte max. 600–700, dünne 1-px-Rahmen statt Schatten (Block „Ruhiger Apple-Look“ am Ende des Menü-CSS).
   **Keine Emojis** (auch nicht in Knöpfen oder Meldungen), klare Text-Buttons, farbige Punkte statt Icons; Werte-Fenster ist ein kleiner Symbol-Knopf (SVG) neben „Video“.
+- Handy/Tablet: Block „Tablet & Handy“ (Media Queries 1180 px / 760 px) am Ende des Menü-CSS; Workout-Box dort unten über der Steuerleiste. iPhone/iPad: kein Web-Bluetooth → Hinweis auf App „Bluefy“.
+- Einführung beim ersten Besuch: `TOUR`, `startTour` (localStorage `kurbel.tour`), erneut über „Einführung“ im Menü.
 - Oben in der Leiste ersetzt ein neues Fenster (Dashboard, Plan, Fahrten, Menü) das offene (Klick-Listener auf `header` vor `#btnSetup`).
 
 ## Aufbau von index.html (Suchbegriffe)
@@ -19,7 +21,7 @@ Sie läuft in Chrome auf dem MacBook und wird über GitHub Pages veröffentlicht
 | Bereich | Wichtige Namen |
 |---|---|
 | Einstellungen | `settings` (localStorage `kurbel.settings`), `saveSettings`, `LS` |
-| Strecken | `KA_DATA`/`KA_NAMES` (4 komoot-Touren Karlsruhe), `PRO_DATA`/`PRO_META`/`PRO_COBBLES` (Paris–Roubaix mit 30 Pavé-Sektoren, Alpe d'Huez, Ventoux, Tourmalet, Galibier), `routeFromPoints`, `parseGPX`, `eleAt`, `gradeAt`, `latLonAt`, `cobbleAt` |
+| Strecken | `KA_DATA`/`KA_NAMES` (4 komoot-Touren Karlsruhe, Hin-und-zurück-Stücke herausgeschnitten), `PRO_DATA`/`PRO_META`/`PRO_COBBLES` (Paris–Roubaix mit 30 Pavé-Sektoren, Alpe d'Huez, Ventoux, Tourmalet, Galibier), `routeFromPoints`, `parseGPX`, `eleAt`, `gradeAt`, `latLonAt`, `cobbleAt` |
 | Workouts | `W(dur,p0,p1)`, `reps`, `FAV_WORKOUTS`, `BUILTIN_WORKOUTS` (Kategorien `WO_CATS`), `parseZWO`/`parseERG`, Ordner-Sync `scanFolder` (Unterordner = Kategorie), Editor `openEditor` |
 | Trainingspläne | `PG` (Generatoren), `PLANS` (ftp12, base8, short6; `weeksDef` mit Slots thr/z2/vo2/long/test/rec), `PLAN_WORKOUTS`, `PLAN_SCIENCE` (Quellen), `plan` (localStorage `kurbel.plan`, v2), `planNext`, `planMarkFromRide`, `openPlan` |
 | Tagesform | `DF`, `dayBias()`, `renderDayForm`, Vorschlag aus TSB `formSuggest` |
