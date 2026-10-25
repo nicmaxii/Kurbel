@@ -503,7 +503,7 @@ body,#landing,#setup .card.menu,#planDlg .card.menu,#calDlg .card,#dashDlg .card
 .ddp{background:var(--s1)!important;border:1px solid var(--ln)}
 #wbox .bar{background:var(--ln)}
 #mapBox,#map{background:#1a1a1c!important}
-#map.tiles-dark .leaflet-tile{filter:invert(1) grayscale(1) brightness(.72) contrast(1.18)} /* helle Straßenkarte → dunkle Graustufen im App-Design */
+#map.tiles-dark .leaflet-tile{filter:url(#kdark)} /* helle Straßenkarte → dunkle Graustufen im App-Design */
 #wbox .rem .u{font-size:16px;font-family:var(--uifont);letter-spacing:0}
 #tour .ring{outline:2px solid var(--acc);outline-offset:0}
 #setup .mhead .ver{font-size:11px;color:var(--tx2);margin-left:10px;font-family:var(--numfont)}
@@ -1213,6 +1213,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <div class="lhint">Scrollen oder heranzoomen, um einzutauchen<span>⌄</span></div>
   <div id="lfade"></div>
 </div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="kdark" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0.3 0.59 0.11 0 0  0.3 0.59 0.11 0 0  0.3 0.59 0.11 0 0  0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues="0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.77 0.76 0.749 0.739 0.729 0.719 0.708 0.698 0.688 0.678 0.668 0.657 0.647 0.637 0.627 0.616 0.606 0.596 0.586 0.576 0.565 0.555 0.545 0.535 0.524 0.514 0.504 0.494 0.484 0.473 0.463 0.453 0.443 0.432 0.422 0.412 0.402 0.392 0.381 0.371 0.361 0.351 0.34 0.33 0.17 0.164 0.157 0.151 0.144 0.138 0.131 0.125 0.118 0.112 0.105 0.099 0.093 0.086 0.08 0.073 0.15 0.31 0.47 0.55 0.55"/><feFuncG type="table" tableValues="0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.77 0.76 0.749 0.739 0.729 0.719 0.708 0.698 0.688 0.678 0.668 0.657 0.647 0.637 0.627 0.616 0.606 0.596 0.586 0.576 0.565 0.555 0.545 0.535 0.524 0.514 0.504 0.494 0.484 0.473 0.463 0.453 0.443 0.432 0.422 0.412 0.402 0.392 0.381 0.371 0.361 0.351 0.34 0.33 0.17 0.164 0.157 0.151 0.144 0.138 0.131 0.125 0.118 0.112 0.105 0.099 0.093 0.086 0.08 0.073 0.15 0.31 0.47 0.55 0.55"/><feFuncB type="table" tableValues="0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.78 0.77 0.76 0.749 0.739 0.729 0.719 0.708 0.698 0.688 0.678 0.668 0.657 0.647 0.637 0.627 0.616 0.606 0.596 0.586 0.576 0.565 0.555 0.545 0.535 0.524 0.514 0.504 0.494 0.484 0.473 0.463 0.453 0.443 0.432 0.422 0.412 0.402 0.392 0.381 0.371 0.361 0.351 0.34 0.33 0.17 0.164 0.157 0.151 0.144 0.138 0.131 0.125 0.118 0.112 0.105 0.099 0.093 0.086 0.08 0.073 0.15 0.31 0.47 0.55 0.55"/></feComponentTransfer></filter></svg>
 <div id="app">
 <header>
   <button id="btnHome" class="brand" title="Zur Startseite">kurbeln</button>
@@ -1333,7 +1334,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <!-- Setup -->
   <div class="overlay" id="setup">
     <div class="card menu">
-      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 2.4</span></div>
+      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 2.5</span></div>
       <div class="warnbox" id="noBt" style="display:none">Bluetooth geht nur in <b>Google Chrome</b> oder Edge. Die Demo funktioniert trotzdem.</div>
       <div class="warnbox" id="recoverBox" style="display:none">Nicht gespeicherte Fahrt vom <span id="recoverDate"></span> gefunden. <button id="btnRecover">Ansehen</button></div>
       <div id="planBanner"></div>
@@ -2509,7 +2510,7 @@ function setTiles(key) {
   tileLayer = L.tileLayer(t.url, { maxZoom: t.max, subdomains: t.sub, attribution: t.attr, crossOrigin: false, detectRetina: true }).addTo(map);
   tileLayer.on('tileerror', () => { if (++errs === 6 && key !== 'esri') { toast('Karten-Server „' + t.name + '“ liefert keine Kacheln – wechsle auf die Esri-Straßenkarte.', 5000); settings.mapStyle = 'esri'; saveSettings(); if ($('#selMap')) $('#selMap').value = 'esri'; setTiles('esri'); } });
 }
-const gradeCol = g => g > .08 ? '#ffffff' : g > .05 ? '#f7ffd2' : g > .03 ? '#edff9a' : g > .01 ? '#b7c472' : g < -.03 ? '#55565a' : g < -.01 ? '#6e6f6a' : '#8a8c80';
+const gradeCol = g => g > .08 ? '#ffffff' : g > .05 ? '#f7ffd2' : g > .03 ? '#edff9a' : g > .01 ? '#d6e687' : g < -.03 ? '#7d8466' : g < -.01 ? '#9aa277' : '#bfcb76'; // Strecke immer in Lime-Tönen, damit sie sich von den hellen Straßen abhebt
 function latLonAt(r, d) { const [i, t] = routePos(r, d); return [r.lat[i] + (r.lat[i + 1] - r.lat[i]) * t, r.lon[i] + (r.lon[i + 1] - r.lon[i]) * t]; }
 function drawRouteOnMap(force) {
   if (!map) return;
