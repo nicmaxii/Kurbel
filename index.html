@@ -395,8 +395,10 @@ details.sec.more>summary{color:var(--text);font-weight:600;font-size:17px}
 .rcard.on:after{width:20px;height:20px;font-size:11px;font-weight:600}
 .rcard.add,#setup .rcard.add{border:1px dashed #c7c7cc!important}
 .rcard.add .addIcon{font-weight:300}
-.rname{font-weight:600}.rstats{gap:6px;font-size:12.5px;white-space:nowrap}.rstats b{font-weight:600}
-.tag{font-weight:600}
+.rname{font-weight:600;font-size:15px;letter-spacing:-.01em}.rstats{gap:6px;font-size:12.5px;white-space:nowrap}.rstats b{font-weight:600}
+.rprof{background:#fff;border-bottom:1px solid #f0f0f2}.rcard.on:after{display:none}
+#setup .rtags{gap:0;padding-top:4px}#setup .rtags .tag{background:none;color:#86868b;padding:0;font-size:12px;font-weight:400}#setup .rtags .tag+.tag:before{content:"·";margin:0 5px}
+#setup .sec .sh h3{font-size:17px!important;font-weight:600}#setup .sec .sh .step{background:none;color:#86868b;width:auto;height:auto;font-size:17px;font-weight:600}
 .ccats button,#setup .ccats button{font-weight:500;border-radius:999px!important;padding:6px 12px!important;box-shadow:inset 0 0 0 1px #e5e5ea}
 .ccats button.on,#setup .ccats button.on{background:#1d1d1f!important;color:#fff;box-shadow:none}
 .wcard,#setup .wcard{border:1px solid #e5e5ea!important;border-top:3px solid var(--cc,#ddd)!important;border-radius:14px!important;box-shadow:none}
@@ -1209,7 +1211,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div id="planBanner"></div>
 
       <section class="sec">
-        <div class="sh"><span class="step">1</span><h3>Wohin geht’s?</h3><span class="i" data-tip="Deine komoot-Touren ab Karlsruhe oder eigene GPX-Dateien. GPX-Dateien kannst du auch einfach aufs Fenster ziehen.">i</span></div>
+        <div class="sh"><span class="step">1</span><h3>Strecke</h3><span class="i" data-tip="Deine komoot-Touren ab Karlsruhe oder eigene GPX-Dateien. GPX-Dateien kannst du auch einfach aufs Fenster ziehen.">i</span></div>
         <div class="ptabs" id="rtTabs"></div>
         <div class="rcards" id="rtCards"></div>
         <div class="inline" style="display:none">
@@ -1221,7 +1223,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       </section>
 
       <section class="sec">
-        <div class="sh"><span class="step">2</span><h3>Was steht an?</h3><span class="i" data-tip="Wähle ein Workout oder fahr frei. Die Prozentwerte beziehen sich auf deine FTP. Mit ✎ bearbeiten, mit ＋ ein eigenes bauen.">i</span></div>
+        <div class="sh"><span class="step">2</span><h3>Workout</h3><span class="i" data-tip="Wähle ein Workout oder fahr frei. Die Prozentwerte beziehen sich auf deine FTP. Mit ✎ bearbeiten, mit ＋ ein eigenes bauen.">i</span></div>
         <div id="catRow" class="ccats"></div>
         <div id="favRow" class="wgrid"></div>
         <div class="inline wtools">
@@ -3083,7 +3085,7 @@ function routeSvg(r) {
   const pts = e.map((v, i) => `${(i / N * 100).toFixed(1)},${(38 - (v - lo) / span * 32).toFixed(1)}`).join(' ');
   const gid = 'g' + r.id.replace(/\W/g, '');
   const cob = (r.cobbles || []).map(c => `<rect x="${(c.a / r.len * 100).toFixed(2)}" y="38" width="${Math.max(.6, (c.b - c.a) / r.len * 100).toFixed(2)}" height="2" fill="#7c4a1e"/>`).join('');
-  return `<svg viewBox="0 0 100 40" preserveAspectRatio="none"><defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2563eb" stop-opacity=".9"/><stop offset="1" stop-color="#93c5fd" stop-opacity=".25"/></linearGradient></defs><polygon points="0,40 ${pts} 100,40" fill="url(#${gid})"/><polyline points="${pts}" fill="none" stroke="#1d4ed8" stroke-width="1.2" vector-effect="non-scaling-stroke"/>${cob}</svg>`;
+  return `<svg viewBox="0 0 100 40" preserveAspectRatio="none"><polygon points="0,40 ${pts} 100,40" fill="#1d1d1f" fill-opacity=".06"/><polyline points="${pts}" fill="none" stroke="#1d1d1f" stroke-opacity=".7" stroke-width="1.2" vector-effect="non-scaling-stroke"/>${cob}</svg>`;
 }
 function routeTags(r) {
   const perKm = r.ascent / Math.max(r.len / 1000, 1);
