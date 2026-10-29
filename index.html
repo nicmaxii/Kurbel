@@ -1345,7 +1345,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <!-- Setup -->
   <div class="overlay" id="setup">
     <div class="card menu">
-      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 3.6</span></div>
+      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 3.7</span></div>
       <div class="warnbox" id="noBt" style="display:none">Bluetooth geht nur in <b>Google Chrome</b> oder Edge. Die Demo funktioniert trotzdem.</div>
       <div class="warnbox" id="recoverBox" style="display:none">Nicht gespeicherte Fahrt vom <span id="recoverDate"></span> gefunden. <button id="btnRecover">Ansehen</button></div>
       <div id="planBanner"></div>
@@ -1537,6 +1537,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <button id="btnTcx">TCX speichern</button>
         <button id="btnFit">FIT speichern</button>
         <button id="btnGarmin" title="FIT-Datei, für die Garmin Connect Belastung, Trainingseffekt und Erholungszeit berechnet">Für Garmin speichern</button>
+        <button id="btnShareImg" title="Bild mit Strecke, Werten und Leistungskurve – zum Hinzufügen bei Strava oder Instagram">Bild für Strava</button>
         <button class="primary" id="btnStravaUp">Zu Strava hochladen</button>
         <button id="btnClose">Schließen</button>
       </div>
@@ -4129,6 +4130,72 @@ $('#btnGarmin').onclick = () => {
   const hr = summaryRide.samples.filter(s => s[3]).length / summaryRide.samples.length;
   download(fileBase(summaryRide) + '_garmin.fit', buildFIT(summaryRide, true), 'application/octet-stream'); markExported();
   $('#stravaMsg').innerHTML = `<div class="${hr < .8 ? 'warnbox' : 'okbox'}">${hr < .8 ? 'In dieser Fahrt fehlen Pulsdaten – ohne Puls berechnet Garmin keine Belastung. ' : ''}Jetzt auf <a href="https://connect.garmin.com/modern/import-data" target="_blank" style="color:inherit"><b>connect.garmin.com → Daten importieren</b></a> die Datei hochladen, danach die Uhr <b>zweimal</b> mit der Connect-App synchronisieren. Läuft bei dir „Garmin → Strava“, lade die Fahrt nicht zusätzlich aus Kurbeln zu Strava hoch, sonst ist sie doppelt da.</div>`;
+};
+// ---------- Zusammenfassungsbild (Strava erlaubt keine Foto-Uploads über die Schnittstelle – Bild wird gespeichert und von Hand hinzugefügt) ----------
+async function buildShareImage(rd) {
+  const W = 1080, H = 1350, c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d');
+  const UI = '"Archivo", -apple-system, Helvetica, Arial, sans-serif', MONO = '"JetBrains Mono", Menlo, monospace', ACC = '#edff9a', TX = '#f2f2ee', TX2 = '#9a9a94';
+  try { await Promise.all(['700 80px "JetBrains Mono"', '400 30px "JetBrains Mono"', '800 60px Archivo', '500 28px Archivo'].map(f => document.fonts.load(f))); } catch (e) {}
+  const st = stats(rd), S = rd.samples, route = rideRoute(rd);
+  g.fillStyle = '#0c0c0d'; g.fillRect(0, 0, W, H);
+  // Körnung
+  const img = g.getImageData(0, 0, W, H), d = img.data; for (let i = 0; i < d.length; i += 4) { const n = (Math.random() - .5) * 18; d[i] += n; d[i + 1] += n; d[i + 2] += n; } g.putImageData(img, 0, 0);
+  const pad = 72;
+  // Kopf
+  g.fillStyle = TX; g.font = `700 44px ${MONO}`; g.textBaseline = 'alphabetic'; g.fillText('kurbeln', pad, pad + 40);
+  g.fillStyle = TX2; g.font = `400 26px ${MONO}`; g.textAlign = 'right'; g.fillText(new Date(rd.start).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }), W - pad, pad + 38); g.textAlign = 'left';
+  const title = rd.routeName.replace(/ · [\d.]+ km.*$/, '').replace(/^Karlsruhe · /, '');
+  g.fillStyle = TX; g.font = `800 ${title.length > 18 ? 64 : 84}px ${UI}`; g.fillText(title, pad, 250, W - 2 * pad);
+  if (rd.workoutName) { g.fillStyle = ACC; g.font = `500 34px ${UI}`; g.fillText(rd.workoutName, pad, 302, W - 2 * pad); }
+  // Strecke
+  const mapTop = 350, mapH = 430;
+  if (route) {
+    const n = route.lat.length, lo = route.lon.map((x, i) => x * Math.cos(route.lat[i] * Math.PI / 180));
+    const minX = Math.min(...lo), maxX = Math.max(...lo), minY = Math.min(...route.lat), maxY = Math.max(...route.lat);
+    const sc = Math.min((W - 2 * pad) / (maxX - minX || 1), mapH / (maxY - minY || 1)), ox = pad + ((W - 2 * pad) - (maxX - minX) * sc) / 2, oy = mapTop + (mapH - (maxY - minY) * sc) / 2;
+    const P = i => [ox + (lo[i] - minX) * sc, oy + (maxY - route.lat[i]) * sc];
+    g.lineJoin = g.lineCap = 'round';
+    g.strokeStyle = 'rgba(242,242,238,.18)'; g.lineWidth = 8; g.beginPath(); for (let i = 0; i < n; i++) { const [x, y] = P(i); i ? g.lineTo(x, y) : g.moveTo(x, y); } g.stroke();
+    const done = Math.min(1, st.dist / route.len), m = Math.max(2, Math.round(done * (n - 1)));
+    g.strokeStyle = ACC; g.lineWidth = 8; g.beginPath(); for (let i = 0; i <= m && i < n; i++) { const [x, y] = P(i); i ? g.lineTo(x, y) : g.moveTo(x, y); } g.stroke();
+    const [sx, sy] = P(0); g.fillStyle = ACC; g.beginPath(); g.arc(sx, sy, 12, 0, TAU); g.fill();
+  }
+  // Werte
+  const tiles = [['Distanz', (st.dist / 1000).toFixed(1).replace('.', ','), 'km'], ['Zeit', fmtT(st.timer), ''], ['Ø Leistung', Math.round(st.avgP), 'W'], ['NP', Math.round(st.np), 'W'],
+    ['Höhenmeter', Math.round(st.asc), 'm'], ['TSS', Math.round(st.tss), ''], [st.avgHr ? 'Ø Puls' : 'Arbeit', st.avgHr ? Math.round(st.avgHr) : Math.round(st.kj), st.avgHr ? 'bpm' : 'kJ'], ['Max. Leistung', st.maxP, 'W']];
+  const tw = (W - 2 * pad - 3 * 16) / 4, ty = 820;
+  tiles.forEach(([l, v, u], i) => {
+    const x = pad + (i % 4) * (tw + 16), y = ty + Math.floor(i / 4) * 128;
+    g.fillStyle = '#1e1e21'; g.beginPath(); g.roundRect(x, y, tw, 112, 18); g.fill();
+    g.fillStyle = TX2; g.font = `500 22px ${UI}`; g.fillText(l, x + 20, y + 36);
+    g.fillStyle = TX; g.font = `700 44px ${MONO}`; g.fillText(String(v), x + 20, y + 90);
+    if (u) { const vw = g.measureText(String(v)).width; g.fillStyle = TX2; g.font = `400 20px ${MONO}`; g.fillText(u, x + 26 + vw, y + 90); }
+  });
+  // Leistungskurve mit Höhenprofil
+  const cy = 1090, ch = 170, cx = pad, cw = W - 2 * pad;
+  if (S.length > 2) {
+    const N = Math.min(S.length, 600), at = k => S[Math.floor(k / (N - 1) * (S.length - 1))];
+    const eMin = Math.min(...S.map(s => s[6])), eMax = Math.max(...S.map(s => s[6])) + 1;
+    g.fillStyle = 'rgba(242,242,238,.08)'; g.beginPath(); g.moveTo(cx, cy + ch);
+    for (let k = 0; k < N; k++) g.lineTo(cx + k / (N - 1) * cw, cy + ch - (at(k)[6] - eMin) / (eMax - eMin) * ch * .55);
+    g.lineTo(cx + cw, cy + ch); g.fill();
+    const sm = []; for (let k = 0; k < N; k++) { let a = 0, q = 0; for (let j = Math.max(0, k - 3); j <= k; j++) { a += at(j)[1]; q++; } sm.push(a / q); }
+    const pMax = Math.max(st.np * 1.6, ...sm, 100);
+    const grad = g.createLinearGradient(0, cy, 0, cy + ch); grad.addColorStop(0, 'rgba(237,255,154,.55)'); grad.addColorStop(1, 'rgba(237,255,154,.03)');
+    g.fillStyle = grad; g.beginPath(); g.moveTo(cx, cy + ch); sm.forEach((v, k) => g.lineTo(cx + k / (N - 1) * cw, cy + ch - v / pMax * ch)); g.lineTo(cx + cw, cy + ch); g.fill();
+    g.strokeStyle = ACC; g.lineWidth = 3; g.beginPath(); sm.forEach((v, k) => { const x = cx + k / (N - 1) * cw, y = cy + ch - v / pMax * ch; k ? g.lineTo(x, y) : g.moveTo(x, y); }); g.stroke();
+  }
+  // Fuß
+  g.fillStyle = TX2; g.font = `400 24px ${MONO}`; g.fillText('Indoor kurbeln', pad, H - 56);
+  g.textAlign = 'right'; g.fillText('nicmaxii.github.io/kurbeln', W - pad, H - 56); g.textAlign = 'left';
+  return new Promise(res => c.toBlob(res, 'image/jpeg', .92));
+}
+$('#btnShareImg').onclick = async () => {
+  if (!summaryRide?.samples.length) return toast('Keine Daten');
+  const b = $('#btnShareImg'); b.disabled = true;
+  try { const blob = await buildShareImage(summaryRide); download(fileBase(summaryRide) + '.jpg', blob, 'image/jpeg'); toast('Bild gespeichert. Bei Strava: Aktivität öffnen → „Bearbeiten“ → Foto hinzufügen.', 7000); }
+  catch (e) { console.error(e); toast('Bild konnte nicht erstellt werden.'); }
+  finally { b.disabled = false; }
 };
 $('#btnFit').onclick = () => { if (!summaryRide?.samples.length) return toast('Keine Daten'); download(fileBase(summaryRide) + '.fit', buildFIT(summaryRide), 'application/octet-stream'); markExported(); };
 $('#btnTcx').onclick = () => { if (!summaryRide?.samples.length) return toast('Keine Daten'); download(fileBase(summaryRide) + '.tcx', buildTCX(summaryRide), 'application/vnd.garmin.tcx+xml'); markExported(); };
