@@ -1345,7 +1345,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <!-- Setup -->
   <div class="overlay" id="setup">
     <div class="card menu">
-      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 3.8</span></div>
+      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 3.9</span></div>
       <div class="warnbox" id="noBt" style="display:none">Bluetooth geht nur in <b>Google Chrome</b> oder Edge. Die Demo funktioniert trotzdem.</div>
       <div class="warnbox" id="recoverBox" style="display:none">Nicht gespeicherte Fahrt vom <span id="recoverDate"></span> gefunden. <button id="btnRecover">Ansehen</button></div>
       <div id="planBanner"></div>
@@ -3066,8 +3066,8 @@ function pmStats(rd) {
   const T = S.map(s => s[1]), M = S.map(s => s[7]), avg = a => a.reduce((x, y) => x + y, 0) / a.length;
   return { n: S.length, tAvg: avg(T), tNp: npOf(T), pAvg: avg(M), pNp: npOf(M) };
 }
-const pmNote = st => { const p = st.pm; if (!p) return ''; const d = p.tAvg ? (p.pAvg / p.tAvg - 1) * 100 : 0;
-  return `Watt Trainer: Ø ${Math.round(p.tAvg)} W · NP ${Math.round(p.tNp)} W\nWatt Powermeter: Ø ${Math.round(p.pAvg)} W · NP ${Math.round(p.pNp)} W (${d >= 0 ? '+' : '−'}${Math.abs(d).toFixed(0)} % zum Trainer)`; };
+const pmNote = st => { const p = st.pm; if (!p) return '';
+  return `Watt Trainer: NP ${Math.round(p.tNp)} W\nWatt Powermeter: NP ${Math.round(p.pNp)} W`; };
 function stats(rd) {
   const S = rd.samples, P = S.map(s => s[1]), n = S.length || 1;
   const avg = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0;
@@ -4003,7 +4003,7 @@ async function stravaAccess() {
 const rideTitle = rd => { const r = rd.routeName.replace(/ · [\d.]+ km.*$/, '').replace(/^Karlsruhe · /, ''); return 'Indoor kurbeln: ' + r + (rd.workoutName ? ' · ' + rd.workoutName : ''); };
 // Strava-Beschreibung (Strecke/Workout stehen schon im Titel): Kernwerte, ggf. Powermeter-Vergleich, Hinweis auf die Website
 const stravaDesc = (rd, st) => [
-  `${(st.dist / 1000).toFixed(1).replace('.', ',')} km · ${fmtT(st.timer)} · Ø ${Math.round(st.avgP)} W · NP ${Math.round(st.np)} W · TSS ${Math.round(st.tss)}`,
+  `${(st.dist / 1000).toFixed(1).replace('.', ',')} km · ${fmtT(st.timer)} · NP ${Math.round(st.np)} W`,
   st.pm ? '\n' + pmNote(st) : '',
   '\nIndoor gefahren mit kurbeln.com',
 ].filter(Boolean).join('\n');
