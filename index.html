@@ -1345,7 +1345,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <!-- Setup -->
   <div class="overlay" id="setup">
     <div class="card menu">
-      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 3.7</span></div>
+      <div class="mhead"><h2>Kurbeln</h2><span class="i" data-tip="So geht's: oben unter „Connections“ den Trainer verbinden, hier Strecke und Workout wählen, „Start“. Die Zeit läuft los, sobald Wattwerte ankommen. Während der Fahrt: Leertaste = Pause, ↑/↓ = Intensität, H = Werte ein/aus.">i</span><button class="linkbtn" id="btnTour">Einführung</button><span class="ver" title="Version">Version 3.8</span></div>
       <div class="warnbox" id="noBt" style="display:none">Bluetooth geht nur in <b>Google Chrome</b> oder Edge. Die Demo funktioniert trotzdem.</div>
       <div class="warnbox" id="recoverBox" style="display:none">Nicht gespeicherte Fahrt vom <span id="recoverDate"></span> gefunden. <button id="btnRecover">Ansehen</button></div>
       <div id="planBanner"></div>
@@ -4001,12 +4001,18 @@ async function stravaAccess() {
   return strava.access;
 }
 const rideTitle = rd => { const r = rd.routeName.replace(/ · [\d.]+ km.*$/, '').replace(/^Karlsruhe · /, ''); return 'Indoor kurbeln: ' + r + (rd.workoutName ? ' · ' + rd.workoutName : ''); };
+// Strava-Beschreibung (Strecke/Workout stehen schon im Titel): Kernwerte, ggf. Powermeter-Vergleich, Hinweis auf die Website
+const stravaDesc = (rd, st) => [
+  `${(st.dist / 1000).toFixed(1).replace('.', ',')} km · ${fmtT(st.timer)} · Ø ${Math.round(st.avgP)} W · NP ${Math.round(st.np)} W · TSS ${Math.round(st.tss)}`,
+  st.pm ? '\n' + pmNote(st) : '',
+  '\nIndoor gefahren mit kurbeln.com',
+].filter(Boolean).join('\n');
 async function stravaUpload(rd, opt = {}) {
   const tok = await stravaAccess(), st = stats(rd), fname = fileBase(rd) + (opt.uniq ? '_' + Date.now().toString(36) : '') + '.fit';
   const fd = new FormData();
   fd.append('file', new Blob([buildFIT(rd, false, opt)], { type: 'application/octet-stream' }), fname);
   fd.append('data_type', 'fit'); fd.append('name', rideTitle(rd)); fd.append('trainer', '1'); fd.append('external_id', fname);
-  fd.append('description', `Indoor mit Kurbeln · ${rd.routeName}${rd.workoutName ? ' · ' + rd.workoutName : ''} · NP ${Math.round(st.np)} W · TSS ${Math.round(st.tss)}${st.pm ? '\n\n' + pmNote(st) : ''}`);
+  fd.append('description', stravaDesc(rd, st));
   const r = await fetch('https://www.strava.com/api/v3/uploads', { method: 'POST', headers: { Authorization: 'Bearer ' + tok }, body: fd });
   let j = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error(j.message || j.error || 'HTTP ' + r.status);
@@ -4187,7 +4193,7 @@ async function buildShareImage(rd) {
   }
   // Fuß
   g.fillStyle = TX2; g.font = `400 24px ${MONO}`; g.fillText('Indoor kurbeln', pad, H - 56);
-  g.textAlign = 'right'; g.fillText('nicmaxii.github.io/kurbeln', W - pad, H - 56); g.textAlign = 'left';
+  g.textAlign = 'right'; g.fillText('kurbeln.com', W - pad, H - 56); g.textAlign = 'left';
   return new Promise(res => c.toBlob(res, 'image/jpeg', .92));
 }
 $('#btnShareImg').onclick = async () => {

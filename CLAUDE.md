@@ -1,7 +1,7 @@
 # Kurbel – Projektnotizen für Claude
 
 Kurbeln (früher „Kurbel“) ist eine Indoor-Radtraining-App (Zwift-Ersatz) als **eine einzige HTML-Datei** (`index.html`, ca. 1,1 MB).
-Sie läuft in Chrome auf dem MacBook und wird über GitHub Pages veröffentlicht: https://nicmaxii.github.io/kurbeln/ (Repo `nicmaxii/kurbeln`, früher `Kurbel`). Strava-Titel: „Indoor kurbeln: <Strecke> · <Workout>“. Nutzer: Max (spricht Deutsch).
+Sie läuft in Chrome auf dem MacBook und wird über GitHub Pages veröffentlicht: **https://www.kurbeln.com** (eigene Domain, Datei `CNAME`; vorher nicmaxii.github.io/kurbeln – Browserdaten hängen an der Domain, Umzug per Backup). Repo `nicmaxii/kurbeln`. Strava-Titel: „Indoor kurbeln: <Strecke> · <Workout>“, Beschreibung `stravaDesc` (Werte, Powermeter-Vergleich, „Indoor gefahren mit kurbeln.com“). Nutzer: Max (spricht Deutsch).
 
 ## Arbeitsweise
 
@@ -58,5 +58,4 @@ Playwright (Chromium) gegen die lokale Datei oder `python3 -m http.server`:
 - Powermeter vs. Trainer: große Abweichung bei Max, PowerMatch klappte nicht → jetzt Standard „Trainer steuert, Powermeter läuft mit“.
 - Street View: bei Max noch nicht gelaufen – genaue Meldung steht aus (Schlüssel gilt pro Adresse: gehostet und lokale Datei getrennt eintragen).
 - Kalibrierung und FE-C/Wahoo-Steuerung nur mit Mocks getestet.
-- Eventuell eigene Domain für GitHub Pages (dann Strava-Callback-Domain anpassen und Backup neu einspielen).
 - Mögliche weitere Strecken: Flandern-Rundfahrt, Champs-Élysées.
